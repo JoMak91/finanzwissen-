@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Finanz-Akademie</title>
+<script>
+// Leitet die Startadresse automatisch zur Lern-App weiter
+var p = location.pathname.split("/").filter(Boolean);
+var base = location.hostname.endsWith("github.io") && p.length ? "/" + p[0] + "/" : "/";
+location.replace(base + "lernapp.html");
+</script></head>
+<body style="font-family:sans-serif;padding:20px">Weiterleitung … <a href="lernapp.html">Zur Finanz-Akademie</a></body></html>

@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finanz-Akademie</title>
+<meta name="theme-color" content="#123c69">
+<link rel="manifest" href="lernapp.webmanifest">
+<link rel="icon" href="lernapp-icon-192.png">
+<link rel="apple-touch-icon" href="lernapp-icon-192.png">
+<style>
+:root{
+  --bg:#f2f4f8; --card:#ffffff; --ink:#15202b; --muted:#5b6675; --line:#dde3ea;
+  --brand:#123c69; --brand2:#1f6f8b; --accent:#e0a526; --ok:#1e8a4c; --bad:#c0392b;
+  --soft:#e8eef6; --shadow:0 1px 3px rgba(16,32,64,.08),0 4px 14px rgba(16,32,64,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#0f141b; --card:#18202b; --ink:#e7edf4; --muted:#9aa7b6; --line:#2a3542;
+    --brand:#5b9bd5; --brand2:#4fb3c9; --soft:#1f2a37; --shadow:none;}
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+header{position:sticky;top:0;z-index:5;background:var(--brand);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;gap:10px}
+header h1{font-size:18px;margin:0;flex:1;font-weight:700;letter-spacing:.2px}
+header button{background:rgba(255,255,255,.15);border:0;color:#fff;border-radius:10px;padding:6px 10px;font-size:15px}
+main{padding:14px 16px 100px;max-width:760px;margin:0 auto}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav a{flex:1;text-align:center;padding:8px 2px 7px;color:var(--muted);text-decoration:none;font-size:11.5px}
+nav a span{display:block;font-size:21px;line-height:1.2}
+nav a.on{color:var(--brand);font-weight:700}
+h2{font-size:21px;margin:6px 0 10px}
+h3{font-size:17px;margin:18px 0 8px}
+p{margin:8px 0}
+.muted{color:var(--muted)}
+.small{font-size:13.5px}
+.card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);border:1px solid var(--line);padding:14px;margin:10px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 12px;box-shadow:var(--shadow);text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px;min-height:118px;position:relative}
+.tile .ic{font-size:28px}
+.tile b{font-size:15px;line-height:1.25}
+.tile small{color:var(--muted);font-size:12px}
+.tile.wide{grid-column:1/-1;min-height:auto;flex-direction:row;align-items:center;gap:12px}
+.tile.hl{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border:0}
+.tile.hl small{color:rgba(255,255,255,.85)}
+.bar{height:7px;background:var(--soft);border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok);border-radius:9px;transition:width .3s}
+.tile.hl .bar{background:rgba(255,255,255,.25)}
+.tile.hl .bar i{background:var(--accent)}
+.list a{display:flex;align-items:center;gap:10px;padding:13px 12px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.list a:last-child{border-bottom:0}
+.list .chk{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:13px;flex:none}
+.list .chk.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.list .arr{margin-left:auto;color:var(--muted)}
+.btn{display:inline-block;background:var(--brand);color:#fff;border:0;border-radius:12px;padding:12px 16px;font-size:16px;font-weight:600;text-decoration:none;text-align:center;cursor:pointer}
+.btn.sec{background:var(--soft);color:var(--ink)}
+.btn.block{display:block;width:100%;margin:8px 0}
+.row{display:flex;gap:8px}
+.row .btn{flex:1}
+.lesson{font-size:16.5px}
+.lesson ul,.lesson ol{padding-left:20px;margin:8px 0}
+.lesson li{margin:5px 0}
+.box{background:var(--soft);border-left:4px solid var(--brand2);border-radius:8px;padding:10px 12px;margin:12px 0}
+.box.warn{border-color:var(--accent)}
+table.t{width:100%;border-collapse:collapse;font-size:14.5px;margin:10px 0}
+table.t td,table.t th{border-bottom:1px solid var(--line);padding:7px 5px;text-align:left;vertical-align:top}
+table.t th{color:var(--muted);font-weight:600}
+table.t td.r,table.t th.r{text-align:right}
+.opt{display:block;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:12px;margin:8px 0;font-size:15.5px;color:var(--ink);cursor:pointer}
+.opt.ok{border-color:var(--ok);background:rgba(30,138,76,.12)}
+.opt.bad{border-color:var(--bad);background:rgba(192,57,43,.1)}
+.qhead{display:flex;justify-content:space-between;color:var(--muted);font-size:13.5px}
+label.f{display:block;margin:10px 0 3px;font-size:14px;color:var(--muted)}
+input,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font-size:16px;background:var(--card);color:var(--ink)}
+input[type=checkbox]{width:auto;transform:scale(1.3);margin-right:8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.res{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.res div{background:var(--soft);border-radius:10px;padding:10px}
+.res div b{display:block;font-size:19px}
+.res div small{color:var(--muted);font-size:12.5px}
+.res .big{grid-column:1/-1;background:var(--brand);color:#fff}
+.res .big small{color:rgba(255,255,255,.85)}
+.chip{display:inline-block;padding:6px 11px;border-radius:20px;background:var(--soft);margin:3px 4px 3px 0;font-size:13.5px;border:0;color:var(--ink)}
+.chip.on{background:var(--brand);color:#fff}
+.lnk{display:block;padding:12px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.lnk:last-child{border-bottom:0}
+.lnk b{color:var(--brand);display:block}
+.lnk small{color:var(--muted)}
+.flip{perspective:1000px;height:230px;margin:14px 0;cursor:pointer}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .fa,.flip .fb{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.flip .fa{background:var(--brand);color:#fff;font-size:22px;font-weight:700}
+.flip .fb{background:var(--card);transform:rotateY(180deg);font-size:16px}
+.gl dt{font-weight:700;margin-top:12px}
+.gl dd{margin:2px 0 0;color:var(--ink)}
+.foot{font-size:12.5px;color:var(--muted);text-align:center;margin:22px 0 4px}
+.ring{display:flex;align-items:center;gap:14px}
+svg text{font-family:inherit}
+</style>
+</head>
+<body>
+<header><h1 id="ttl">Finanz-Akademie</h1><button id="back" hidden>‹ Zurück</button></header>
+<main id="v"></main>
+<nav>
+  <a href="#/" data-n="home"><span>🏠</span>Lernen</a>
+  <a href="#/quiz/mix" data-n="quiz"><span>🎯</span>Quiz</a>
+  <a href="#/rechner" data-n="rechner"><span>🧮</span>Rechner</a>
+  <a href="#/links" data-n="links"><span>🔗</span>Links</a>
+  <a href="#/glossar" data-n="glossar"><span>📖</span>Glossar</a>
+</nav>
+<script>
+"use strict";
+/* ================= INHALTE (Stand: Oktober 2026) ================= */
+const TOPICS = [
+{id:"grundlagen", ic:"🧭", title:"Finanz-Grundlagen", sub:"Budget, Notgroschen, Zinseszins",
+lessons:[
+{t:"Die richtige Reihenfolge", b:`<p>Eine gute Finanzplanung geht in einer festen Reihenfolge vor. Wer sie einhält, baut auf einem stabilen Fundament.</p>
+<ol><li><b>Existenzbedrohende Risiken absichern</b>: Privathaftpflicht, Berufsunfähigkeit, bei Familie oder Kredit eine Risikolebensversicherung.</li>
+<li><b>Notgroschen</b> aufbauen: 3 bis 6 Netto-Monatsgehälter auf dem Tagesgeldkonto.</li>
+<li><b>Teure Schulden</b> tilgen, zum Beispiel Dispo- oder Ratenkredite.</li>
+<li><b>Altersvorsorge und Vermögensaufbau</b>: Förderungen mitnehmen, langfristig investieren.</li>
+<li><b>Ziele und Wünsche</b>: Auto, Urlaub, Immobilie mit eigenen Sparzielen planen.</li></ol>
+<div class="box">Merksatz: Erst das Große absichern, dann das Kleine. Ein Haftpflichtschaden kann ein Leben lang Schulden bedeuten, ein kaputtes Handy nicht.</div>`},
+{t:"Haushaltsbudget und 50-30-20-Regel", b:`<p>Wer weiß, wohin sein Geld fließt, kann gezielt sparen. Eine einfache Faustregel für das Nettoeinkommen:</p>
+<ul><li><b>50 %</b> für Fixkosten (Miete/Kredit, Energie, Versicherungen, Lebensmittel)</li>
+<li><b>30 %</b> für Freizeit und Wünsche</li>
+<li><b>20 %</b> für Sparen und Vorsorge</li></ul>
+<p><b>„Pay yourself first“</b>: Die Sparrate per Dauerauftrag direkt nach dem Gehaltseingang abbuchen lassen, nicht erst am Monatsende das sparen, was übrig bleibt.</p>
+<div class="box">Tipp aus der Beratung: Einmal drei Monate alle Ausgaben aufschreiben. Die meisten entdecken dabei 100 € und mehr im Monat, die unbemerkt verschwinden.</div>`},
+{t:"Der Notgroschen", b:`<p>Der Notgroschen ist die Reserve für Unvorhergesehenes: Waschmaschine kaputt, Autoreparatur, Jobwechsel.</p>
+<ul><li>Höhe: <b>3 bis 6 Netto-Monatsgehälter</b>, bei Familie, Eigenheim oder Selbstständigkeit eher mehr.</li>
+<li>Ort: <b>Tagesgeld</b>, täglich verfügbar und über die Einlagensicherung bis 100.000 € pro Bank und Person geschützt.</li>
+<li>Nicht ins Aktiendepot: Im Crash müsste man sonst mit Verlust verkaufen.</li></ul>
+<p>Erst wenn der Notgroschen steht, lohnt sich das langfristige Investieren richtig.</p>`},
+{t:"Inflation – der stille Gegner", b:`<p>Inflation bedeutet: Das Geld verliert an Kaufkraft. Bei 2 % Inflation pro Jahr sind 1.000 € nach 35 Jahren nur noch etwa die Hälfte wert.</p>
+<p><b>Realzins = Nominalzins – Inflation.</b> Bringt das Sparbuch 1 % und die Inflation liegt bei 2,5 %, verliert man real 1,5 % pro Jahr.</p>
+<div class="box">Deshalb reicht reines Sparen für die Altersvorsorge nicht aus. Langfristig braucht es Sachwerte wie Aktien oder Immobilien, die mit der Inflation mitwachsen können.</div>`},
+{t:"Zinseszins und 72er-Regel", b:`<p>Beim Zinseszins werden auch die Erträge wieder verzinst. Je länger die Laufzeit, desto stärker der Effekt.</p>
+<p><b>Beispiel:</b> 100 € im Monat, 30 Jahre, 6 % Rendite pro Jahr: Eingezahlt werden 36.000 €, am Ende stehen knapp <b>100.000 €</b> im Depot.</p>
+<p><b>72er-Regel:</b> 72 geteilt durch den Zinssatz ergibt ungefähr die Jahre bis zur Verdopplung. Bei 6 % sind das 12 Jahre, bei 8 % neun Jahre.</p>
+<div class="box">Der wichtigste Faktor ist die Zeit. Wer 10 Jahre früher anfängt, braucht für dasselbe Ziel oft nur die Hälfte der Sparrate.</div>`}
+],
+quiz:[
+{q:"Wie hoch sollte ein Notgroschen typischerweise sein?",a:["1 Netto-Monatsgehalt","3 bis 6 Netto-Monatsgehälter","2 Brutto-Jahresgehälter","So viel wie möglich im Aktiendepot"],c:1,e:"Üblich sind 3 bis 6 Netto-Monatsgehälter, gut erreichbar auf dem Tagesgeldkonto."},
+{q:"Was steht in der Finanzplanung an erster Stelle?",a:["ETF-Sparplan","Existenzbedrohende Risiken absichern","Urlaubskasse","Bausparvertrag"],c:1,e:"Zuerst werden Risiken abgesichert, die die Existenz bedrohen (z. B. Haftpflicht, Berufsunfähigkeit)."},
+{q:"Nach der 72er-Regel: Wie lange dauert die Verdopplung bei 6 % Rendite?",a:["6 Jahre","9 Jahre","12 Jahre","18 Jahre"],c:2,e:"72 ÷ 6 = 12 Jahre."},
+{q:"Zins 2 %, Inflation 3 %. Wie hoch ist der Realzins?",a:["+5 %","+1 %","-1 %","0 %"],c:2,e:"Realzins = Nominalzins – Inflation = 2 % – 3 % = –1 %."},
+{q:"Wie viel Prozent sieht die 50-30-20-Regel fürs Sparen vor?",a:["10 %","20 %","30 %","50 %"],c:1,e:"20 % des Nettoeinkommens gehen in Sparen und Vorsorge."},
+{q:"Wo sollte der Notgroschen am besten liegen?",a:["Aktien-ETF","Tagesgeldkonto","Bausparvertrag","Lebensversicherung"],c:1,e:"Tagesgeld ist täglich verfügbar und schwankt nicht."},
+{q:"Was bedeutet „Pay yourself first“?",a:["Zuerst Schulden zahlen","Sparrate direkt nach Gehaltseingang abbuchen","Erst Konsum, dann sparen","Sich selbst ein Gehalt auszahlen"],c:1,e:"Die Sparrate geht als Dauerauftrag direkt am Monatsanfang weg."}
+]},
+
+{id:"altersvorsorge", ic:"🏖️", title:"Altersvorsorge", sub:"Rentenlücke, 3 Schichten, bAV",
+lessons:[
+{t:"Die Rentenlücke", b:`<p>Die gesetzliche Rente deckt nur einen Teil des letzten Einkommens. Das Rentenniveau liegt derzeit bei 48 % – das ist das Verhältnis einer Standardrente nach 45 Beitragsjahren zum Durchschnittsverdienst, <b>vor Steuern und Sozialabgaben</b>.</p>
+<p>Im Alter fallen außerdem Steuern sowie Kranken- und Pflegeversicherungsbeiträge an.</p>
+<p><b>Rentenlücke = gewünschtes Alterseinkommen – erwartete Renten</b></p>
+<p>Als Faustregel braucht man im Alter etwa <b>70–80 % des letzten Nettoeinkommens</b>, um den Lebensstandard zu halten.</p>
+<div class="box">Die jährliche <b>Renteninformation</b> der Deutschen Rentenversicherung (ab 27 Jahren) ist die Basis jeder Rentenlückenrechnung. Im Rechner-Bereich der App gibt es einen Schnellcheck.</div>`},
+{t:"Das 3-Schichten-Modell", b:`<p>Die Altersvorsorge in Deutschland wird in drei Schichten eingeteilt – nach der Art der steuerlichen Förderung.</p>
+<table class="t"><tr><th>Schicht</th><th>Beispiele</th></tr>
+<tr><td><b>1 – Basisversorgung</b></td><td>Gesetzliche Rente, berufsständische Versorgungswerke, Basisrente (Rürup)</td></tr>
+<tr><td><b>2 – Zusatzversorgung</b></td><td>Betriebliche Altersvorsorge (bAV), Riester, ab 2027 das Altersvorsorgedepot</td></tr>
+<tr><td><b>3 – Private Vorsorge</b></td><td>Private Renten- und Lebensversicherung, ETF-Depot, Immobilien</td></tr></table>
+<p>Schicht 1 und 2 werden stark gefördert, dafür ist das Geld bis zur Rente gebunden. Schicht 3 ist flexibel, aber ohne direkte Zulagen.</p>`},
+{t:"Die gesetzliche Rente", b:`<ul><li><b>Umlageverfahren</b>: Die heutigen Beitragszahler finanzieren die heutigen Renten (Generationenvertrag).</li>
+<li>Beiträge: ein fester Prozentsatz des Bruttolohns, je zur Hälfte von Arbeitgeber und Arbeitnehmer.</li>
+<li>Für jedes Jahr mit Durchschnittsverdienst gibt es einen <b>Entgeltpunkt</b>.</li>
+<li><b>Regelaltersgrenze 67</b> für alle ab Jahrgang 1964.</li>
+<li>Vorzeitige Rente: <b>0,3 % Abschlag pro Monat</b>, also 3,6 % pro Jahr – lebenslang.</li></ul>
+<div class="box warn">Der demografische Wandel (mehr Rentner, weniger Beitragszahler) setzt das System unter Druck. Private und betriebliche Vorsorge werden deshalb wichtiger.</div>`},
+{t:"Betriebliche Altersvorsorge (bAV)", b:`<p>Bei der bAV wird ein Teil des Bruttogehalts in eine Betriebsrente umgewandelt (<b>Entgeltumwandlung</b>).</p>
+<ul><li>5 Durchführungswege: Direktversicherung, Pensionskasse, Pensionsfonds, Unterstützungskasse, Direktzusage.</li>
+<li>Beiträge sind bis <b>8 % der Beitragsbemessungsgrenze</b> (Rentenversicherung) steuerfrei und bis <b>4 %</b> sozialversicherungsfrei.</li>
+<li>Der Arbeitgeber muss bei Entgeltumwandlung <b>15 % Zuschuss</b> zahlen, soweit er Sozialabgaben spart. Viele zahlen freiwillig mehr.</li>
+<li>Im Alter: Die Betriebsrente ist voll steuerpflichtig, dazu kommen Kranken- und Pflegeversicherungsbeiträge (mit Freibetrag in der KV).</li></ul>
+<div class="box">Beratungsfrage: „Was gibt Ihr Arbeitgeber dazu?“ – Ein hoher Arbeitgeberzuschuss macht die bAV oft sehr attraktiv.</div>`},
+{t:"Basisrente (Rürup)", b:`<ul><li>Gehört zur <b>Schicht 1</b>, wie die gesetzliche Rente.</li>
+<li>Beiträge sind bis zum jährlichen Höchstbetrag zu <b>100 % als Sonderausgaben</b> absetzbar.</li>
+<li>Auszahlung nur als <b>lebenslange Rente</b>, frühestens ab 62. Nicht kapitalisierbar, nicht beleihbar, nicht vererbbar (außer Hinterbliebenenschutz für Ehepartner/Kinder).</li>
+<li>Die Rente ist im Alter voll steuerpflichtig.</li></ul>
+<p>Besonders interessant für <b>Selbstständige</b> und Gutverdiener mit hohem Steuersatz.</p>`},
+{t:"Private Rentenversicherung", b:`<ul><li><b>Klassisch</b> mit Garantiezins oder <b>fondsgebunden</b> mit höheren Renditechancen.</li>
+<li>Bei <b>Kapitalauszahlung</b>: Nur der halbe Ertrag wird versteuert, wenn der Vertrag mindestens <b>12 Jahre</b> lief und die Auszahlung <b>ab 62</b> erfolgt (Halbeinkünfteverfahren).</li>
+<li>Bei <b>Rentenzahlung</b>: Nur der Ertragsanteil wird versteuert, z. B. 17 % bei Rentenbeginn mit 67.</li>
+<li>Vorteile: lebenslange Rente (Langlebigkeitsrisiko), steuerfreies Umschichten innerhalb des Vertrags, oft Zusatzbausteine.</li></ul>`},
+{t:"Riester – Auslaufmodell mit Bestandsschutz", b:`<ul><li>Neue Riester-Verträge gibt es nur noch bis Ende 2026. Ab 2027 folgt das <b>Altersvorsorgedepot</b>.</li>
+<li>Bestehende Verträge laufen mit <b>Bestandsschutz</b> weiter.</li>
+<li>Man kann per Erklärung in die neue Fördersystematik wechseln oder das Kapital übertragen. Dabei können Kosten entstehen, und ein Rückweg ins alte Recht ist ausgeschlossen.</li>
+<li><b>Nicht einfach kündigen</b>: Eine Kündigung ist eine „schädliche Verwendung“ – die Zulagen und Steuervorteile müssen zurückgezahlt werden.</li></ul>`}
+],
+quiz:[
+{q:"Zu welcher Schicht gehört die betriebliche Altersvorsorge?",a:["Schicht 1","Schicht 2","Schicht 3","Zu keiner"],c:1,e:"bAV, Riester und das neue Altersvorsorgedepot gehören zur Schicht 2."},
+{q:"Zu welcher Schicht gehört die Basisrente (Rürup)?",a:["Schicht 1","Schicht 2","Schicht 3","Zu keiner"],c:0,e:"Die Basisrente ist Teil der Basisversorgung, wie die gesetzliche Rente."},
+{q:"Was bedeutet „Umlageverfahren“ bei der gesetzlichen Rente?",a:["Jeder spart für sich selbst an","Die Beiträge von heute zahlen die Renten von heute","Der Staat legt alles in Aktien an","Arbeitgeber zahlen allein"],c:1,e:"Das ist der Generationenvertrag: Die aktuellen Beiträge finanzieren direkt die aktuellen Renten."},
+{q:"Wie hoch ist der Abschlag pro Monat bei vorzeitiger Altersrente?",a:["0,1 %","0,3 %","0,5 %","1 %"],c:1,e:"0,3 % pro Monat, also 3,6 % pro Jahr – lebenslang."},
+{q:"Welchen Pflichtzuschuss muss der Arbeitgeber bei Entgeltumwandlung zahlen?",a:["Keinen","10 %","15 %","50 %"],c:2,e:"15 %, soweit er Sozialversicherungsbeiträge einspart."},
+{q:"Wann gilt das Halbeinkünfteverfahren bei einer privaten Rentenversicherung?",a:["Immer","Laufzeit 12 Jahre und Auszahlung ab 62","Laufzeit 5 Jahre","Nur bei Rentenzahlung"],c:1,e:"Mindestens 12 Jahre Laufzeit und Auszahlung ab 62 – dann wird nur der halbe Ertrag versteuert."},
+{q:"Was passiert bei einer Kündigung eines Riester-Vertrags?",a:["Nichts","Zulagen und Steuervorteile müssen zurückgezahlt werden","Man bekommt einen Bonus","Der Vertrag wird automatisch ein Altersvorsorgedepot"],c:1,e:"Eine Kündigung ist schädliche Verwendung. Besser: beitragsfrei stellen, wechseln oder übertragen."},
+{q:"Welcher Anteil des letzten Nettos wird als Faustregel im Alter benötigt?",a:["30–40 %","50 %","70–80 %","120 %"],c:2,e:"Etwa 70–80 % des letzten Nettoeinkommens, um den Lebensstandard zu halten."}
+]},
+
+{id:"avd", ic:"🆕", title:"Altersvorsorgedepot 2027", sub:"Neue Förderung ab 1. Januar 2027", hl:true,
+lessons:[
+{t:"Was ist das Altersvorsorgedepot?", b:`<p>Das Altersvorsorgedepot ist der <b>Nachfolger der Riester-Rente</b>. Das Altersvorsorgereformgesetz wurde im Mai 2026 verkündet. Die Produkte starten am <b>1. Januar 2027</b>.</p>
+<ul><li>Ein zertifizierter Altersvorsorgevertrag, in dem in <b>Fonds und ETFs</b> gespart wird.</li>
+<li><b>Keine Pflicht zur Beitragsgarantie</b> mehr – eine Aktienquote von bis zu 100 % ist möglich.</li>
+<li>Erstmals sind auch <b>alle Selbstständigen</b> förderberechtigt.</li>
+<li>Vor 2027 gibt es nur Vormerklisten. Verträge dürfen erst nach der Zertifizierung verkauft werden.</li></ul>
+<div class="box">Stand dieser Lektion: Oktober 2026. Konkrete Kosten und Fondslisten der Anbieter lassen sich erst ab dem Marktstart vergleichen.</div>`},
+{t:"Die Grundzulage – bis 540 € pro Jahr", b:`<p>Die Zulage richtet sich nach dem eigenen Beitrag (beitragsproportional). Der einkommensabhängige Mindesteigenbeitrag aus der Riester-Welt entfällt.</p>
+<table class="t"><tr><th>Eigenbeitrag pro Jahr</th><th class="r">Zulage</th></tr>
+<tr><td>erste 360 € (30 €/Monat)</td><td class="r"><b>50 %</b> = max. 180 €</td></tr>
+<tr><td>360 € bis 1.800 €</td><td class="r"><b>25 %</b> = max. 360 €</td></tr>
+<tr><td><b>Maximum bei 1.800 € (150 €/Monat)</b></td><td class="r"><b>540 €</b></td></tr></table>
+<ul><li>Voraussetzung: mindestens <b>120 € Eigenbeitrag pro Jahr</b> (10 €/Monat).</li>
+<li>Einzahlen darf man bis <b>6.840 € pro Jahr</b>, gefördert werden davon 1.800 €.</li></ul>
+<div class="box">Beispiel: 100 €/Monat = 1.200 € im Jahr → 180 € + 25 % von 840 € (210 €) = <b>390 € Zulage</b>.</div>`},
+{t:"Kinderzulage und Berufseinsteigerbonus", b:`<ul><li><b>Kinderzulage</b>: 1 € Zulage je eingezahltem Euro, höchstens <b>300 € pro Kind und Jahr</b>.</li>
+<li>Die volle Kinderzulage gibt es für <b>jedes</b> Kind schon ab <b>300 € Eigenbeitrag im Jahr</b> (25 €/Monat).</li>
+<li>Sie fließt in das Depot des zulageberechtigten Elternteils, nicht in ein Depot des Kindes.</li>
+<li><b>Berufseinsteigerbonus</b>: einmalig <b>200 €</b> bei Vertragsabschluss vor dem 25. Geburtstag.</li></ul>
+<div class="box">Beispiel Familie mit 2 Kindern: 300 € Eigenbeitrag → 150 € Grundzulage + 600 € Kinderzulage = <b>750 € Förderung</b>. Aus 300 € werden 1.050 € im Depot.</div>`},
+{t:"Die Produktarten", b:`<ul><li><b>Standarddepot</b>: Jeder Anbieter muss es führen. Zwei vorgegebene Fonds (defensiv und chancenorientiert), vor Rentenbeginn wird schrittweise umgeschichtet. <b>Effektivkosten max. 1,0 % pro Jahr.</b></li>
+<li><b>Frei gestaltetes Depot</b>: eigene Fondsauswahl nach einer Positivliste (u. a. höchstens Risikoklasse 5 im Basisinformationsblatt). Breite Welt-ETFs sind zulässig, Krypto und Hebelprodukte nicht. Hier gibt es keinen Kostendeckel.</li>
+<li><b>Garantieprodukte</b>: optional mit 80 % oder 100 % Beitragsgarantie für Sicherheitsorientierte.</li></ul>
+<div class="box warn">Kosten zählen: 1 % Effektivkosten klingen wenig, kosten über 30 Jahre aber etwa ein Viertel des Endvermögens.</div>`},
+{t:"Auszahlung im Alter", b:`<ul><li>Auszahlbeginn frühestens mit <b>65</b>, spätestens mit <b>70</b> Jahren.</li>
+<li>Früher nur, wenn bereits eine gesetzliche Altersrente bezogen wird.</li>
+<li>Wahl zwischen <b>lebenslanger Rente</b> oder einem <b>Auszahlplan mindestens bis 85</b>.</li></ul>
+<div class="box warn">Häufiger Irrtum: „Das Geld ist ab 62 verfügbar.“ Das stimmt nicht – die Zahl 62 stammt aus dem Steuerrecht für ungeförderte Beiträge.</div>`},
+{t:"Steuern", b:`<ul><li><b>Ansparphase steuerfrei</b>: keine Vorabpauschale, keine Abgeltungsteuer beim Umschichten.</li>
+<li><b>Nachgelagerte Besteuerung</b>: Auszahlungen aus geförderten Beiträgen werden im Alter mit dem persönlichen Steuersatz versteuert – inklusive Zulagen und Erträgen.</li>
+<li>Das Finanzamt prüft automatisch, ob der <b>Sonderausgabenabzug</b> mehr bringt als die Zulage (Günstigerprüfung).</li></ul>`},
+{t:"Wichtige Spielregeln", b:`<ul><li>Gefördert werden höchstens <b>2 Verträge</b> nach neuem Recht. Maßgeblich ist das Abschlussdatum.</li>
+<li><b>Anbieterwechsel</b> nach 5 Jahren kostenfrei, der neue Anbieter darf höchstens 150 € berechnen.</li>
+<li>Riester-Verträge behalten Bestandsschutz. Wechsel in die neue Förderung per Erklärung oder Übertragung möglich, kein Rückweg.</li>
+<li>Zwischenzeitliche Verluste von 30–40 % sind bei Aktien normal und werden nicht ausgeglichen. Was das Risiko begrenzt, ist die lange Laufzeit.</li></ul>`},
+{t:"Frühstartrente (geplant)", b:`<p>Die Frühstartrente ist eine eigene Förderung für Kinder und fließt in dieselbe Produktwelt.</p>
+<ul><li>Der Bund zahlt <b>10 € pro Monat</b> vom 6. bis zum 18. Lebensjahr, über 12 Jahre also 1.440 €.</li>
+<li>Geplanter Start: 1. Januar 2027 mit den Jahrgängen 2020 und 2021.</li>
+<li>Gefördert wird ein Standarddepot mit 1 % Kostendeckel. Ohne Depot legt der Bund das Geld kollektiv an (verwaltet von der Bundesbank).</li>
+<li>Das Geld ist erst ab 65 verfügbar – also nichts für Führerschein oder Studium.</li></ul>
+<div class="box warn">Stand Oktober 2026: Das Kabinett hat den Entwurf am 12. August 2026 beschlossen, Bundestag und Bundesrat haben noch nicht entschieden.</div>`}
+],
+quiz:[
+{q:"Wie hoch ist die maximale Grundzulage pro Jahr?",a:["175 €","300 €","540 €","1.800 €"],c:2,e:"180 € (50 % auf 360 €) + 360 € (25 % auf 1.440 €) = 540 €."},
+{q:"Welcher Eigenbeitrag ist für die volle Grundzulage nötig?",a:["360 € im Jahr","1.200 € im Jahr","1.800 € im Jahr","6.840 € im Jahr"],c:2,e:"1.800 € pro Jahr, also 150 € pro Monat."},
+{q:"Wie hoch ist der Mindesteigenbeitrag für eine Zulage?",a:["10 € im Jahr","120 € im Jahr","4 % vom Einkommen","360 € im Jahr"],c:1,e:"Mindestens 120 € pro Jahr (10 €/Monat)."},
+{q:"Ab welchem Eigenbeitrag gibt es die volle Kinderzulage?",a:["120 € pro Jahr","300 € pro Jahr","300 € pro Kind und Monat","1.800 € pro Jahr"],c:1,e:"300 € pro Jahr (25 €/Monat) reichen für die volle Kinderzulage jedes Kindes."},
+{q:"2 Kinder, 300 € Eigenbeitrag im Jahr. Wie hoch ist die Förderung insgesamt?",a:["300 €","450 €","750 €","1.140 €"],c:2,e:"150 € Grundzulage + 2 × 300 € Kinderzulage = 750 €."},
+{q:"Wie hoch ist der Kostendeckel im Standarddepot?",a:["0,5 %","1,0 %","1,5 %","Es gibt keinen"],c:1,e:"Die Effektivkosten im Standarddepot dürfen 1,0 % pro Jahr nicht übersteigen."},
+{q:"Ab welchem Alter kann frühestens ausgezahlt werden?",a:["60","62","65","67"],c:2,e:"Frühestens ab 65, spätestens ab 70."},
+{q:"Wie wird in der Ansparphase besteuert?",a:["Abgeltungsteuer jährlich","Vorabpauschale","Gar nicht – Besteuerung erst bei Auszahlung","Mit 30 % Teilfreistellung"],c:2,e:"Die Ansparphase ist steuerfrei, besteuert wird nachgelagert im Alter."},
+{q:"Wie viele geförderte Verträge sind möglich?",a:["1","2","3","Unbegrenzt"],c:1,e:"Höchstens zwei Verträge nach neuem Recht werden gefördert."},
+{q:"Was bekommt man, wenn man vor dem 25. Geburtstag abschließt?",a:["Doppelte Grundzulage","Einmalig 200 € Berufseinsteigerbonus","Keine Kosten","Garantie"],c:1,e:"Einmalig 200 € Berufseinsteigerbonus."}
+]},
+
+{id:"vermoegen", ic:"📈", title:"Vermögensaufbau", sub:"ETF, Fonds, Kosten, Steuern",
+lessons:[
+{t:"Das magische Dreieck", b:`<p>Jede Geldanlage wird nach drei Zielen beurteilt:</p>
+<ul><li><b>Rendite</b> – wie viel Ertrag bringt sie?</li><li><b>Sicherheit</b> – wie stark schwankt sie, droht Verlust?</li><li><b>Liquidität</b> – wie schnell komme ich an mein Geld?</li></ul>
+<p>Keine Anlage erfüllt alle drei Ziele gleichzeitig. Tagesgeld ist sicher und liquide, bringt aber wenig. Aktien bringen langfristig mehr, schwanken aber stark.</p>
+<div class="box">Die richtige Mischung hängt vom Anlageziel, vom Zeithorizont und von der Risikobereitschaft ab.</div>`},
+{t:"Anlageklassen und Risikoklassen", b:`<ul><li><b>Tages- und Festgeld</b>: sicher, wenig Rendite.</li>
+<li><b>Anleihen</b>: Kredit an Staaten oder Unternehmen, fester Zins.</li>
+<li><b>Aktien</b>: Beteiligung an Unternehmen, höchste Renditechance, starke Schwankungen.</li>
+<li><b>Fonds</b>: Bündeln viele Wertpapiere.</li>
+<li><b>Immobilien</b>, <b>Rohstoffe und Gold</b> als Sachwerte.</li></ul>
+<p>Im <b>Basisinformationsblatt</b> steht der Gesamtrisikoindikator <b>SRI von 1 (gering) bis 7 (hoch)</b>.</p>`},
+{t:"Fonds und ETFs", b:`<ul><li><b>Aktiver Fonds</b>: Ein Fondsmanager wählt Wertpapiere aus und will den Markt schlagen. Höhere Kosten.</li>
+<li><b>ETF</b> (Exchange Traded Fund): bildet einen Index passiv nach, z. B. den MSCI World mit über 1.000 Unternehmen aus 23 Industrieländern. Sehr günstig.</li>
+<li><b>Sondervermögen</b>: Fondsgeld ist bei einer Pleite der Fondsgesellschaft geschützt.</li>
+<li><b>Ausschüttend</b> (Erträge werden ausgezahlt) oder <b>thesaurierend</b> (Erträge werden wieder angelegt).</li></ul>
+<div class="box">Der MSCI World enthält nur Industrieländer. Der MSCI ACWI oder die Kombination World + Emerging Markets streut zusätzlich in Schwellenländer.</div>`},
+{t:"Kosten verstehen", b:`<ul><li><b>Laufende Kosten (TER)</b>: jährlich im Fonds, bei ETFs oft 0,1–0,3 %.</li>
+<li><b>Ausgabeaufschlag</b>: einmalig beim Kauf, bei aktiven Fonds oft bis 5 %.</li>
+<li><b>Depot- und Ordergebühren</b> beim Broker oder der Bank.</li>
+<li><b>Effektivkosten</b> (Renditeminderung): fassen alles zusammen – der beste Vergleichswert.</li></ul>
+<div class="box warn">Kosten sind sicher, Renditen nicht. Schon 1 % mehr Kosten pro Jahr können über 30 Jahre etwa ein Viertel des Endvermögens kosten.</div>`},
+{t:"Sparplan und Cost-Average-Effekt", b:`<p>Beim Sparplan wird jeden Monat ein fester Betrag investiert.</p>
+<ul><li>Bei niedrigen Kursen kauft man <b>mehr</b> Anteile, bei hohen Kursen <b>weniger</b>. Das ist der <b>Durchschnittskosteneffekt</b>.</li>
+<li>Man muss nicht den „richtigen Zeitpunkt“ finden.</li>
+<li>Mit einer <b>Dynamik</b> (z. B. +3 % pro Jahr) wächst die Sparrate mit dem Gehalt.</li></ul>`},
+{t:"Streuung und Anlagehorizont", b:`<ul><li><b>Diversifikation</b>: über Länder, Branchen und Anlageklassen streuen. Ein Einzelwert kann ausfallen, der Weltmarkt als Ganzes hat sich langfristig immer erholt.</li>
+<li><b>Klumpenrisiko</b> vermeiden, z. B. nur Aktien des eigenen Arbeitgebers.</li>
+<li><b>Anlagehorizont</b>: Aktien eignen sich für Geld, das 10–15 Jahre und länger nicht gebraucht wird.</li>
+<li><b>Rebalancing</b>: die Aufteilung regelmäßig auf die Zielgewichtung zurückführen.</li></ul>
+<div class="box">Crashs von 30–40 % gehören dazu. Wer dann in Panik verkauft, macht Buchverluste zu echten Verlusten.</div>`},
+{t:"Steuern auf Kapitalerträge", b:`<ul><li><b>Abgeltungsteuer 25 %</b> plus 5,5 % Solidaritätszuschlag darauf (zusammen 26,375 %), ggf. Kirchensteuer.</li>
+<li><b>Sparerpauschbetrag</b>: 1.000 € pro Person, 2.000 € für Ehepaare pro Jahr steuerfrei.</li>
+<li>Dafür bei der Bank einen <b>Freistellungsauftrag</b> erteilen.</li>
+<li><b>Teilfreistellung</b>: Bei Aktienfonds und -ETFs bleiben 30 % der Erträge steuerfrei.</li>
+<li><b>Vorabpauschale</b>: Bei thesaurierenden Fonds wird jährlich ein fiktiver Mindestertrag besteuert.</li></ul>`},
+{t:"Sparen für Kinder", b:`<ul><li><b>Depot auf den Namen des Kindes</b>: Das Kind hat eigenen Grundfreibetrag und Sparerpauschbetrag. Aber: Das Geld gehört dem Kind und ist ab 18 frei verfügbar. Es kann bei BAföG angerechnet werden.</li>
+<li><b>Depot der Eltern</b> mit „Kinder-Unterkonto“: Eltern behalten die Kontrolle.</li>
+<li>Ab 2027 gibt es zusätzlich die <b>Kinderzulage</b> im eigenen Altersvorsorgedepot und geplant die <b>Frühstartrente</b>.</li></ul>`}
+],
+quiz:[
+{q:"Welche drei Ziele bilden das magische Dreieck?",a:["Rendite, Sicherheit, Liquidität","Zins, Steuer, Kosten","Aktie, Anleihe, Fonds","Inflation, Deflation, Rezession"],c:0,e:"Rendite, Sicherheit und Liquidität – alle drei gleichzeitig sind nicht erreichbar."},
+{q:"Was macht ein ETF?",a:["Ein Manager wählt Aktien aus","Er bildet einen Index passiv nach","Er garantiert eine Rendite","Er investiert nur in Gold"],c:1,e:"Ein ETF bildet einen Index nach, z. B. den MSCI World."},
+{q:"Wie hoch ist der Sparerpauschbetrag für Ehepaare?",a:["801 €","1.000 €","1.602 €","2.000 €"],c:3,e:"1.000 € pro Person, 2.000 € für zusammenveranlagte Ehepaare."},
+{q:"Wie viel Prozent der Erträge sind bei Aktien-ETFs teilfreigestellt?",a:["15 %","30 %","50 %","80 %"],c:1,e:"30 % der Erträge bleiben bei Aktienfonds steuerfrei."},
+{q:"Was beschreibt der Cost-Average-Effekt?",a:["Bei niedrigen Kursen werden mehr Anteile gekauft","Die Kosten sinken jedes Jahr","Gebühren werden erstattet","Kurse steigen garantiert"],c:0,e:"Mit festem Betrag kauft man bei tiefen Kursen mehr Anteile."},
+{q:"Was bedeutet „Sondervermögen“ bei Fonds?",a:["Das Geld ist bei Pleite der Fondsgesellschaft geschützt","Fonds für Reiche","Steuerfreies Vermögen","Ein Garantiefonds"],c:0,e:"Fondsvermögen ist rechtlich vom Vermögen der Fondsgesellschaft getrennt."},
+{q:"Welche Skala hat der Risikoindikator SRI im Basisinformationsblatt?",a:["A bis F","1 bis 5","1 bis 7","0 bis 100"],c:2,e:"Der SRI reicht von 1 (geringes Risiko) bis 7 (hohes Risiko)."},
+{q:"Was ist der beste Wert, um Kosten zu vergleichen?",a:["Ausgabeaufschlag","Effektivkosten","Depotgebühr","Fondsgröße"],c:1,e:"Die Effektivkosten (Renditeminderung) fassen alle Kosten zusammen."}
+]},
+
+{id:"absicherung", ic:"🛡️", title:"Vermögensabsicherung", sub:"BU, Risikoleben, Pflege, KV",
+lessons:[
+{t:"Die Arbeitskraft ist das größte Vermögen", b:`<p>Wer 2.500 € netto verdient und noch 30 Jahre arbeitet, hat ein Lebenseinkommen von <b>900.000 €</b> vor sich. Dieses Einkommen ist die Basis für alles andere – Miete, Kredit, Sparplan.</p>
+<p>Deshalb gilt: <b>Große, existenzbedrohende Risiken zuerst absichern.</b> Kleine Schäden kann man selbst tragen.</p>
+<div class="box">Etwa jeder vierte Erwerbstätige wird vor dem Rentenalter berufsunfähig. Häufigste Ursachen sind psychische Erkrankungen und Erkrankungen des Bewegungsapparats.</div>`},
+{t:"Berufsunfähigkeitsversicherung (BU)", b:`<ul><li>Zahlt eine monatliche Rente, wenn man seinen <b>zuletzt ausgeübten Beruf</b> voraussichtlich mindestens 6 Monate zu mindestens <b>50 %</b> nicht mehr ausüben kann.</li>
+<li>Wichtig: <b>Verzicht auf abstrakte Verweisung</b> – der Versicherer darf nicht auf einen anderen Beruf verweisen.</li>
+<li><b>Nachversicherungsgarantie</b>: Rente bei Heirat, Geburt, Hauskauf ohne neue Gesundheitsprüfung erhöhen.</li>
+<li>Laufzeit möglichst bis zum <b>Renteneintritt (67)</b>.</li>
+<li>Höhe: etwa <b>70–80 % des Nettoeinkommens</b>.</li>
+<li>Gesundheitsfragen vollständig und wahrheitsgemäß beantworten (vorvertragliche Anzeigepflicht).</li></ul>
+<div class="box">Je jünger und gesünder beim Abschluss, desto günstiger der Beitrag.</div>`},
+{t:"Gesetzliche Erwerbsminderungsrente", b:`<ul><li><b>Volle Erwerbsminderung</b>: Man kann <b>weniger als 3 Stunden täglich</b> irgendeine Tätigkeit ausüben.</li>
+<li><b>Teilweise Erwerbsminderung</b>: 3 bis unter 6 Stunden täglich.</li>
+<li>Es zählt <b>jede</b> Tätigkeit auf dem Arbeitsmarkt, nicht der eigene Beruf.</li>
+<li>Wer nach 1961 geboren ist, hat <b>keinen gesetzlichen Berufsunfähigkeitsschutz</b> mehr.</li></ul>
+<p>Die gesetzliche Absicherung ist deshalb meist zu niedrig, um den Lebensstandard zu halten.</p>`},
+{t:"Alternativen zur BU", b:`<ul><li><b>Erwerbsunfähigkeitsversicherung</b>: zahlt erst, wenn man gar nicht mehr arbeiten kann. Günstiger, aber schwächer.</li>
+<li><b>Grundfähigkeitsversicherung</b>: zahlt bei Verlust bestimmter Fähigkeiten (Sehen, Gehen, Hände gebrauchen).</li>
+<li><b>Schwere-Krankheiten-Versicherung</b> (Dread Disease): Einmalzahlung bei Diagnose z. B. Krebs, Herzinfarkt, Schlaganfall.</li>
+<li><b>Unfallversicherung</b>: nur bei Unfällen, Leistung nach Invaliditätsgrad (Gliedertaxe), oft mit Progression. Sie ersetzt keine BU, weil die meisten Fälle durch Krankheit entstehen.</li></ul>`},
+{t:"Risikolebensversicherung", b:`<ul><li>Zahlt im Todesfall eine Summe an die Hinterbliebenen – wichtig für <b>Familien</b> und bei <b>Krediten</b>.</li>
+<li>Faustregel: <b>3 bis 5 Bruttojahresgehälter</b> plus offene Kredite.</li>
+<li><b>Konstante</b> Summe für die Familie, <b>fallende</b> Summe passend zur Restschuld eines Kredits.</li>
+<li><b>Überkreuz-Versicherung</b> bei unverheirateten Paaren: Jeder versichert den anderen, damit keine Erbschaftsteuer anfällt.</li>
+<li>Meist sehr günstig, vor allem für Nichtraucher.</li></ul>`},
+{t:"Kranken- und Pflegeversicherung", b:`<ul><li><b>Gesetzliche KV</b>: Beitrag nach Einkommen, Familienversicherung für Kinder und Partner ohne eigenes Einkommen.</li>
+<li><b>Private KV</b>: Beitrag nach Alter und Gesundheit, Leistungen frei wählbar. Möglich für Selbstständige, Beamte und Angestellte über der Versicherungspflichtgrenze.</li>
+<li><b>Zusatzversicherungen</b>: Zahn, stationär (Einzelzimmer, Chefarzt), Auslandsreise.</li>
+<li><b>Pflege</b>: Die gesetzliche Pflegeversicherung ist nur eine Teilabsicherung. Pflegegrade 1 bis 5. Der Eigenanteil im Pflegeheim liegt häufig über 2.000 € pro Monat. Lösung: <b>Pflegetagegeld</b> oder Pflegerente.</li></ul>`},
+{t:"Vorsorgedokumente", b:`<ul><li><b>Testament</b>: Ohne Testament gilt die gesetzliche Erbfolge.</li>
+<li><b>Vorsorgevollmacht</b>: Wer darf entscheiden, wenn ich es nicht mehr kann? Auch Ehepartner haben kein automatisches umfassendes Vertretungsrecht.</li>
+<li><b>Patientenverfügung</b>: Welche medizinischen Maßnahmen will ich?</li>
+<li><b>Sorgerechtsverfügung</b>: Wer kümmert sich um minderjährige Kinder?</li></ul>`}
+],
+quiz:[
+{q:"Ab welchem Grad zahlt eine BU üblicherweise?",a:["10 %","25 %","50 %","100 %"],c:2,e:"Mindestens 50 % Berufsunfähigkeit, voraussichtlich mindestens 6 Monate."},
+{q:"Was bedeutet „Verzicht auf abstrakte Verweisung“?",a:["Keine Gesundheitsfragen","Der Versicherer darf nicht auf einen anderen Beruf verweisen","Die Rente steigt jährlich","Keine Wartezeit"],c:1,e:"Ein wichtiges Qualitätsmerkmal einer BU."},
+{q:"Wann gibt es die volle gesetzliche Erwerbsminderungsrente?",a:["Unter 6 Stunden im eigenen Beruf","Unter 3 Stunden in irgendeiner Tätigkeit","Ab 50 % Einschränkung","Nach jedem Unfall"],c:1,e:"Weniger als 3 Stunden täglich in irgendeiner Tätigkeit."},
+{q:"Faustregel für die Summe der Risikolebensversicherung?",a:["1 Monatsgehalt","3–5 Bruttojahresgehälter plus Kredite","100.000 € für alle","10 Jahresgehälter"],c:1,e:"3 bis 5 Bruttojahresgehälter plus offene Kredite."},
+{q:"Warum ersetzt eine Unfallversicherung keine BU?",a:["Sie ist zu teuer","Die meisten Berufsunfähigkeiten entstehen durch Krankheit","Sie zahlt nur im Ausland","Sie zahlt nur Rentnern"],c:1,e:"Unfälle sind nur selten die Ursache – meist sind es Krankheiten."},
+{q:"Wozu dient eine Überkreuz-Risikolebensversicherung?",a:["Doppelte Leistung","Erbschaftsteuer bei unverheirateten Paaren vermeiden","Günstigerer Beitrag für Raucher","Absicherung von Kindern"],c:1,e:"Versicherungsnehmer und Begünstigter sind dieselbe Person, so fällt keine Erbschaftsteuer an."},
+{q:"Wie viele Pflegegrade gibt es?",a:["3","4","5","7"],c:2,e:"Pflegegrad 1 bis 5."},
+{q:"Welches Dokument regelt, wer für mich entscheidet, wenn ich es nicht kann?",a:["Testament","Vorsorgevollmacht","Patientenverfügung","Erbschein"],c:1,e:"Die Vorsorgevollmacht."}
+]},
+
+{id:"sach", ic:"🏠", title:"Sachversicherungen", sub:"Haftpflicht, Hausrat, Gebäude, Kfz",
+lessons:[
+{t:"Privathaftpflicht – das Muss", b:`<ul><li>Wer einem anderen schadet, haftet nach § 823 BGB mit seinem <b>gesamten Vermögen – unbegrenzt</b>.</li>
+<li>Deckungssumme: mindestens <b>10 Mio. € pauschal</b>.</li>
+<li><b>Forderungsausfalldeckung</b>: zahlt, wenn ein anderer mich schädigt und nicht zahlen kann.</li>
+<li>Wichtige Bausteine: Mietsachschäden, Schlüsselverlust, geliehene Sachen, <b>deliktunfähige Kinder</b> (unter 7, im Straßenverkehr unter 10 Jahren).</li>
+<li>Ein <b>Familientarif</b> schützt Partner und Kinder mit.</li></ul>
+<div class="box">Kostet oft nur 50–100 € im Jahr und schützt vor Millionenforderungen.</div>`},
+{t:"Hausratversicherung", b:`<ul><li>Versichert ist alles, was man beim Umzug mitnehmen würde: Möbel, Kleidung, Elektronik, Wertsachen.</li>
+<li>Gefahren: <b>Feuer, Leitungswasser, Einbruchdiebstahl, Sturm/Hagel</b> (ab Windstärke 8).</li>
+<li>Erstattet wird der <b>Neuwert</b>.</li>
+<li>Versicherungssumme: meist <b>650 € pro m²</b> Wohnfläche mit <b>Unterversicherungsverzicht</b>.</li>
+<li>Extras: Fahrraddiebstahl, Überspannung, <b>Elementarschäden</b>, grobe Fahrlässigkeit.</li></ul>`},
+{t:"Wohngebäudeversicherung", b:`<ul><li>Versichert das Gebäude und alles, was fest eingebaut ist (Heizung, Einbauküche je nach Vertrag).</li>
+<li>Gefahren: <b>Feuer, Leitungswasser, Sturm/Hagel</b>.</li>
+<li><b>Elementarschäden</b> (Starkregen, Überschwemmung, Rückstau, Erdrutsch) müssen meist <b>extra</b> versichert werden – sehr wichtig.</li>
+<li><b>Gleitender Neuwert</b> (Wert 1914) schützt vor Unterversicherung.</li>
+<li><b>Photovoltaikanlage</b> einschließen oder separat versichern.</li>
+<li>Bei Baufinanzierung verlangt die Bank den Nachweis.</li></ul>
+<div class="box warn">Neue Solaranlage aufs Dach? Unbedingt dem Gebäudeversicherer melden – sonst droht Unterversicherung.</div>`},
+{t:"Kfz-Versicherung", b:`<ul><li><b>Kfz-Haftpflicht ist Pflicht</b>. Empfehlung: <b>100 Mio. € pauschal</b>, deutlich über der gesetzlichen Mindestdeckung.</li>
+<li><b>Teilkasko</b>: Diebstahl, Glasbruch, Wildunfall, Sturm, Hagel, Brand.</li>
+<li><b>Vollkasko</b>: zusätzlich selbst verschuldete Unfälle und Vandalismus.</li>
+<li><b>Schadenfreiheitsklasse (SF)</b>: Jedes schadenfreie Jahr senkt den Beitrag.</li>
+<li>Wechselstichtag: Kündigung bis <b>30. November</b> zum 1. Januar.</li></ul>`},
+{t:"Rechtsschutzversicherung", b:`<ul><li>Bausteine: <b>Privat, Beruf, Verkehr, Wohnen</b> (Mieter/Eigentümer).</li>
+<li>Meist <b>3 Monate Wartezeit</b> (nicht bei Verkehr).</li>
+<li>Oft ausgeschlossen: Baurecht (Hausbau!), Scheidung (meist nur Erstberatung), Streitigkeiten, die vor Abschluss begannen.</li>
+<li>Selbstbeteiligung senkt den Beitrag.</li></ul>`},
+{t:"Weitere Sachversicherungen", b:`<ul><li><b>Bauherrenhaftpflicht</b>: Pflicht für jeden, der baut.</li>
+<li><b>Haus- und Grundbesitzerhaftpflicht</b>: bei vermieteten Immobilien oder unbebauten Grundstücken. Das selbst bewohnte Einfamilienhaus ist meist in der Privathaftpflicht enthalten.</li>
+<li><b>Tierhalterhaftpflicht</b>: für Hunde und Pferde. In NRW ist sie für große Hunde Pflicht.</li>
+<li><b>Gewässerschadenhaftpflicht</b>: bei Öltanks.</li>
+<li><b>Photovoltaikversicherung</b>: Technikschäden und Ertragsausfall.</li></ul>`},
+{t:"Wichtige Grundbegriffe", b:`<ul><li><b>Unterversicherung</b>: Versicherungssumme zu niedrig → Leistung wird anteilig gekürzt.</li>
+<li><b>Neuwert / Zeitwert</b>: Neuwert = Wiederbeschaffung neu, Zeitwert = abzüglich Alter und Abnutzung.</li>
+<li><b>Grobe Fahrlässigkeit</b> (z. B. Kerze brennen lassen): mitversichern!</li>
+<li><b>Obliegenheiten</b>: Pflichten des Versicherten, z. B. Schaden sofort melden, Fenster schließen.</li>
+<li><b>Selbstbeteiligung</b>: Eigenanteil pro Schaden, senkt die Prämie.</li></ul>`}
+],
+quiz:[
+{q:"Wie hoch haftet man privat für Schäden an Dritten?",a:["Bis 10.000 €","Bis 1 Mio. €","Unbegrenzt mit dem gesamten Vermögen","Gar nicht"],c:2,e:"Nach § 823 BGB haftet man unbegrenzt."},
+{q:"Welche Deckungssumme wird für die Privathaftpflicht empfohlen?",a:["500.000 €","1 Mio. €","Mindestens 10 Mio. €","Egal"],c:2,e:"Mindestens 10 Mio. € pauschal für Personen-, Sach- und Vermögensschäden."},
+{q:"Was versichert die Hausratversicherung?",a:["Das Gebäude","Alles, was man beim Umzug mitnimmt","Nur Bargeld","Das Auto"],c:1,e:"Der bewegliche Hausrat."},
+{q:"Was muss in der Wohngebäudeversicherung meist extra versichert werden?",a:["Feuer","Leitungswasser","Elementarschäden wie Starkregen","Sturm"],c:2,e:"Elementarschäden sind meist ein Zusatzbaustein."},
+{q:"Was leistet die Teilkasko?",a:["Selbst verschuldete Unfälle","Diebstahl, Glas, Wildunfall, Sturm","Nur Haftpflichtschäden","Reparatur nach Verschleiß"],c:1,e:"Selbst verschuldete Unfälle zahlt erst die Vollkasko."},
+{q:"Bis wann muss man die Kfz-Versicherung zum 1. Januar kündigen?",a:["31. Oktober","30. November","31. Dezember","15. Januar"],c:1,e:"Stichtag ist der 30. November."},
+{q:"Was bedeutet Unterversicherung?",a:["Versicherung zu teuer","Versicherungssumme zu niedrig – Leistung wird gekürzt","Keine Selbstbeteiligung","Doppelversicherung"],c:1,e:"Die Leistung wird im Verhältnis Versicherungssumme zu Wert gekürzt."},
+{q:"Wie lang ist die übliche Wartezeit bei der Rechtsschutzversicherung?",a:["Keine","1 Woche","3 Monate","2 Jahre"],c:2,e:"Meist 3 Monate, im Verkehrsrecht oft keine."}
+]},
+
+{id:"immobilien", ic:"🔑", title:"Immobilien & Finanzierung", sub:"Eigenkapital, Annuität, Förderung",
+lessons:[
+{t:"Eigenkapital und Kaufnebenkosten", b:`<p>Beim Kauf fallen Nebenkosten an, die nicht finanziert werden sollten. In <b>NRW</b>:</p>
+<table class="t"><tr><td>Grunderwerbsteuer</td><td class="r">6,5 %</td></tr>
+<tr><td>Notar und Grundbuch</td><td class="r">ca. 2 %</td></tr>
+<tr><td>Makler (falls vorhanden)</td><td class="r">bis 3,57 %</td></tr>
+<tr><td><b>Gesamt</b></td><td class="r"><b>ca. 8,5–12 %</b></td></tr></table>
+<p>Faustregel: Eigenkapital mindestens in Höhe der Nebenkosten, besser <b>20 % des Kaufpreises</b>. Mehr Eigenkapital = besserer Zins.</p>`},
+{t:"Das Annuitätendarlehen", b:`<ul><li>Gleichbleibende Monatsrate aus <b>Zins und Tilgung</b>.</li>
+<li>Mit jeder Rate sinkt der Zinsanteil, der Tilgungsanteil steigt.</li>
+<li><b>Anfangstilgung</b> mindestens 2 %, besser 3 % – sonst dauert die Rückzahlung sehr lange.</li></ul>
+<div class="box">Beispiel: 300.000 € Darlehen, 3,5 % Zins, 2 % Tilgung → (3,5 % + 2 %) × 300.000 € ÷ 12 = <b>1.375 € pro Monat</b>.</div>`},
+{t:"Zinsbindung und Anschlussfinanzierung", b:`<ul><li><b>Zinsbindung</b>: 10, 15 oder 20 Jahre fester Zins. Danach ist die <b>Restschuld</b> neu zu finanzieren.</li>
+<li><b>Forward-Darlehen</b>: Zins für die Anschlussfinanzierung bis zu ca. 5 Jahre im Voraus sichern (gegen Aufschlag).</li>
+<li>Nach 10 Jahren ab Vollauszahlung gibt es ein <b>Sonderkündigungsrecht</b> (§ 489 BGB) mit 6 Monaten Frist.</li>
+<li><b>Sondertilgung</b> (z. B. 5 % pro Jahr) vereinbaren – für Bonus oder Erbschaft.</li></ul>`},
+{t:"Wie viel Haus kann ich mir leisten?", b:`<ul><li>Die Rate sollte höchstens etwa <b>35–40 % des Haushaltsnettos</b> betragen.</li>
+<li><b>Instandhaltungsrücklage</b> einplanen: etwa 1 € pro m² Wohnfläche und Monat, bei älteren Häusern mehr.</li>
+<li>Puffer für Elternzeit, Jobwechsel und steigende Kosten einplanen.</li></ul>`},
+{t:"Förderungen", b:`<ul><li><b>KfW</b>: zinsgünstige Kredite und Zuschüsse, z. B. für energieeffizientes Bauen, Sanierung, Heizungstausch und Familien.</li>
+<li><b>NRW.BANK</b>: Wohneigentums- und Modernisierungsförderung in Nordrhein-Westfalen.</li>
+<li><b>Wohn-Riester</b>: für bestehende Riester-Verträge.</li>
+<li><b>Bausparvertrag</b>: Zinssicherung für die Zukunft, Wohnungsbauprämie möglich.</li></ul>`},
+{t:"Die Finanzierung absichern", b:`<ul><li><b>Risikolebensversicherung</b> mindestens in Höhe der Restschuld.</li>
+<li><b>Berufsunfähigkeit</b>: Die Rate muss auch bei Krankheit bezahlbar bleiben.</li>
+<li><b>Wohngebäudeversicherung</b> mit Elementarschutz – verlangt die Bank.</li>
+<li>In der Bauphase: <b>Bauherrenhaftpflicht</b>, Feuerrohbau-, Bauleistungsversicherung.</li></ul>`}
+],
+quiz:[
+{q:"Wie hoch ist die Grunderwerbsteuer in NRW?",a:["3,5 %","5 %","6,5 %","10 %"],c:2,e:"In Nordrhein-Westfalen 6,5 %."},
+{q:"Was bleibt beim Annuitätendarlehen gleich?",a:["Der Zinsanteil","Der Tilgungsanteil","Die Monatsrate","Die Restschuld"],c:2,e:"Die Rate bleibt gleich, die Aufteilung verschiebt sich."},
+{q:"300.000 € Darlehen, 3 % Zins, 2 % Tilgung. Monatsrate?",a:["1.000 €","1.250 €","1.500 €","2.000 €"],c:1,e:"5 % × 300.000 € = 15.000 € pro Jahr ÷ 12 = 1.250 €."},
+{q:"Was ist ein Forward-Darlehen?",a:["Ein Kredit für das Auto","Zinssicherung für die Anschlussfinanzierung im Voraus","Ein Darlehen ohne Zinsen","Eine Sondertilgung"],c:1,e:"Damit sichert man sich heute den Zins für die Anschlussfinanzierung."},
+{q:"Welche Anfangstilgung wird mindestens empfohlen?",a:["0,5 %","1 %","2 %","10 %"],c:2,e:"Mindestens 2 %, besser 3 %."},
+{q:"Nach wie vielen Jahren gibt es das gesetzliche Sonderkündigungsrecht?",a:["5","10","15","20"],c:1,e:"Nach 10 Jahren ab Vollauszahlung mit 6 Monaten Frist (§ 489 BGB)."},
+{q:"Wie hoch sollte die Kreditrate höchstens sein?",a:["10 % vom Netto","35–40 % vom Haushaltsnetto","60 % vom Brutto","Egal"],c:1,e:"Etwa 35–40 % des Haushaltsnettos."}
+]}
+];
+
+const GLOSSAR = [
+["Abgeltungsteuer","25 % Steuer auf Kapitalerträge, plus Soli und ggf. Kirchensteuer."],
+["Altersvorsorgedepot","Ab 2027 staatlich gefördertes Fonds-/ETF-Depot für die Rente, Nachfolger von Riester. Bis 540 € Grundzulage plus 300 € je Kind."],
+["Annuität","Gleichbleibende Rate aus Zins und Tilgung."],
+["Basisinformationsblatt","Pflicht-Kurzinfo zu einem Finanzprodukt mit Risikoindikator, Kosten und Szenarien."],
+["Basisrente (Rürup)","Schicht-1-Vorsorge, Beiträge steuerlich absetzbar, nur als lebenslange Rente auszahlbar."],
+["Beitragsbemessungsgrenze","Bis zu diesem Einkommen werden Sozialversicherungsbeiträge erhoben."],
+["Berufsunfähigkeit","Man kann seinen zuletzt ausgeübten Beruf zu mindestens 50 % nicht mehr ausüben."],
+["bAV","Betriebliche Altersvorsorge, z. B. über Entgeltumwandlung."],
+["Cost-Average-Effekt","Bei festen Sparraten werden bei niedrigen Kursen mehr Anteile gekauft."],
+["Diversifikation","Streuung des Geldes über viele Anlagen, Länder und Branchen."],
+["Dynamik","Jährliche automatische Erhöhung der Sparrate oder Versicherungssumme."],
+["Effektivkosten","Renditeminderung durch alle Kosten eines Produkts pro Jahr."],
+["Elementarschaden","Schäden durch Naturgewalten wie Starkregen, Überschwemmung, Erdrutsch."],
+["Entgeltumwandlung","Teil des Bruttogehalts wird in eine Betriebsrente eingezahlt."],
+["ETF","Börsengehandelter Indexfonds, bildet einen Index passiv nach."],
+["Forward-Darlehen","Sicherung des Zinses für eine spätere Anschlussfinanzierung."],
+["Freistellungsauftrag","Auftrag an die Bank, Erträge bis zum Sparerpauschbetrag steuerfrei zu lassen."],
+["Frühstartrente","Geplant: 10 € pro Monat vom Staat für Kinder von 6 bis 18 Jahren."],
+["Grundzulage","Staatliche Zulage im Altersvorsorgedepot: 50 % bis 360 €, 25 % bis 1.800 € Eigenbeitrag."],
+["Inflation","Anstieg des Preisniveaus, Geld verliert an Kaufkraft."],
+["Kinderzulage","Im Altersvorsorgedepot 1 € je eingezahltem Euro, max. 300 € je Kind und Jahr."],
+["Liquidität","Wie schnell man an sein Geld kommt."],
+["MSCI World","Aktienindex mit über 1.000 Unternehmen aus 23 Industrieländern."],
+["Nachgelagerte Besteuerung","Beiträge werden in der Ansparphase entlastet, die Auszahlung im Alter wird besteuert."],
+["Neuwert","Betrag für die Wiederbeschaffung einer gleichwertigen neuen Sache."],
+["Notgroschen","Rücklage von 3 bis 6 Netto-Monatsgehältern für Unvorhergesehenes."],
+["Obliegenheit","Pflicht des Versicherten, z. B. Schaden sofort melden."],
+["Rebalancing","Zurückführen eines Depots auf die ursprüngliche Aufteilung."],
+["Rentenlücke","Differenz zwischen gewünschtem Alterseinkommen und erwarteten Renten."],
+["Restschuld","Offener Kreditbetrag am Ende der Zinsbindung."],
+["Sondervermögen","Fondsvermögen, das bei Pleite der Fondsgesellschaft geschützt ist."],
+["Sparerpauschbetrag","1.000 € (Ehepaare 2.000 €) Kapitalerträge pro Jahr steuerfrei."],
+["Teilfreistellung","30 % der Erträge von Aktienfonds bleiben steuerfrei."],
+["Thesaurierend","Erträge eines Fonds werden automatisch wieder angelegt."],
+["Umlageverfahren","Heutige Beiträge finanzieren direkt die heutigen Renten."],
+["Unterversicherung","Versicherungssumme zu niedrig – die Leistung wird anteilig gekürzt."],
+["Vorabpauschale","Jährlich besteuerter fiktiver Mindestertrag bei thesaurierenden Fonds."],
+["Zinseszins","Auch die Erträge werden wieder verzinst."]
+];
+
+const LINKS = [
+{cat:"ETF & Sparplan berechnen", items:[
+["justETF Sparplan-Rechner","https://www.justetf.com/de/etf-sparplan/etf-sparplan-rechner.html","Sparrate, Laufzeit, Rendite und Kosten durchspielen"],
+["finanzen.net ETF-Sparplanrechner","https://www.finanzen.net/ratgeber/rechner-vergleiche/etf-rechner/","Schnelle Berechnung des Endvermögens"],
+["Stiftung Warentest ETF-Sparplan-Rechner","https://www.test.de/ETF-Sparplan-Vergleich-5015866-5756781/","Zwei Angebote mit unterschiedlichen Kosten vergleichen"],
+["extraETF Sparplanrechner","https://extraetf.com/de/finanzrechner/etf-sparplanrechner","Auch Ziel-Sparrate berechnen"],
+["finanz-tools.de ETF-Rechner","https://www.finanz-tools.de/etf-sparplan-rechner","Mit Dynamik und Ordergebühren"],
+["finanzen.net Zinseszinsrechner","https://www.finanzen.net/ratgeber/rechner-vergleiche/zinseszinsrechner/","Zinseszins-Effekt sichtbar machen"],
+["finanzen.net Entnahmeplan-Rechner","https://www.finanzen.net/ratgeber/rechner-vergleiche/entnahmerechner/","Wie lange reicht das Depot in der Rente?"]]},
+{cat:"Altersvorsorgedepot 2027", items:[
+["finanzen.net Altersvorsorgedepot-Rechner","https://www.finanzen.net/ratgeber/vorsorge/altersvorsorgedepot-rechner/","Zulagen und Endkapital berechnen"],
+["deutschland-rechner.de AVD-Rechner","https://www.deutschland-rechner.de/altersvorsorgedepot-rechner","Mit Kinderzulage und Berufseinsteigerbonus"],
+["finanzen.net: Förderung, Kosten, Frühstartrente","https://www.finanzen.net/ratgeber/news/altersvorsorgedepot-und-fruehstartrente-ab-2027-so-funktionieren-foerderung-kosten-und-uebergang-20-10-2026-01/","Überblick, Stand 20.10.2026"],
+["ING: Altersvorsorge für Familien","https://www.ing.de/wissen/altersvorsorge/altersvorsorge-familien/","Beispiele mit Kindern"],
+["Bundesfinanzministerium","https://www.bundesfinanzministerium.de","Offizielle FAQ zur Reform (dort nach „Altersvorsorge“ suchen)"]]},
+{cat:"Gesetzliche Rente", items:[
+["DRV Rentenbeginnrechner","https://www.deutsche-rentenversicherung.de/DRV/DE/Online-Services/Online-Rechner/RentenbeginnUndHoehenRechner/rentenbeginnrechner_node.html","Frühester und regulärer Rentenbeginn"],
+["DRV Rentenhöhenrechner","https://www.deutsche-rentenversicherung.de/DRV/DE/Online-Services/Online-Rechner/RentenbeginnUndHoehenRechner/rentenhoehenrechner_node.html","Mit Werten aus der Renteninformation"],
+["Deutsche Rentenversicherung","https://www.deutsche-rentenversicherung.de","Startseite, Beratung, Online-Dienste"]]},
+{cat:"Gehalt & Steuern", items:[
+["finanzen.net Brutto-Netto-Rechner","https://www.finanzen.net/ratgeber/rechner-vergleiche/brutto-netto-rechner/","Nettolohn berechnen"],
+["finanzen.net Kreditrechner","https://www.finanzen.net/ratgeber/rechner-vergleiche/kreditrechner/","Raten und Zinsen"]]},
+{cat:"Immobilien & Förderung", items:[
+["KfW","https://www.kfw.de","Förderkredite und Zuschüsse"],
+["NRW.BANK","https://www.nrwbank.de","Wohneigentums- und Modernisierungsförderung NRW"]]},
+{cat:"Unabhängige Infos", items:[
+["Verbraucherzentrale","https://www.verbraucherzentrale.de","Geld, Versicherungen, Vorsorge"],
+["Stiftung Warentest","https://www.test.de","Tests zu Versicherungen und Geldanlage"],
+["Finanztip","https://www.finanztip.de","Ratgeber und Vergleiche"],
+["BaFin","https://www.bafin.de","Finanzaufsicht, Verbraucherinfos, Warnungen"],
+["GDV","https://www.gdv.de","Gesamtverband der Versicherer, Statistiken"],
+["justETF","https://www.justetf.com/de/","ETF-Suche und -Vergleich"]]}
+];
+
+/* ================= SPEICHER ================= */
+const KEY="finanzakademie_v1";
+let S={read:{},best:{},links:[]};
+try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x)S=Object.assign(S,x);}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+
+/* ================= HILFEN ================= */
+const $=s=>document.querySelector(s);
+const V=$("#v");
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const eur=(n,d=0)=>(isFinite(n)?n:0).toLocaleString("de-DE",{minimumFractionDigits:d,maximumFractionDigits:d})+" €";
+const T=id=>TOPICS.find(t=>t.id===id);
+function topicPct(t){
+  const r=t.lessons.filter((_,i)=>S.read[t.id+":"+i]).length/t.lessons.length;
+  const q=(S.best[t.id]||0)/100;
+  return Math.round((r*0.6+q*0.4)*100);
+}
+function totalPct(){return Math.round(TOPICS.reduce((a,t)=>a+topicPct(t),0)/TOPICS.length);}
+function setTitle(t,back){$("#ttl").textContent=t;$("#back").hidden=!back;}
+$("#back").onclick=()=>history.length>1?history.back():(location.hash="#/");
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ================= ANSICHTEN ================= */
+function home(){
+  setTitle("Finanz-Akademie",false);
+  const p=totalPct();
+  let next=null;
+  for(const t of TOPICS){const i=t.lessons.findIndex((_,k)=>!S.read[t.id+":"+k]);if(i>=0){next=[t,i];break;}}
+  V.innerHTML=`
+  <div class="card ring">
+    ${ringSvg(p)}
+    <div><b>Dein Lernfortschritt</b><div class="muted small">${TOPICS.reduce((a,t)=>a+t.lessons.filter((_,i)=>S.read[t.id+":"+i]).length,0)} von ${TOPICS.reduce((a,t)=>a+t.lessons.length,0)} Lektionen gelesen</div>
+    ${next?`<a class="btn" style="margin-top:8px;padding:8px 12px;font-size:14px" href="#/l/${next[0].id}/${next[1]}">Weiterlernen ›</a>`:`<div class="small" style="margin-top:6px">Alle Lektionen gelesen – stark! 🎉</div>`}</div>
+  </div>
+  <h3>Themen</h3>
+  <div class="grid">
+   ${TOPICS.map(t=>`<a class="tile ${t.hl?"hl":""}" href="#/t/${t.id}"><span class="ic">${t.ic}</span><b>${t.title}</b><small>${t.sub}</small><div class="bar"><i style="width:${topicPct(t)}%"></i></div></a>`).join("")}
+   <a class="tile" href="#/rechner"><span class="ic">🧮</span><b>Rechner</b><small>Sparplan, Zulagen, Rentenlücke, Kredit</small></a>
+   <a class="tile wide hl" href="#/links"><span class="ic">🔗</span><div><b>Nützliche Links</b><br><small>Live-Rechner für ETF-Sparplan, Altersvorsorgedepot, Rente</small></div></a>
+   <a class="tile" href="#/karten"><span class="ic">🃏</span><b>Karteikarten</b><small>Begriffe üben</small></a>
+   <a class="tile" href="#/quiz/mix"><span class="ic">🎯</span><b>Mix-Quiz</b><small>10 Fragen aus allen Themen</small></a>
+  </div>
+  <p class="foot">Lern-App zur Weiterbildung, keine Anlage-, Steuer- oder Rechtsberatung.<br>Inhalte Stand: Oktober 2026.<br><a href="#" id="reset" style="color:var(--muted)">Fortschritt zurücksetzen</a></p>`;
+  $("#reset").onclick=e=>{e.preventDefault();if(confirm("Lernfortschritt wirklich löschen? Eigene Links bleiben erhalten.")){S.read={};S.best={};save();home();}};
+}
+function ringSvg(p){const r=26,c=2*Math.PI*r;return `<svg width="70" height="70" viewBox="0 0 70 70" aria-label="${p} Prozent"><circle cx="35" cy="35" r="${r}" fill="none" stroke="var(--soft)" stroke-width="8"/><circle cx="35" cy="35" r="${r}" fill="none" stroke="var(--ok)" stroke-width="8" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-p/100)}" transform="rotate(-90 35 35)"/><text x="35" y="40" text-anchor="middle" font-size="15" font-weight="700" fill="var(--ink)">${p}%</text></svg>`;}
+
+function topic(id){
+  const t=T(id);if(!t)return home();
+  setTitle(t.title,true);
+  V.innerHTML=`<p class="muted">${t.sub}</p>
+  <div class="card" style="padding:0">
+  <div class="list">${t.lessons.map((l,i)=>`<a href="#/l/${t.id}/${i}"><span class="chk ${S.read[t.id+":"+i]?"done":""}">${S.read[t.id+":"+i]?"✓":i+1}</span>${l.t}<span class="arr">›</span></a>`).join("")}</div></div>
+  <a class="btn block" href="#/quiz/${t.id}">🎯 Quiz starten (${t.quiz.length} Fragen)</a>
+  ${S.best[t.id]!=null?`<p class="muted small" style="text-align:center">Bestes Ergebnis: ${S.best[t.id]} %</p>`:""}`;
+}
+
+function lesson(id,i){
+  const t=T(id);i=+i;if(!t||!t.lessons[i])return home();
+  const l=t.lessons[i];
+  S.read[id+":"+i]=1;save();
+  setTitle(t.title,true);
+  const last=i===t.lessons.length-1;
+  V.innerHTML=`<p class="muted small">Lektion ${i+1} von ${t.lessons.length}</p>
+  <h2>${l.t}</h2><div class="lesson">${l.b}</div>
+  <div class="row" style="margin-top:16px">
+   ${i>0?`<a class="btn sec" href="#/l/${id}/${i-1}">‹ Zurück</a>`:""}
+   ${last?`<a class="btn" href="#/quiz/${id}">Zum Quiz 🎯</a>`:`<a class="btn" href="#/l/${id}/${i+1}">Weiter ›</a>`}
+  </div>`;
+  window.scrollTo(0,0);
+}
+
+/* Quiz */
+let Q=null;
+function quiz(id){
+  let qs,title;
+  if(id==="mix"){qs=shuffle(TOPICS.flatMap(t=>t.quiz.map(q=>Object.assign({tid:t.id},q)))).slice(0,10);title="Mix-Quiz";}
+  else{const t=T(id);if(!t)return home();qs=shuffle(t.quiz);title="Quiz: "+t.title;}
+  Q={id,qs:qs.map(q=>{const order=shuffle(q.a.map((_,k)=>k));return Object.assign({},q,{order});}),i:0,score:0,title};
+  setTitle(title,true);renderQ();
+}
+function renderQ(){
+  const q=Q.qs[Q.i];
+  V.innerHTML=`<div class="qhead"><span>Frage ${Q.i+1} / ${Q.qs.length}</span><span>✓ ${Q.score}</span></div>
+  <div class="bar" style="margin:6px 0 12px"><i style="width:${Q.i/Q.qs.length*100}%"></i></div>
+  ${q.tid?`<p class="muted small">${T(q.tid).ic} ${T(q.tid).title}</p>`:""}
+  <h2 style="font-size:19px">${q.q}</h2>
+  <div id="opts">${q.order.map(k=>`<button class="opt" data-k="${k}">${q.a[k]}</button>`).join("")}</div>
+  <div id="fb"></div>`;
+  V.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(+b.dataset.k));
+  window.scrollTo(0,0);
+}
+function answer(k){
+  const q=Q.qs[Q.i];if(q.done)return;q.done=1;
+  const right=k===q.c;if(right)Q.score++;
+  V.querySelectorAll(".opt").forEach(b=>{const kk=+b.dataset.k;if(kk===q.c)b.classList.add("ok");else if(kk===k)b.classList.add("bad");b.disabled=true;});
+  const last=Q.i===Q.qs.length-1;
+  $("#fb").innerHTML=`<div class="box ${right?"":"warn"}"><b>${right?"Richtig! ✓":"Leider falsch."}</b> ${q.e}</div>
+  <button class="btn block" id="nx">${last?"Ergebnis anzeigen":"Nächste Frage ›"}</button>`;
+  $("#nx").onclick=()=>{if(last)result();else{Q.i++;renderQ();}};
+}
+function result(){
+  const pct=Math.round(Q.score/Q.qs.length*100);
+  if(Q.id!=="mix"){S.best[Q.id]=Math.max(S.best[Q.id]||0,pct);save();}
+  const msg=pct>=90?"Ausgezeichnet! 🏆":pct>=70?"Sehr gut! 👍":pct>=50?"Gut – noch etwas üben.":"Lies die Lektionen noch einmal durch.";
+  V.innerHTML=`<div class="card" style="text-align:center">${ringSvg(pct)}<h2>${Q.score} von ${Q.qs.length} richtig</h2><p>${msg}</p></div>
+  <button class="btn block" id="again">Nochmal versuchen</button>
+  ${Q.id!=="mix"?`<a class="btn sec block" href="#/t/${Q.id}">Zu den Lektionen</a>`:""}
+  <a class="btn sec block" href="#/">Zur Startseite</a>`;
+  $("#again").onclick=()=>quiz(Q.id);
+}
+
+/* Glossar & Karteikarten */
+function glossar(){
+  setTitle("Glossar",false);
+  V.innerHTML=`<input id="gs" placeholder="Begriff suchen …" autocomplete="off">
+  <a class="btn sec block" href="#/karten">🃏 Als Karteikarten üben</a>
+  <dl class="gl card" id="gl"></dl>`;
+  const draw=f=>{f=f.toLowerCase();$("#gl").innerHTML=GLOSSAR.filter(g=>(g[0]+g[1]).toLowerCase().includes(f)).map(g=>`<dt>${g[0]}</dt><dd>${g[1]}</dd>`).join("")||"<p class='muted'>Kein Treffer.</p>";};
+  draw("");$("#gs").oninput=e=>draw(e.target.value);
+}
+let K=null;
+function karten(){
+  setTitle("Karteikarten",true);
+  K={list:shuffle(GLOSSAR),i:0};drawK();
+}
+function drawK(){
+  const g=K.list[K.i];
+  V.innerHTML=`<p class="muted small" style="text-align:center">Karte ${K.i+1} von ${K.list.length} · Tippen zum Umdrehen</p>
+  <div class="flip" id="fl"><div class="in"><div class="fa">${g[0]}</div><div class="fb">${g[1]}</div></div></div>
+  <div class="row"><button class="btn sec" id="kp">‹ Zurück</button><button class="btn" id="kn">Weiter ›</button></div>
+  <button class="btn sec block" id="kmix">🔀 Neu mischen</button>`;
+  $("#fl").onclick=()=>$("#fl").classList.toggle("on");
+  $("#kp").onclick=()=>{K.i=(K.i-1+K.list.length)%K.list.length;drawK();};
+  $("#kn").onclick=()=>{K.i=(K.i+1)%K.list.length;drawK();};
+  $("#kmix").onclick=karten;
+}
+
+/* Links */
+function links(){
+  setTitle("Nützliche Links",false);
+  const cats=LINKS.map(c=>c.cat);
+  let flt="";
+  V.innerHTML=`<input id="ls" placeholder="Link suchen …" autocomplete="off"><div id="lw"></div>
+  <h3>Eigenen Link hinzufügen</h3>
+  <div class="card"><label class="f">Name</label><input id="ln" placeholder="z. B. Mein Rechner">
+  <label class="f">Adresse</label><input id="lu" placeholder="https://…" inputmode="url">
+  <label class="f">Notiz (optional)</label><input id="lt" placeholder="Wofür nutze ich ihn?">
+  <button class="btn block" id="ladd">Hinzufügen</button></div>
+  <p class="foot">Links öffnen sich im Browser. Eigene Links werden nur auf diesem Gerät gespeichert.</p>`;
+  const draw=()=>{
+    const f=flt.toLowerCase();
+    const own=S.links.length?[{cat:"⭐ Meine Links",own:1,items:S.links.map(l=>[l.n,l.u,l.t])}]:[];
+    $("#lw").innerHTML=own.concat(LINKS).map(c=>{
+      const it=c.items.map((x,i)=>[x,i]).filter(([x])=>(x[0]+x[2]+c.cat).toLowerCase().includes(f));
+      if(!it.length)return"";
+      return `<h3>${esc(c.cat)}</h3><div class="card" style="padding:0">${it.map(([x,i])=>`<a class="lnk" href="${esc(x[1])}" target="_blank" rel="noopener"><b>${esc(x[0])} ↗</b>${x[2]?`<small>${esc(x[2])}</small>`:""}${c.own?` <button class="chip" data-del="${i}" style="float:right">Löschen</button>`:""}</a>`).join("")}</div>`;
+    }).join("")||"<p class='muted'>Kein Treffer.</p>";
+    $("#lw").querySelectorAll("[data-del]").forEach(b=>b.onclick=e=>{e.preventDefault();e.stopPropagation();if(confirm("Link löschen?")){S.links.splice(+b.dataset.del,1);save();draw();}});
+  };
+  draw();
+  $("#ls").oninput=e=>{flt=e.target.value;draw();};
+  $("#ladd").onclick=()=>{
+    let n=$("#ln").value.trim(),u=$("#lu").value.trim(),t=$("#lt").value.trim();
+    if(!n||!u){alert("Bitte Name und Adresse eingeben.");return;}
+    if(!/^https?:\/\//i.test(u))u="https://"+u;
+    S.links.push({n,u,t});save();$("#ln").value=$("#lu").value=$("#lt").value="";draw();
+  };
+}
+
+/* ================= RECHNER ================= */
+const CALCS=[
+ ["sparplan","📈","ETF-Sparplan","Endvermögen mit Zinseszins und Kosten"],
+ ["avd","🆕","Altersvorsorgedepot","Zulagen 2027 und Förderquote"],
+ ["luecke","🏖️","Rentenlücke","Schnellcheck und nötige Sparrate"],
+ ["kredit","🔑","Baufinanzierung","Rate und Restschuld"],
+ ["inflation","🎈","Inflation","Was ist mein Geld später wert?"]
+];
+function rechner(){
+  setTitle("Rechner",false);
+  V.innerHTML=`<div class="grid">${CALCS.map(c=>`<a class="tile" href="#/r/${c[0]}"><span class="ic">${c[1]}</span><b>${c[2]}</b><small>${c[3]}</small></a>`).join("")}
+  <a class="tile hl" href="#/links"><span class="ic">🔗</span><b>Online-Rechner</b><small>Links zu weiteren Live-Rechnern</small></a></div>
+  <p class="foot">Alle Rechner sind vereinfachte Modellrechnungen ohne Steuern. Renditen sind nicht garantiert.</p>`;
+}
+function num(id){const v=parseFloat(String($("#"+id).value).replace(",","."));return isFinite(v)?v:0;}
+function field(id,label,val,suf){return `<div><label class="f" for="${id}">${label}${suf?" ("+suf+")":""}</label><input id="${id}" type="number" inputmode="decimal" step="any" value="${val}"></div>`;}
+function bindCalc(fn){V.querySelectorAll("input,select").forEach(i=>i.addEventListener("input",fn));fn();}
+
+function lineChart(pts){ // pts: [{y, dep, val}]
+  if(pts.length<2)return"";
+  const W=320,H=150,P=6,max=Math.max(...pts.map(p=>p.val),1);
+  const x=i=>P+i*(W-2*P)/(pts.length-1),y=v=>H-P-(v/max)*(H-2*P-14);
+  const path=k=>pts.map((p,i)=>(i?"L":"M")+x(i).toFixed(1)+","+y(p[k]).toFixed(1)).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;margin-top:12px">
+  <path d="${path("val")}L${x(pts.length-1)},${H-P}L${P},${H-P}Z" fill="var(--brand2)" opacity=".18"/>
+  <path d="${path("val")}" fill="none" stroke="var(--brand2)" stroke-width="2.5"/>
+  <path d="${path("dep")}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="${P}" y="12" font-size="11" fill="var(--muted)">— Vermögen  - - Einzahlungen</text>
+  <text x="${W-P}" y="${H-P-4}" font-size="11" text-anchor="end" fill="var(--muted)">${pts[pts.length-1].y} J.</text></svg>`;
+}
+function simulate(start,monthly,years,ret,cost,dyn){
+  const rm=Math.pow(1+(ret-cost)/100,1/12)-1;
+  let v=start,dep=start,rate=monthly;const pts=[{y:0,dep,val:v}];
+  for(let y=1;y<=years;y++){
+    for(let m=0;m<12;m++){v=(v+rate)*(1+rm);dep+=rate;}
+    pts.push({y,dep,val:v});rate*=1+dyn/100;
+  }
+  return {v,dep,pts};
+}
+const CALC={
+sparplan(){
+  V.innerHTML=`<div class="card"><div class="two">
+  ${field("a","Startkapital",0,"€")}${field("b","Sparrate monatlich",100,"€")}
+  ${field("c","Laufzeit",30,"Jahre")}${field("d","Rendite p. a.",6,"%")}
+  ${field("e","Kosten p. a.",0.2,"%")}${field("f","Dynamik p. a.",0,"%")}</div>
+  <div class="res" id="o"></div><div id="ch"></div></div>
+  <p class="muted small">Zum Vergleich: Weltweite Aktienindizes erzielten langfristig historisch etwa 6–8 % pro Jahr – mit starken Schwankungen und ohne Garantie.</p>`;
+  bindCalc(()=>{
+    const s=simulate(num("a"),num("b"),Math.min(80,Math.max(0,Math.round(num("c")))),num("d"),num("e"),num("f"));
+    $("#o").innerHTML=`<div class="big"><small>Endvermögen (vor Steuern)</small><b>${eur(s.v)}</b></div>
+    <div><small>Eingezahlt</small><b>${eur(s.dep)}</b></div><div><small>Ertrag</small><b>${eur(s.v-s.dep)}</b></div>`;
+    $("#ch").innerHTML=lineChart(s.pts);
+  });
+},
+avd(){
+  V.innerHTML=`<div class="card"><div class="two">
+  ${field("a","Eigenbeitrag monatlich",150,"€")}${field("k","Anzahl Kinder mit Kindergeld",0,"")}
+  ${field("ky","Jahre mit Kinderzulage (ca.)",15,"")}${field("j","Jahre bis Rentenbeginn",30,"")}
+  ${field("r","Rendite p. a.",6,"%")}${field("c","Kosten p. a.",0.5,"%")}</div>
+  <label style="display:flex;align-items:center;margin-top:12px"><input type="checkbox" id="u"> Jünger als 25 (Berufseinsteigerbonus)</label>
+  <div class="res" id="o"></div><div id="ch"></div></div>
+  <div class="box small">Regeln ab 2027: 50 % Zulage auf die ersten 360 €, 25 % auf 360–1.800 € Eigenbeitrag (max. 540 €), mind. 120 €/Jahr. Kinderzulage 1 € je Euro, max. 300 € je Kind. Vereinfachte Schätzung – die Kinderzulage gibt es nur, solange Kindergeld bezogen wird.</div>`;
+  bindCalc(()=>{
+    const b=Math.max(0,num("a"))*12,kids=Math.max(0,Math.round(num("k"))),ok=b>=120;
+    const g=ok?0.5*Math.min(b,360)+0.25*Math.max(0,Math.min(b,1800)-360):0;
+    const kz=ok?kids*Math.min(b,300):0;
+    const bonus=ok&&$("#u").checked?200:0;
+    const quote=b?(g+kz)/b*100:0;
+    const years=Math.min(60,Math.max(0,Math.round(num("j")))),ky=Math.max(0,Math.round(num("ky")));
+    const rm=Math.pow(1+(num("r")-num("c"))/100,1/12)-1;
+    let v=bonus,dep=0,zul=bonus;const pts=[{y:0,dep:0,val:v}];
+    for(let y=1;y<=years;y++){const inflow=b+g+(y<=ky?kz:0);zul+=g+(y<=ky?kz:0);
+      for(let m=0;m<12;m++){v=(v+inflow/12)*(1+rm);dep+=b/12;}pts.push({y,dep,val:v});}
+    $("#o").innerHTML=`<div class="big"><small>Staatliche Förderung pro Jahr</small><b>${eur(g+kz)}</b></div>
+    <div><small>Grundzulage</small><b>${eur(g)}</b></div><div><small>Kinderzulage</small><b>${eur(kz)}</b></div>
+    <div><small>Förderquote</small><b>${quote.toLocaleString("de-DE",{maximumFractionDigits:0})} %</b></div><div><small>Einmaliger Bonus</small><b>${eur(bonus)}</b></div>
+    ${!ok&&b>0?`<div style="grid-column:1/-1;background:rgba(192,57,43,.12)"><small>Hinweis</small>Unter 120 € im Jahr gibt es keine Zulage.</div>`:""}
+    ${b>6840?`<div style="grid-column:1/-1;background:rgba(192,57,43,.12)"><small>Hinweis</small>Höchstens 6.840 € pro Jahr einzahlbar.</div>`:""}
+    <div class="big"><small>Geschätztes Depot nach ${years} Jahren</small><b>${eur(v)}</b></div>
+    <div><small>Eigene Einzahlungen</small><b>${eur(dep)}</b></div><div><small>Zulagen gesamt</small><b>${eur(zul)}</b></div>`;
+    $("#ch").innerHTML=lineChart(pts);
+  });
+},
+luecke(){
+  V.innerHTML=`<div class="card"><div class="two">
+  ${field("n","Nettoeinkommen heute",2800,"€/Monat")}${field("w","Wunsch im Alter",80,"% vom Netto")}
+  ${field("g","Erwartete Renten (netto)",1300,"€/Monat")}${field("j","Jahre bis Rente",32,"")}
+  ${field("i","Inflation p. a.",2,"%")}${field("r","Rendite Ansparphase",6,"%")}
+  ${field("e","Rendite in der Rente",3,"%")}${field("d","Rentendauer",25,"Jahre")}</div>
+  <div class="res" id="o"></div></div>
+  <div class="box small">Die erwartete Rente steht in der jährlichen Renteninformation (Betrag vor Steuern und Abgaben, grob 10–20 % abziehen). Beträge in heutiger Kaufkraft eingeben – der Rechner rechnet die Inflation hoch.</div>`;
+  bindCalc(()=>{
+    const gap=Math.max(0,num("n")*num("w")/100-num("g")),j=Math.max(0,num("j"));
+    const fut=gap*Math.pow(1+num("i")/100,j);
+    const em=Math.pow(1+num("e")/100,1/12)-1,nm=Math.max(1,num("d")*12);
+    const cap=em>0?fut*(1-Math.pow(1+em,-nm))/em:fut*nm;
+    const rm=Math.pow(1+num("r")/100,1/12)-1,m=j*12;
+    const fac=rm>0?(Math.pow(1+rm,m)-1)/rm*(1+rm):m;
+    const rate=m>0?cap/fac:cap;
+    $("#o").innerHTML=`<div class="big"><small>Monatliche Rentenlücke (heutige Kaufkraft)</small><b>${eur(gap)}</b></div>
+    <div><small>Lücke bei Rentenbeginn (mit Inflation)</small><b>${eur(fut)}</b></div><div><small>Benötigtes Kapital</small><b>${eur(cap)}</b></div>
+    <div class="big"><small>Nötige Sparrate ab heute</small><b>${eur(rate)} / Monat</b></div>`;
+  });
+},
+kredit(){
+  V.innerHTML=`<div class="card"><div class="two">
+  ${field("d","Darlehen",300000,"€")}${field("z","Sollzins p. a.",3.5,"%")}
+  ${field("t","Anfangstilgung",2,"%")}${field("b","Zinsbindung",10,"Jahre")}</div>
+  <div class="res" id="o"></div></div>`;
+  bindCalc(()=>{
+    const D=num("d"),z=num("z")/100,t=num("t")/100,B=Math.max(0,Math.round(num("b")));
+    const rate=D*(z+t)/12;let rest=D,zins=0,mon=0;
+    for(let m=0;m<B*12&&rest>0;m++){const zi=rest*z/12;zins+=zi;rest=rest+zi-rate;}
+    let r2=D;while(r2>0&&mon<1200&&rate>r2*z/12){r2=r2+r2*z/12-rate;mon++;}
+    $("#o").innerHTML=`<div class="big"><small>Monatsrate</small><b>${eur(rate)}</b></div>
+    <div><small>Restschuld nach ${B} J.</small><b>${eur(Math.max(0,rest))}</b></div><div><small>Gezahlte Zinsen in ${B} J.</small><b>${eur(zins)}</b></div>
+    <div class="big"><small>Volltilgung bei gleichem Zins nach</small><b>${mon>=1200||rate<=D*z/12?"nie (Tilgung zu niedrig)":(Math.floor(mon/12)+" Jahren "+(mon%12)+" Monaten")}</b></div>`;
+  });
+},
+inflation(){
+  V.innerHTML=`<div class="card"><div class="two">
+  ${field("a","Betrag heute",1000,"€")}${field("i","Inflation p. a.",2.5,"%")}
+  ${field("j","Jahre",30,"")}</div><div class="res" id="o"></div></div>`;
+  bindCalc(()=>{
+    const f=Math.pow(1+num("i")/100,num("j"));
+    $("#o").innerHTML=`<div class="big"><small>Kaufkraft in ${num("j")} Jahren</small><b>${eur(num("a")/f)}</b></div>
+    <div style="grid-column:1/-1"><small>So viel braucht man dann für dieselben Dinge</small><b>${eur(num("a")*f)}</b></div>`;
+  });
+}};
+function calc(id){
+  const c=CALCS.find(x=>x[0]===id);if(!c||!CALC[id])return rechner();
+  setTitle(c[2],true);CALC[id]();window.scrollTo(0,0);
+}
+
+/* ================= ROUTER ================= */
+function route(){
+  const h=(location.hash||"#/").slice(2).split("/");
+  const n={"":"home",t:"home",l:"home",quiz:"quiz",rechner:"rechner",r:"rechner",links:"links",glossar:"glossar",karten:"glossar"}[h[0]]||"home";
+  document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on",a.dataset.n===n));
+  switch(h[0]){
+    case "t":return topic(h[1]);
+    case "l":return lesson(h[1],h[2]);
+    case "quiz":return quiz(h[1]||"mix");
+    case "rechner":return rechner();
+    case "r":return calc(h[1]);
+    case "links":return links();
+    case "glossar":return glossar();
+    case "karten":return karten();
+    default:return home();
+  }
+}
+window.addEventListener("hashchange",()=>{route();window.scrollTo(0,0);});
+route();
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("lernapp-sw.js").catch(()=>{}));}
+</script>
+</body>
+</html>
