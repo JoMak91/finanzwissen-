@@ -48,7 +48,7 @@ p{margin:8px 0}
 .tile.hl .bar i{background:var(--accent)}
 .list a{display:flex;align-items:center;gap:10px;padding:13px 12px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
 .list a:last-child{border-bottom:0}
-.list .chk{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:13px;flex:none}
+.list .chk{min-width:30px;height:30px;font-size:11px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:13px;flex:none}
 .list .chk.done{background:var(--ok);border-color:var(--ok);color:#fff}
 .list .arr{margin-left:auto;color:var(--muted)}
 .btn{display:inline-block;background:var(--brand);color:#fff;border:0;border-radius:12px;padding:12px 16px;font-size:16px;font-weight:600;text-decoration:none;text-align:center;cursor:pointer}
@@ -66,6 +66,7 @@ table.t td,table.t th{border-bottom:1px solid var(--line);padding:7px 5px;text-a
 table.t th{color:var(--muted);font-weight:600}
 table.t td.r,table.t th.r{text-align:right}
 .opt{display:block;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:12px;margin:8px 0;font-size:15.5px;color:var(--ink);cursor:pointer}
+.opt.pick{border-color:var(--brand);background:var(--soft);font-weight:600}
 .opt.ok{border-color:var(--ok);background:rgba(30,138,76,.12)}
 .opt.bad{border-color:var(--bad);background:rgba(192,57,43,.1)}
 .qhead{display:flex;justify-content:space-between;color:var(--muted);font-size:13.5px}
@@ -103,7 +104,7 @@ svg text{font-family:inherit}
 <main id="v"></main>
 <nav>
   <a href="#/" data-n="home"><span>🏠</span>Lernen</a>
-  <a href="#/quiz/mix" data-n="quiz"><span>🎯</span>Quiz</a>
+  <a href="#/training" data-n="quiz"><span>🎯</span>Training</a>
   <a href="#/rechner" data-n="rechner"><span>🧮</span>Rechner</a>
   <a href="#/links" data-n="links"><span>🔗</span>Links</a>
   <a href="#/glossar" data-n="glossar"><span>📖</span>Glossar</a>
@@ -518,9 +519,196 @@ const LINKS = [
 ["justETF","https://www.justetf.com/de/","ETF-Suche und -Vergleich"]]}
 ];
 
+/* ================= IHK-PRÜFUNGSTRAINING ================= */
+// Format: [Kategorie, Frage, [Antworten], richtige Antwort(en) als Index oder Array, Erklärung]
+const IHK = {
+d34:{title:"§34d Versicherungsvermittlung", short:"§34d", ic:"☂️",
+info:"Sachkundeprüfung „Geprüfte/r Fachmann/-frau für Versicherungsvermittlung IHK“. Sie besteht aus einem schriftlichen Teil (Multiple Choice, teils mit mehreren richtigen Antworten) und einem praktischen Teil (simuliertes Kundengespräch).",
+cats:{rv:"Vermittlerrecht",vvg:"Versicherungsvertrag (VVG)",sv:"Sozialversicherung",lv:"Leben, Rente & BU",kv:"Kranken & Pflege",sach:"Sach, Haftpflicht & Unfall",ber:"Kundenberatung"},
+qs:[
+["rv","Wer erteilt die Erlaubnis nach § 34d GewO?",["BaFin","Die zuständige IHK","Das Finanzamt","Der Versicherungsombudsmann"],1,"Die Erlaubnis für Versicherungsvermittler erteilt die örtlich zuständige Industrie- und Handelskammer."],
+["rv","Wer ist Versicherungsmakler im Sinne des § 59 VVG?",["Wer von einem Versicherer ständig betraut ist","Wer für den Kunden vermittelt, ohne von einem Versicherer damit betraut zu sein","Wer nur gegen Honorar berät","Ein Angestellter eines Versicherers"],1,"Der Makler steht im Lager des Kunden und wird nicht von einem Versicherer betraut."],
+["rv","Was kennzeichnet einen Versicherungsvertreter?",["Er ist von einem oder mehreren Versicherern betraut, Verträge zu vermitteln","Er arbeitet ausschließlich gegen Honorar","Er ist immer Angestellter","Er braucht keine Sachkunde"],0,"Der Vertreter steht im Lager des Versicherers (§ 59 Abs. 2 VVG)."],
+["rv","Welche Voraussetzungen gehören zur Erlaubnis nach § 34d GewO?",["Zuverlässigkeit","Geordnete Vermögensverhältnisse","Berufshaftpflichtversicherung","Abgeschlossenes Studium"],[0,1,2],"Dazu kommt der Sachkundenachweis. Ein Studium ist nicht erforderlich."],
+["rv","Wie viele Stunden Weiterbildung muss ein Versicherungsvermittler pro Kalenderjahr nachweisen?",["5","10","15","40"],2,"15 Stunden pro Kalenderjahr (Weiterbildungspflicht nach § 34d Abs. 9 GewO)."],
+["rv","Wo werden Versicherungsvermittler registriert?",["Im Handelsregister","Im Vermittlerregister beim DIHK","Bei der BaFin","Beim Bundeszentralamt für Steuern"],1,"Das Vermittlerregister wird vom DIHK geführt und ist öffentlich einsehbar."],
+["rv","Wann muss der Vermittler dem Kunden die Statusinformation geben?",["Bei Vertragsende","Beim ersten Geschäftskontakt","Nur auf Nachfrage","Nach dem ersten Schaden"],1,"Die Erstinformation ist beim ersten Geschäftskontakt in Textform zu übergeben."],
+["rv","Was gehört zur Erstinformation (Statusinformation)?",["Name und Anschrift","Registrierungsnummer","Anschrift der Schlichtungsstellen","Genaue Provisionshöhe in Euro"],[0,1,2],"Auch die Art der Vergütung muss genannt werden, nicht aber die genaue Provisionshöhe."],
+["rv","Was gilt für einen Versicherungsberater nach § 34d Abs. 2 GewO?",["Er erhält Provisionen vom Versicherer","Er berät gegen Honorar und darf keine Vergütung vom Versicherer annehmen","Er ist ein gebundener Vertreter","Er braucht keine Erlaubnis"],1,"Der Versicherungsberater ist unabhängig und wird ausschließlich vom Kunden bezahlt."],
+["rv","Wann ist ein gebundener Vermittler von der Erlaubnispflicht befreit?",["Wenn er weniger als 10 Kunden hat","Wenn der Versicherer die uneingeschränkte Haftung übernimmt und er eingetragen ist","Wenn er nebenberuflich tätig ist","Nie"],1,"Der Versicherer übernimmt die Haftung, der Vermittler wird über ihn ins Register eingetragen."],
+["rv","Wer beaufsichtigt die Versicherungsunternehmen in Deutschland?",["IHK","BaFin","Bundesbank allein","Verbraucherzentrale"],1,"Die Bundesanstalt für Finanzdienstleistungsaufsicht (BaFin)."],
+["rv","An welche Schlichtungsstelle wendet sich ein Kunde bei Streit mit einer privaten Krankenversicherung?",["Versicherungsombudsmann","PKV-Ombudsmann","BaFin-Schlichtung","Amtsgericht"],1,"Für private Kranken- und Pflegeversicherung ist der PKV-Ombudsmann zuständig, für die meisten anderen Sparten der Versicherungsombudsmann."],
+["vvg","Wie lang ist die allgemeine Widerrufsfrist nach § 8 VVG?",["7 Tage","14 Tage","30 Tage","1 Monat"],1,"14 Tage, beginnend mit Zugang aller Unterlagen."],
+["vvg","Wie lang ist die Widerrufsfrist bei der Lebensversicherung?",["14 Tage","21 Tage","30 Tage","3 Monate"],2,"Bei Lebensversicherungen beträgt sie 30 Tage (§ 152 VVG)."],
+["vvg","Was muss der Vermittler nach § 61 VVG dokumentieren?",["Wünsche und Bedürfnisse des Kunden","Den erteilten Rat","Die Gründe für den Rat","Seine Provision"],[0,1,2],"Die Beratung wird dokumentiert und dem Kunden vor Vertragsschluss in Textform übergeben."],
+["vvg","Wie kann der Kunde auf Beratung und Dokumentation verzichten?",["Mündlich","Gar nicht","Durch gesonderte schriftliche Erklärung mit Hinweis auf mögliche Nachteile","Durch Ankreuzen im Antrag"],2,"Der Verzicht erfordert eine gesonderte schriftliche Erklärung (§ 61 Abs. 2 VVG)."],
+["vvg","Was gilt, wenn die Erstprämie nicht rechtzeitig gezahlt wird?",["Der Versicherer kann zurücktreten, solange nicht gezahlt ist","Der Vertrag ruht 1 Jahr","Nichts","Die Prämie verdoppelt sich"],0,"Zudem ist der Versicherer bei Eintritt des Versicherungsfalls in der Regel leistungsfrei (§ 37 VVG)."],
+["vvg","Was muss der Versicherer bei Verzug mit der Folgeprämie tun?",["Sofort kündigen","Eine qualifizierte Mahnung mit mindestens 2 Wochen Zahlungsfrist senden","Den Vertrag beitragsfrei stellen","Nichts"],1,"Ohne qualifizierte Mahnung nach § 38 VVG keine Leistungsfreiheit oder Kündigung."],
+["vvg","Welche Umstände muss der Kunde vor Vertragsschluss anzeigen?",["Alle denkbaren","Gefahrerhebliche Umstände, nach denen der Versicherer in Textform gefragt hat","Nur Vorerkrankungen der letzten 6 Monate","Keine"],1,"Vorvertragliche Anzeigepflicht nach § 19 VVG."],
+["vvg","Welche Rechte hat der Versicherer bei Verletzung der vorvertraglichen Anzeigepflicht?",["Rücktritt","Kündigung","Vertragsanpassung","Erhöhung der Provision"],[0,1,2],"Welches Recht greift, hängt vom Verschulden ab (§ 19 VVG)."],
+["vvg","Nach wie vielen Jahren erlöschen die Rechte aus § 19 VVG grundsätzlich?",["2 Jahre","5 Jahre","10 Jahre","Nie"],1,"Nach 5 Jahren, bei Vorsatz oder Arglist nach 10 Jahren (§ 21 Abs. 3 VVG)."],
+["vvg","Was gilt bei grob fahrlässiger Herbeiführung des Versicherungsfalls?",["Volle Leistung","Keine Leistung","Kürzung entsprechend der Schwere des Verschuldens","Leistung verdoppelt"],2,"Quotelung nach § 81 Abs. 2 VVG – sofern grobe Fahrlässigkeit nicht mitversichert ist."],
+["vvg","Was ist eine Unterversicherung?",["Die Versicherungssumme ist niedriger als der Versicherungswert","Der Beitrag ist zu niedrig","Es gibt keinen Vertrag","Die Selbstbeteiligung ist zu hoch"],0,"Dann wird nur im Verhältnis Versicherungssumme zu Versicherungswert geleistet (§ 75 VVG)."],
+["vvg","Wer kann nach einem Schaden in der Sachversicherung kündigen?",["Nur der Versicherer","Nur der Kunde","Beide Vertragsparteien","Keiner"],2,"Beide, innerhalb eines Monats nach Abschluss der Verhandlungen über die Entschädigung (§ 92 VVG)."],
+["vvg","Zu wann kann ein Kunde einen Vertrag mit mehr als 3 Jahren Laufzeit kündigen?",["Gar nicht","Zum Schluss des 3. Jahres mit 3 Monaten Frist","Jederzeit fristlos","Erst nach 10 Jahren"],1,"§ 11 Abs. 4 VVG."],
+["vvg","Was ist bei einer Überversicherung möglich?",["Die Versicherungssumme kann herabgesetzt werden","Doppelte Entschädigung","Kündigung durch den Staat","Nichts"],0,"Jede Seite kann die Herabsetzung der Versicherungssumme und der Prämie verlangen (§ 74 VVG)."],
+["sv","Welche Zweige gehören zur gesetzlichen Sozialversicherung?",["Krankenversicherung","Rentenversicherung","Unfallversicherung","Hausratversicherung"],[0,1,2],"Die fünf Zweige: Kranken-, Pflege-, Renten-, Arbeitslosen- und Unfallversicherung."],
+["sv","Wer zahlt die Beiträge zur gesetzlichen Unfallversicherung?",["Arbeitnehmer allein","Arbeitgeber allein","Beide je zur Hälfte","Der Staat"],1,"Die gesetzliche Unfallversicherung wird allein vom Arbeitgeber finanziert."],
+["sv","Wer ist Träger der gesetzlichen Unfallversicherung?",["Krankenkassen","Berufsgenossenschaften und Unfallkassen","Deutsche Rentenversicherung","Private Versicherer"],1,"Berufsgenossenschaften (gewerbliche Wirtschaft) und Unfallkassen (öffentlicher Dienst)."],
+["sv","Wann leistet die gesetzliche Unfallversicherung?",["Arbeitsunfall","Wegeunfall","Berufskrankheit","Freizeitunfall am Wochenende"],[0,1,2],"Freizeitunfälle sind nicht gesetzlich versichert – dafür gibt es die private Unfallversicherung."],
+["sv","Wie hoch ist das gesetzliche Krankengeld?",["50 % vom Brutto","70 % vom Brutto, höchstens 90 % vom Netto","100 % vom Netto","60 % vom Netto"],1,"70 % des Bruttoentgelts, maximal 90 % des Nettoentgelts."],
+["sv","Ab wann zahlt die Krankenkasse bei Arbeitnehmern in der Regel Krankengeld?",["Ab dem 1. Tag","Ab der 3. Woche","Nach 6 Wochen Entgeltfortzahlung","Nach 3 Monaten"],2,"Die ersten 6 Wochen zahlt der Arbeitgeber das Gehalt weiter."],
+["sv","Wie lang ist die allgemeine Wartezeit für die Regelaltersrente?",["1 Jahr","5 Jahre","15 Jahre","35 Jahre"],1,"5 Jahre Beitragszeit."],
+["sv","Welche versicherungsrechtliche Voraussetzung gilt für die Erwerbsminderungsrente?",["Keine","3 Jahre Pflichtbeiträge in den letzten 5 Jahren und 5 Jahre Wartezeit","Nur 1 Beitragsmonat","45 Beitragsjahre"],1,"Zusätzlich zur medizinischen Voraussetzung."],
+["sv","Wie hoch ist das Arbeitslosengeld I für Arbeitslose mit Kind?",["50 %","60 %","67 % des pauschalierten Nettoentgelts","80 %"],2,"Mit Kind 67 %, ohne Kind 60 %."],
+["sv","Wie hoch ist die große Witwenrente nach neuem Recht?",["25 %","55 % der Rente des Verstorbenen","60 %","100 %"],1,"55 % (altes Recht 60 %), ggf. mit Einkommensanrechnung."],
+["sv","Wer ist in der gesetzlichen Pflegeversicherung versichert?",["Nur Rentner","Grundsätzlich jeder, der krankenversichert ist – Pflege folgt Krankenversicherung","Nur Beamte","Nur Pflegebedürftige"],1,"GKV-Versicherte sind in der sozialen, PKV-Versicherte in der privaten Pflegepflichtversicherung."],
+["lv","Was leistet eine Risikolebensversicherung?",["Auszahlung im Erlebensfall","Zahlung nur im Todesfall während der Laufzeit","Rente ab 67","Pflegetagegeld"],1,"Reiner Todesfallschutz, deshalb günstig und meist ohne Rückkaufswert."],
+["lv","Wie hoch ist der Höchstrechnungszins für neue Lebensversicherungen seit 2025?",["0,25 %","0,9 %","1,0 %","4 %"],2,"Er wurde zum 1. Januar 2025 von 0,25 % auf 1,0 % angehoben."],
+["lv","Was bedeutet Beitragsfreistellung?",["Der Vertrag wird gekündigt","Der Vertrag läuft ohne weitere Beiträge mit reduzierter Leistung weiter","Der Versicherer zahlt die Beiträge","Der Vertrag ruht 6 Monate"],1,"Eine Alternative zur Kündigung, wenn das Geld knapp wird."],
+["lv","Was ist der Rückkaufswert?",["Der Betrag, den der Kunde bei Kündigung erhält","Die Todesfallsumme","Die Überschussbeteiligung","Die Abschlussprovision"],0,"Er liegt in den ersten Jahren wegen der Kosten oft unter den eingezahlten Beiträgen."],
+["lv","Wer trägt bei der fondsgebundenen Rentenversicherung das Anlagerisiko?",["Der Versicherer","Der Versicherungsnehmer","Der Staat","Die Fondsgesellschaft"],1,"Wertentwicklung hängt von den Fonds ab, ohne Garantie trägt der Kunde das Risiko."],
+["lv","Ab welchem Grad leistet eine BU-Versicherung üblicherweise?",["25 %","50 %","75 %","100 %"],1,"Ab 50 % Berufsunfähigkeit, voraussichtlich mindestens 6 Monate."],
+["lv","Was bedeutet „abstrakte Verweisung“ in der BU?",["Verweis auf eine andere Tätigkeit, die der Versicherte ausüben könnte, auch wenn er sie nicht ausübt","Verweis an einen anderen Arzt","Verweis auf die gesetzliche Rente","Verweis auf die Krankenkasse"],0,"Gute Tarife verzichten darauf."],
+["lv","Was ermöglicht eine Nachversicherungsgarantie?",["Erhöhung der Leistung ohne erneute Gesundheitsprüfung bei bestimmten Ereignissen","Rückzahlung aller Beiträge","Beitragsfreiheit","Doppelte Rente"],0,"Zum Beispiel bei Heirat, Geburt eines Kindes oder Immobilienkauf."],
+["lv","Welche Merkmale hat die Basisrente (Rürup)?",["Nicht kapitalisierbar","Nicht vererbbar (außer Hinterbliebenenschutz)","Nicht beleihbar","Jederzeit kündbar mit Auszahlung"],[0,1,2],"Eine Auszahlung ist nur als lebenslange Rente möglich."],
+["lv","Bei welchem bAV-Durchführungsweg ist der Arbeitgeber selbst Versorgungsträger?",["Direktversicherung","Pensionskasse","Direktzusage","Pensionsfonds"],2,"Bei der Direktzusage (Pensionszusage) zahlt der Arbeitgeber die Rente selbst."],
+["lv","Welche bAV-Durchführungswege sind über den PSVaG insolvenzgesichert?",["Direktzusage","Unterstützungskasse","Pensionsfonds","Direktversicherung"],[0,1,2],"Direktversicherung und Pensionskasse sind über den Versicherer abgesichert (Protektor)."],
+["lv","Wann ist eine bAV aus Entgeltumwandlung unverfallbar?",["Sofort","Nach 3 Jahren","Nach 5 Jahren","Ab 25 Jahren"],0,"Bei Entgeltumwandlung sofort, bei arbeitgeberfinanzierter bAV nach 3 Jahren Zusagedauer und ab 21."],
+["lv","Wie hoch ist der Ertragsanteil einer privaten Rente bei Rentenbeginn mit 67?",["10 %","17 %","22 %","50 %"],1,"Nur dieser Anteil der Rente ist steuerpflichtig."],
+["lv","Unter welchen Bedingungen gilt bei der Kapitalauszahlung einer privaten Rentenversicherung das Halbeinkünfteverfahren?",["5 Jahre Laufzeit, ab 60","12 Jahre Laufzeit, Auszahlung ab 62","20 Jahre Laufzeit","Immer"],1,"Dann ist nur der halbe Ertrag steuerpflichtig (für Verträge ab 2012)."],
+["kv","Wonach richtet sich der Beitrag in der privaten Krankenversicherung?",["Nach dem Einkommen","Nach Eintrittsalter, Gesundheitszustand und Leistungsumfang","Nach der Wohnfläche","Pauschal 200 €"],1,"Zusätzlich werden Altersrückstellungen gebildet."],
+["kv","Wozu dienen Altersrückstellungen in der PKV?",["Zur Dämpfung von Beitragssteigerungen im Alter","Für die Provision","Für Verwaltungskosten","Für die Rente"],0,"Ein Teil der Beiträge in jungen Jahren wird für das Alter zurückgelegt."],
+["kv","Was gilt für Kinder in der GKV-Familienversicherung?",["Sie zahlen eigene Beiträge","Sie sind unter Voraussetzungen beitragsfrei mitversichert","Sie sind nicht versichert","Sie müssen privat versichert werden"],1,"In der PKV braucht dagegen jede Person einen eigenen Vertrag."],
+["kv","Wie viele Pflegegrade gibt es?",["3","4","5","6"],2,"Pflegegrad 1 bis 5."],
+["kv","Was ist ein Vorteil des Pflegetagegelds gegenüber der Pflegekostenversicherung?",["Es ist frei verwendbar","Es zahlt nur gegen Rechnung","Es ist immer günstiger","Es braucht keinen Pflegegrad"],0,"Das Tagegeld wird je nach Pflegegrad gezahlt, ohne Kostennachweis."],
+["kv","Was zeichnet den Basistarif der PKV aus?",["Leistungen vergleichbar mit der GKV, Annahmezwang","Chefarztbehandlung","Keine Beiträge","Nur für Kinder"],0,"Der Beitrag ist auf den GKV-Höchstbeitrag begrenzt."],
+["kv","Warum ist eine Auslandsreise-Krankenversicherung sinnvoll?",["Die GKV zahlt keinen medizinisch sinnvollen Rücktransport","Sie ist gesetzlich Pflicht","Sie ersetzt die GKV","Sie zahlt Urlaubsausfall"],0,"Außerdem zahlt die GKV außerhalb der EU oft gar nicht."],
+["kv","Für wen ist eine Krankentagegeldversicherung besonders wichtig?",["Für Selbstständige","Für Rentner","Für Kinder","Für Studenten"],0,"Selbstständige haben keine Entgeltfortzahlung durch einen Arbeitgeber."],
+["sach","In welcher Höhe haftet man nach § 823 BGB für Schäden an Dritten?",["Bis 50.000 €","Bis zur Deckungssumme","Unbegrenzt mit dem gesamten Vermögen","Gar nicht"],2,"Deshalb ist die Privathaftpflicht so wichtig."],
+["sach","Welche Aufgaben hat eine Haftpflichtversicherung?",["Prüfung der Haftpflichtfrage","Abwehr unberechtigter Ansprüche","Befriedigung berechtigter Ansprüche","Erstattung eigener Schäden"],[0,1,2],"Die Abwehr unberechtigter Ansprüche nennt man passiven Rechtsschutz."],
+["sach","Bis zu welchem Alter sind Kinder im Straßenverkehr in der Regel deliktunfähig?",["Unter 7 Jahren","Unter 10 Jahren","Unter 14 Jahren","Unter 18 Jahren"],1,"Allgemein unter 7 Jahren, im fließenden Straßenverkehr unter 10 Jahren (§ 828 BGB)."],
+["sach","Welcher Wert wird in der Hausratversicherung ersetzt?",["Zeitwert","Neuwert (Wiederbeschaffungswert)","Kaufpreis","Pauschal 500 €"],1,"Ersetzt wird der Betrag, um neue Sachen gleicher Art und Güte zu kaufen."],
+["sach","Wie lässt sich in der Hausratversicherung eine Unterversicherung vermeiden?",["650 € je m² Wohnfläche mit Unterversicherungsverzicht","Selbstbeteiligung erhöhen","Zeitwert versichern","Kündigen"],0,"Bei pauschaler Summe je m² verzichtet der Versicherer auf den Einwand der Unterversicherung."],
+["sach","Ab welcher Windstärke gilt Sturm in der Sachversicherung?",["6","7","8","10"],2,"Ab Windstärke 8."],
+["sach","Was bedeutet „Wert 1914“ in der Wohngebäudeversicherung?",["Baujahr des Hauses","Basiswert für die gleitende Neuwertversicherung","Höchstentschädigung","Versicherungsbeginn"],1,"Er wird über einen Index jährlich angepasst und schützt so vor Unterversicherung."],
+["sach","Welche Schäden sind typischerweise Elementarschäden?",["Überschwemmung","Rückstau","Erdrutsch","Leitungswasser"],[0,1,2],"Leitungswasser ist eine Grundgefahr, Elementarschäden sind ein Zusatzbaustein."],
+["sach","Welche Versicherung ist für Kfz-Halter gesetzlich vorgeschrieben?",["Vollkasko","Teilkasko","Kfz-Haftpflicht","Insassenunfall"],2,"Nach dem Pflichtversicherungsgesetz."],
+["sach","Was leistet die Vollkasko zusätzlich zur Teilkasko?",["Selbst verschuldete Unfallschäden am eigenen Fahrzeug","Glasbruch","Diebstahl","Wildunfall"],0,"Außerdem meist Vandalismus."],
+["sach","Was ist ein Unfall im Sinne der privaten Unfallversicherung?",["Ein plötzlich von außen auf den Körper wirkendes Ereignis, durch das man unfreiwillig eine Gesundheitsschädigung erleidet","Jede Krankheit","Ein Herzinfarkt","Ein Bandscheibenvorfall durch Abnutzung"],0,"Krankheiten und Verschleiß sind keine Unfälle."],
+["sach","Was regelt die Gliedertaxe?",["Feste Invaliditätsgrade für den Verlust bestimmter Körperteile","Die Beitragshöhe","Die Wartezeit","Die Krankenhauskosten"],0,"Zum Beispiel Verlust eines Auges oder einer Hand."],
+["sach","Wie lang ist die übliche Wartezeit in der Rechtsschutzversicherung?",["Keine","3 Monate","1 Jahr","3 Jahre"],1,"Im Verkehrsrecht gibt es meist keine Wartezeit."],
+["sach","Wer braucht eine Haus- und Grundbesitzerhaftpflicht?",["Vermieter eines Hauses","Jeder Mieter","Nur Autofahrer","Kinder"],0,"Das selbst bewohnte Einfamilienhaus ist meist über die Privathaftpflicht mitversichert."],
+["sach","Welche Versicherung braucht jemand, der ein Haus baut?",["Bauherrenhaftpflicht","Tierhalterhaftpflicht","Rechtsschutz Verkehr","Reiserücktritt"],0,"Der Bauherr haftet für Gefahren auf der Baustelle."],
+["sach","Was ist ein Leitungswasserschaden?",["Schaden durch bestimmungswidrig ausgetretenes Leitungswasser","Schaden durch Regen","Schaden durch Grundwasser","Hochwasser"],0,"Regen, Grund- und Hochwasser gehören nicht dazu."],
+["ber","Womit beginnt eine qualifizierte Beratung?",["Produktpräsentation","Bedarfsanalyse","Abschluss","Einwandbehandlung"],1,"Erst die Situation und Ziele des Kunden erfassen, dann Lösungen vorschlagen."],
+["ber","Was sind offene Fragen?",["Fragen, die mit Ja oder Nein beantwortet werden","W-Fragen, die zum Erzählen einladen","Suggestivfragen","Alternativfragen"],1,"Zum Beispiel: „Wie stellen Sie sich Ihren Ruhestand vor?“"],
+["ber","Welche Risiken sollten zuerst abgesichert werden?",["Kleine Alltagsschäden","Existenzbedrohende Risiken","Handy und Brille","Reisegepäck"],1,"Zum Beispiel Haftpflicht, Berufsunfähigkeit, Hinterbliebenenschutz."],
+["ber","Was gehört zum aktiven Zuhören?",["Nachfragen","Zusammenfassen mit eigenen Worten","Blickkontakt und Zuwendung","Den Kunden unterbrechen"],[0,1,2],"Aktives Zuhören zeigt dem Kunden Wertschätzung."],
+["ber","Wie reagiert man professionell auf den Einwand „Das ist mir zu teuer“?",["Sofort Rabatt geben","Nachfragen und den Nutzen in Bezug zum Bedarf erklären","Das Gespräch beenden","Widersprechen"],1,"Einwände ernst nehmen, Hintergründe erfragen, Nutzen und Alternativen zeigen."],
+["ber","Was ist nach Vertragsabschluss wichtig?",["Kontakt abbrechen","Regelmäßige Betreuung und Anpassung an Lebensereignisse","Neue Verträge ohne Bedarf","Nichts"],1,"Heirat, Kinder oder Hauskauf verändern den Bedarf."]
+]},
+f34:{title:"§34f Finanzanlagenvermittlung", short:"§34f", ic:"📊",
+info:"Sachkundeprüfung „Geprüfte/r Finanzanlagenfachmann/-frau IHK“. Prüfungsgebiete u. a. Recht, Kundenberatung, offene und geschlossene Investmentvermögen, Vermögensanlagen, Steuern und Wirtschaft.",
+cats:{rp:"Recht & Pflichten",inv:"Investmentfonds & KAGB",gesch:"Geschlossene AIF & Vermögensanlagen",wp:"Wertpapiere & Märkte",st:"Steuern",vwl:"Volkswirtschaft",risk:"Anlageberatung & Risiko"},
+qs:[
+["rp","Welche Bereiche umfasst die Erlaubnis nach § 34f Abs. 1 GewO?",["Offene Investmentvermögen","Geschlossene Investmentvermögen (AIF)","Vermögensanlagen","Versicherungen"],[0,1,2],"Die Erlaubnis kann auf einzelne Kategorien beschränkt werden. Versicherungen fallen unter § 34d."],
+["rp","Welche Verordnung regelt die Pflichten von Finanzanlagenvermittlern?",["VersVermV","FinVermV","WpHG","KWG"],1,"Die Finanzanlagenvermittlungsverordnung (FinVermV)."],
+["rp","Was muss der Vermittler dem Kunden vor Vertragsschluss bei einer Anlageberatung aushändigen?",["Eine Geeignetheitserklärung","Seinen Steuerbescheid","Einen Arbeitsvertrag","Nichts"],0,"Sie erklärt, warum die Empfehlung zum Kunden passt – auf einem dauerhaften Datenträger."],
+["rp","Was gilt für Zuwendungen (Provisionen) Dritter?",["Sie müssen dem Kunden offengelegt werden","Sie sind geheim","Sie sind verboten","Sie gehen an den Staat"],0,"Art und Höhe der Zuwendungen sind offenzulegen."],
+["rp","Was gilt für Telefongespräche zur Anlagevermittlung und -beratung?",["Sie müssen aufgezeichnet werden (Taping)","Sie sind verboten","Sie müssen notariell beglaubigt werden","Nichts"],0,"Die Aufzeichnungspflicht gilt seit 2020 auch für 34f-Vermittler."],
+["rp","Darf ein Finanzanlagenvermittler Gelder seiner Kunden entgegennehmen?",["Ja, immer","Nein","Nur bar","Nur bis 1.000 €"],1,"Er darf sich kein Eigentum oder Besitz an Kundengeldern verschaffen."],
+["rp","Welche Pflichten ergeben sich aus dem Geldwäschegesetz?",["Identifizierung des Kunden","Verdachtsmeldung an die FIU","Aufbewahrung der Unterlagen (5 Jahre)","Weitergabe der Daten an die Konkurrenz"],[0,1,2],"Die FIU ist die Zentralstelle für Finanztransaktionsuntersuchungen."],
+["rp","Was unterscheidet den Honorar-Finanzanlagenberater (§ 34h GewO)?",["Er wird nur vom Kunden bezahlt","Er nimmt Provisionen","Er braucht keine Erlaubnis","Er vermittelt Versicherungen"],0,"Zuwendungen von Produktgebern muss er an den Kunden auskehren."],
+["rp","Was muss vor Anlageberatung erfragt werden?",["Kenntnisse und Erfahrungen","Finanzielle Verhältnisse inkl. Verlusttragfähigkeit","Anlageziele inkl. Risikotoleranz und Nachhaltigkeitspräferenzen","Religion"],[0,1,2],"Nur so kann eine geeignete Empfehlung gegeben werden."],
+["rp","Welches Informationsdokument gibt es für Vermögensanlagen?",["Vermögensanlagen-Informationsblatt (VIB)","Steuerbescheid","Versicherungsschein","Grundbuchauszug"],0,"Das VIB ist kurz gehalten (höchstens 3 DIN-A4-Seiten)."],
+["inv","Was ist ein OGAW?",["Ein offener Publikumsfonds nach EU-Richtlinie mit strenger Risikostreuung","Ein geschlossener Immobilienfonds","Eine Aktie","Ein Bausparvertrag"],0,"Organismus für gemeinsame Anlagen in Wertpapieren (englisch UCITS)."],
+["inv","Wer verwahrt das Vermögen eines Investmentfonds?",["Die Kapitalverwaltungsgesellschaft","Die Verwahrstelle","Der Vermittler","Der Anleger"],1,"Die KVG verwaltet, die Verwahrstelle (meist eine Bank) verwahrt und kontrolliert."],
+["inv","Was passiert mit dem Fondsvermögen bei Insolvenz der Kapitalverwaltungsgesellschaft?",["Es fällt in die Insolvenzmasse","Es ist als Sondervermögen geschützt","Es verfällt","Der Staat übernimmt es"],1,"Das Sondervermögen ist vom Vermögen der KVG getrennt."],
+["inv","Welche Fristen gelten bei der Rückgabe offener Immobilienfonds (Käufe ab 2013)?",["Keine","24 Monate Mindesthaltedauer und 12 Monate Kündigungsfrist","1 Woche","10 Jahre"],1,"Damit sollen Liquiditätsengpässe vermieden werden."],
+["inv","Wie setzt sich der Ausgabepreis eines Fondsanteils zusammen?",["Anteilswert + Ausgabeaufschlag","Anteilswert – Ausgabeaufschlag","Nur Ausgabeaufschlag","Nennwert"],0,"Der Rücknahmepreis entspricht in der Regel dem Anteilswert (NAV)."],
+["inv","Wie bildet ein synthetischer ETF den Index nach?",["Durch Kauf aller Indexwerte","Über ein Tauschgeschäft (Swap)","Durch einen Fondsmanager","Gar nicht"],1,"Physisch replizierende ETFs kaufen dagegen die Indexwerte."],
+["inv","Was besagt die 5-10-40-Regel bei OGAW?",["Grenzen für die Anlage in Wertpapiere eines Emittenten","Steuerregel","Mindestanlage","Kostendeckel"],0,"Max. 5 % je Emittent, bis 10 % erlaubt, wenn alle Positionen über 5 % zusammen höchstens 40 % ausmachen."],
+["inv","Was ist ein Nachteil eines Dachfonds?",["Doppelte Kostenebene","Keine Streuung","Kein Sondervermögen","Keine Rücknahme"],0,"Es fallen Kosten beim Dachfonds und bei den Zielfonds an."],
+["inv","Was ist ein thesaurierender Fonds?",["Erträge werden wieder angelegt","Erträge werden ausgeschüttet","Fonds ohne Erträge","Fonds mit Garantie"],0,"Ausschüttende Fonds zahlen die Erträge aus."],
+["inv","Was gibt die TER an?",["Die laufenden jährlichen Kosten eines Fonds in Prozent","Den Ausgabeaufschlag","Die Rendite","Das Risiko"],0,"Total Expense Ratio."],
+["gesch","Was ist typisch für einen geschlossenen AIF?",["Keine Rückgabe der Anteile während der Laufzeit","Tägliche Rückgabe","Einlagensicherung","Garantierte Rendite"],0,"Anleger sind unternehmerisch, oft für viele Jahre, gebunden."],
+["gesch","In welcher Rechtsform werden geschlossene Publikums-AIF meist aufgelegt?",["AG","GmbH & Co. KG","eG","Stiftung"],1,"Anleger sind Kommanditisten."],
+["gesch","Wann kann die Haftung eines Kommanditisten wieder aufleben?",["Bei Ausschüttungen, die nicht durch Gewinne gedeckt sind","Nie","Bei jeder Hauptversammlung","Bei Steuererstattungen"],0,"Dann gilt die Einlage als zurückgezahlt (§ 172 Abs. 4 HGB)."],
+["gesch","Welche Risiken haben geschlossene AIF?",["Totalverlust","Eingeschränkte Handelbarkeit","Lange Kapitalbindung","Einlagensicherung bis 100.000 €"],[0,1,2],"Es gibt keine Einlagensicherung."],
+["gesch","Was bedeutet „Blind Pool“?",["Die konkreten Anlageobjekte stehen bei Zeichnung noch nicht fest","Der Fonds ist anonym","Die Kosten sind unbekannt","Ein Fonds ohne Verwahrstelle"],0,"Das erhöht das Risiko, weil der Anleger die Objekte nicht prüfen kann."],
+["gesch","Was ist ein Nachrangdarlehen?",["Ein Darlehen, das im Insolvenzfall erst nach anderen Gläubigern bedient wird","Ein Darlehen mit Vorrang","Ein Bankkredit","Ein Bausparkredit"],0,"Das Risiko eines Totalverlusts ist hoch."],
+["gesch","Was zählt zu den Vermögensanlagen nach dem VermAnlG?",["Genussrechte","Namensschuldverschreibungen","Nachrangdarlehen","Aktien börsennotierter Unternehmen"],[0,1,2],"Aktien sind Wertpapiere und keine Vermögensanlagen."],
+["wp","Was passiert mit dem Kurs einer festverzinslichen Anleihe, wenn der Marktzins steigt?",["Er steigt","Er fällt","Er bleibt gleich","Die Anleihe wird gekündigt"],1,"Kurs und Marktzins verlaufen gegenläufig."],
+["wp","Bis zu welchem Rating spricht man (S&P) von Investment Grade?",["AAA","A-","BBB-","BB+"],2,"Alles darunter ist spekulativ (High Yield)."],
+["wp","Was unterscheidet die Vorzugsaktie von der Stammaktie?",["Meist kein Stimmrecht, dafür Vorteile bei der Dividende","Doppeltes Stimmrecht","Keine Dividende","Garantierter Kurs"],0,"Stammaktien haben Stimmrecht in der Hauptversammlung."],
+["wp","Wie berechnet man das Kurs-Gewinn-Verhältnis (KGV)?",["Aktienkurs ÷ Gewinn je Aktie","Gewinn ÷ Umsatz","Dividende ÷ Kurs","Kurs × Gewinn"],0,"Ein niedriges KGV kann auf eine günstige Bewertung hindeuten."],
+["wp","Was misst die Duration?",["Die Zinsempfindlichkeit einer Anleihe","Die Dividende","Die Volatilität einer Aktie","Die Fondskosten"],0,"Je höher die Duration, desto stärker reagiert der Kurs auf Zinsänderungen."],
+["wp","Was ist ein Zerobond?",["Anleihe ohne laufende Zinszahlung, Ertrag aus der Differenz zwischen Kauf- und Rückzahlungskurs","Aktie ohne Dividende","Anleihe mit Nullrisiko","Ein Fonds"],0,"Zerobonds werden deutlich unter dem Nennwert ausgegeben."],
+["wp","Welches Risiko tragen Käufer von Zertifikaten besonders?",["Emittentenrisiko","Kein Risiko","Inflationsschutz","Einlagensicherung"],0,"Zertifikate sind Schuldverschreibungen und kein Sondervermögen."],
+["wp","Bis zu welcher Höhe sind Bankeinlagen in der EU gesetzlich gesichert?",["20.000 €","50.000 €","100.000 € je Kunde und Bank","Unbegrenzt"],2,"Gesetzliche Einlagensicherung."],
+["wp","Was erhalten Aktionäre bei einer Kapitalerhöhung gegen Einlagen?",["Bezugsrecht","Stückzinsen","Kupon","Garantie"],0,"Es schützt vor Verwässerung der Beteiligung."],
+["wp","Was sind Stückzinsen?",["Zinsen seit dem letzten Zinstermin, die der Käufer einer Anleihe dem Verkäufer zahlt","Zinsen je Aktie","Zinsen auf Tagesgeld","Strafzinsen"],0,"Damit wird der Zinsanspruch fair aufgeteilt."],
+["st","Wie hoch ist die Abgeltungsteuer?",["15 %","25 % zzgl. Soli und ggf. Kirchensteuer","30 %","42 %"],1,"Mit Soli 26,375 %."],
+["st","Welche Teilfreistellungen gelten für Privatanleger?",["Aktienfonds 30 %","Mischfonds 15 %","Immobilienfonds 60 % (Auslandsimmobilien 80 %)","Rentenfonds 50 %"],[0,1,2],"Rentenfonds haben keine Teilfreistellung."],
+["st","Wie wird die Vorabpauschale berechnet?",["Fondswert am Jahresanfang × Basiszins × 70 %","Ausschüttung × 2","Fester Betrag","Gar nicht"],0,"Begrenzt auf den tatsächlichen Wertzuwachs, abzüglich Ausschüttungen."],
+["st","Womit dürfen Verluste aus Aktienverkäufen verrechnet werden?",["Nur mit Gewinnen aus Aktienverkäufen","Mit allen Einkünften","Mit Zinsen","Gar nicht"],0,"Es gibt einen eigenen Verlustverrechnungstopf für Aktien."],
+["st","Was ist eine NV-Bescheinigung?",["Nichtveranlagungsbescheinigung – Kapitalerträge bleiben steuerfrei, wenn das Einkommen unter dem Grundfreibetrag liegt","Ein Kontoauszug","Eine Steuernummer","Eine Vollmacht"],0,"Zum Beispiel für Kinder oder Studenten."],
+["st","Wie werden Einkünfte aus einem geschlossenen Immobilien-AIF in KG-Form meist besteuert?",["Mit dem persönlichen Steuersatz als Einkünfte aus Vermietung und Verpachtung","Mit Abgeltungsteuer","Gar nicht","Mit Erbschaftsteuer"],0,"Die Abgeltungsteuer gilt hier nicht."],
+["vwl","Welche Ziele bilden das magische Viereck der Wirtschaftspolitik?",["Preisniveaustabilität","Hoher Beschäftigungsstand","Außenwirtschaftliches Gleichgewicht","Hohe Steuern"],[0,1,2],"Das vierte Ziel ist ein stetiges und angemessenes Wirtschaftswachstum."],
+["vwl","Welches Inflationsziel verfolgt die EZB mittelfristig?",["0 %","1 %","2 %","5 %"],2,"2 % mittelfristig, symmetrisch."],
+["vwl","Was bewirkt eine Leitzinssenkung typischerweise?",["Kredite werden günstiger, die Konjunktur wird angeregt","Kredite werden teurer","Die Inflation sinkt sofort","Die Arbeitslosigkeit steigt"],0,"Gleichzeitig steigen meist die Kurse bestehender Anleihen."],
+["vwl","Wie heißen die vier Konjunkturphasen?",["Aufschwung, Boom, Abschwung, Rezession","Frühling, Sommer, Herbst, Winter","Start, Mitte, Ende, Pause","Hausse, Baisse, Plateau, Crash"],0,"Rezession bzw. Tiefphase."],
+["vwl","Was misst das Bruttoinlandsprodukt?",["Den Wert aller im Inland in einem Jahr produzierten Waren und Dienstleistungen","Die Staatsschulden","Die Inflation","Die Arbeitslosenquote"],0,"Wichtigster Indikator für die Wirtschaftsleistung."],
+["vwl","Was ist eine inverse Zinsstrukturkurve?",["Kurzfristige Zinsen sind höher als langfristige","Alle Zinsen sind gleich","Langfristige Zinsen sind höher","Es gibt keine Zinsen"],0,"Sie gilt häufig als Warnsignal für eine Rezession."],
+["risk","Welches Risiko lässt sich durch Diversifikation verringern?",["Das unsystematische (unternehmensspezifische) Risiko","Das systematische Marktrisiko","Kein Risiko","Das Inflationsrisiko vollständig"],0,"Das Marktrisiko bleibt auch bei breiter Streuung."],
+["risk","Was beschreibt die Volatilität?",["Die Schwankungsbreite eines Kurses","Die Rendite","Die Kosten","Die Laufzeit"],0,"Hohe Volatilität bedeutet hohe Schwankungen."],
+["risk","Was ist das Liquiditätsrisiko?",["Eine Anlage kann nicht oder nur mit Abschlag verkauft werden","Kursverlust durch Zinsen","Ausfall des Emittenten","Wechselkursverlust"],0,"Typisch bei geschlossenen AIF oder engen Märkten."],
+["risk","Was bedeutet Verlusttragfähigkeit?",["Wie viel Verlust ein Kunde wirtschaftlich verkraften kann","Wie viel Gewinn er erwartet","Wie viele Verluste er schon hatte","Die Steuerlast"],0,"Ein Teil der Abfrage der finanziellen Verhältnisse."],
+["risk","Was zeigt der Zielmarkt eines Finanzprodukts?",["Für welche Kunden das Produkt geeignet ist – und für welche nicht (negativer Zielmarkt)","Den Börsenplatz","Den Verkaufspreis","Die Provision"],0,"Der Hersteller legt den Zielmarkt fest."],
+["risk","Welche Skala hat der Risikoindikator im PRIIPs-Basisinformationsblatt?",["1 bis 5","1 bis 7","A bis E","0 bis 10"],1,"1 = geringes, 7 = hohes Risiko."],
+["risk","Welche Risiken bestehen bei einer Fremdwährungsanleihe zusätzlich?",["Währungsrisiko","Kein Zinsrisiko","Einlagensicherung","Inflationsschutz"],0,"Wechselkursänderungen wirken sich auf den Euro-Wert aus."]
+]}
+};
+
+/* Rechentrainer: Zufallsaufgaben */
+const ri=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const fm=(n,d=2)=>n.toLocaleString("de-DE",{minimumFractionDigits:d,maximumFractionDigits:d});
+const GEN=[
+()=>{const W=ri(12,30)*5000,VS=Math.round(W*ri(12,18)/20/1000)*1000,S=ri(4,40)*500,a=S*VS/W;
+ return{t:"Unterversicherung",q:`Versicherungswert ${fm(W,0)} €, Versicherungssumme ${fm(VS,0)} €. Schaden: ${fm(S,0)} €. Wie viel zahlt der Versicherer (Proportionalregel)?`,ans:a,u:"€",tol:1,e:`Leistung = Schaden × VS ÷ Versicherungswert = ${fm(S,0)} × ${fm(VS,0)} ÷ ${fm(W,0)} = ${fm(a)} €`};},
+()=>{const m=pick([10,20,25,30,40,50,75,100,125,150,200]),k=ri(0,3),b=m*12,g=b>=120?0.5*Math.min(b,360)+0.25*Math.max(0,Math.min(b,1800)-360):0,kz=b>=120?k*Math.min(b,300):0;
+ return{t:"Altersvorsorgedepot",q:`Eigenbeitrag ${m} € im Monat, ${k} Kind${k===1?"":"er"} mit Kindergeld. Wie hoch ist die gesamte Zulage pro Jahr (Grund- + Kinderzulage)?`,ans:g+kz,u:"€",tol:1,e:`Jahresbeitrag ${fm(b,0)} €. Grundzulage: 50 % auf bis 360 € + 25 % auf 360–1.800 € = ${fm(g)} €. Kinderzulage: ${k} × min(${fm(b,0)} €; 300 €) = ${fm(kz)} €. Summe ${fm(g+kz)} €.`};},
+()=>{const E=ri(14,60)*100,sp=Math.max(0,E*0.7-1000),tx=sp*0.26375;
+ return{t:"Abgeltungsteuer",q:`Ein Lediger erzielt ${fm(E,0)} € Ertrag aus einem Aktien-ETF. Teilfreistellung 30 %, Sparerpauschbetrag 1.000 €, keine Kirchensteuer. Wie hoch sind Abgeltungsteuer + Soli?`,ans:tx,u:"€",tol:1,e:`Steuerpflichtig: ${fm(E,0)} × 70 % – 1.000 = ${fm(sp)} €. Steuer: × 26,375 % = ${fm(tx)} €.`};},
+()=>{const D=ri(15,50)*10000,z=pick([2.5,3,3.5,4]),t=pick([1.5,2,2.5,3]),a=D*(z+t)/1200;
+ return{t:"Annuitätendarlehen",q:`Darlehen ${fm(D,0)} €, Sollzins ${fm(z,1)} %, Anfangstilgung ${fm(t,1)} %. Wie hoch ist die Monatsrate?`,ans:a,u:"€",tol:1,e:`(${fm(z,1)} % + ${fm(t,1)} %) × ${fm(D,0)} € ÷ 12 = ${fm(a)} €`};},
+()=>{const K=ri(5,50)*1000,p=pick([3,4,5,6,7]),n=pick([5,10,15,20,25]),a=K*Math.pow(1+p/100,n);
+ return{t:"Zinseszins",q:`${fm(K,0)} € werden einmalig für ${n} Jahre zu ${p} % p. a. angelegt (jährliche Verzinsung). Wie hoch ist das Endkapital?`,ans:a,u:"€",tol:Math.max(2,a*0.003),e:`K × (1 + p)^n = ${fm(K,0)} × ${fm(1+p/100,2)}^${n} = ${fm(a)} €`};},
+()=>{const N=ri(400,1500)/10,AA=pick([2.5,3,4,5]),a=N*(1+AA/100);
+ return{t:"Ausgabepreis",q:`Ein Fondsanteil hat einen Anteilswert von ${fm(N)} €. Der Ausgabeaufschlag beträgt ${fm(AA,1)} %. Wie hoch ist der Ausgabepreis?`,ans:a,u:"€",tol:0.02,e:`${fm(N)} € × ${fm(1+AA/100,3)} = ${fm(a)} €`};},
+()=>{const m=ri(6,48),a=0.3*m;
+ return{t:"Rentenabschlag",q:`Jemand geht ${m} Monate vor der Regelaltersgrenze in Rente. Wie hoch ist der Abschlag?`,ans:a,u:"%",tol:0.05,e:`0,3 % × ${m} Monate = ${fm(a,1)} %`};},
+()=>{const n=pick([1,1.5,2,2.5,3,3.5,4]),i=pick([1.5,2,2.5,3,4,5]),a=n-i;
+ return{t:"Realzins",q:`Tagesgeld bringt ${fm(n,1)} %, die Inflation liegt bei ${fm(i,1)} %. Wie hoch ist der Realzins (Näherung)?`,ans:a,u:"%",tol:0.05,e:`Nominalzins – Inflation = ${fm(n,1)} – ${fm(i,1)} = ${fm(a,1)} %`};},
+()=>{const k=ri(20,200),d=ri(50,600)/100,a=d/k*100;
+ return{t:"Dividendenrendite",q:`Eine Aktie kostet ${fm(k,0)} € und zahlt ${fm(d)} € Dividende. Wie hoch ist die Dividendenrendite?`,ans:a,u:"%",tol:0.05,e:`${fm(d)} ÷ ${fm(k,0)} × 100 = ${fm(a)} %`};},
+()=>{const g=ri(20,80)/10,kg=ri(8,30),k=Math.round(g*kg*10)/10,a=k/g;
+ return{t:"KGV",q:`Kurs ${fm(k)} €, Gewinn je Aktie ${fm(g)} €. Wie hoch ist das KGV?`,ans:a,u:"",tol:0.1,e:`${fm(k)} ÷ ${fm(g)} = ${fm(a,1)}`};},
+()=>{const B=ri(25,45)*100,N=Math.round(B*0.64/10)*10,a=Math.min(0.7*B,0.9*N);
+ return{t:"Krankengeld",q:`Monatsbrutto ${fm(B,0)} €, Monatsnetto ${fm(N,0)} €. Wie hoch ist das monatliche Krankengeld vor Abzug der Sozialbeiträge (vereinfacht, ohne Beitragsbemessungsgrenze)?`,ans:a,u:"€",tol:1,e:`70 % vom Brutto = ${fm(0.7*B)} €, max. 90 % vom Netto = ${fm(0.9*N)} €. Der niedrigere Wert gilt: ${fm(a)} €.`};},
+()=>{const z=pick([2,3,4,6,8,9,12]),a=72/z;
+ return{t:"72er-Regel",q:`Nach wie vielen Jahren verdoppelt sich ein Kapital bei ${z} % Rendite ungefähr (72er-Regel)?`,ans:a,u:"Jahre",tol:0.1,e:`72 ÷ ${z} = ${fm(a,1)} Jahre`};},
+()=>{const P=ri(25,60)*10000,a=P*0.065;
+ return{t:"Grunderwerbsteuer",q:`Ein Haus in NRW kostet ${fm(P,0)} €. Wie hoch ist die Grunderwerbsteuer?`,ans:a,u:"€",tol:1,e:`6,5 % × ${fm(P,0)} € = ${fm(a,0)} €`};},
+()=>{const S=ri(20,80)*1000,V=pick([10,20,30,50,60,80,100]),a=S*V/100;
+ return{t:"Unfallversicherung",q:`Grundsumme Invalidität ${fm(S,0)} €, ohne Progression. Laut Gliedertaxe beträgt der Invaliditätsgrad ${V} %. Wie hoch ist die Leistung?`,ans:a,u:"€",tol:1,e:`${fm(S,0)} € × ${V} % = ${fm(a,0)} €`};}
+];
+
 /* ================= SPEICHER ================= */
 const KEY="finanzakademie_v1";
-let S={read:{},best:{},links:[]};
+let S={read:{},best:{},links:[],stats:{},wrong:{},days:[],calc:{r:0,n:0},exams:[]};
 try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x)S=Object.assign(S,x);}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 
@@ -552,13 +740,18 @@ function home(){
     <div><b>Dein Lernfortschritt</b><div class="muted small">${TOPICS.reduce((a,t)=>a+t.lessons.filter((_,i)=>S.read[t.id+":"+i]).length,0)} von ${TOPICS.reduce((a,t)=>a+t.lessons.length,0)} Lektionen gelesen</div>
     ${next?`<a class="btn" style="margin-top:8px;padding:8px 12px;font-size:14px" href="#/l/${next[0].id}/${next[1]}">Weiterlernen ›</a>`:`<div class="small" style="margin-top:6px">Alle Lektionen gelesen – stark! 🎉</div>`}</div>
   </div>
+  <div class="grid" style="margin-bottom:6px">
+   <a class="tile wide hl" href="#/tag"><span class="ic">☀️</span><div><b>Tagestraining</b><br><small>15 Fragen · 🔥 ${streak()} Tag${streak()===1?"":"e"} Serie</small></div></a>
+   <a class="tile" href="#/ihk/d34"><span class="ic">☂️</span><b>IHK §34d</b><small>Prüfungstraining Versicherung</small></a>
+   <a class="tile" href="#/ihk/f34"><span class="ic">📊</span><b>IHK §34f</b><small>Prüfungstraining Finanzanlagen</small></a>
+  </div>
   <h3>Themen</h3>
   <div class="grid">
    ${TOPICS.map(t=>`<a class="tile ${t.hl?"hl":""}" href="#/t/${t.id}"><span class="ic">${t.ic}</span><b>${t.title}</b><small>${t.sub}</small><div class="bar"><i style="width:${topicPct(t)}%"></i></div></a>`).join("")}
    <a class="tile" href="#/rechner"><span class="ic">🧮</span><b>Rechner</b><small>Sparplan, Zulagen, Rentenlücke, Kredit</small></a>
    <a class="tile wide hl" href="#/links"><span class="ic">🔗</span><div><b>Nützliche Links</b><br><small>Live-Rechner für ETF-Sparplan, Altersvorsorgedepot, Rente</small></div></a>
    <a class="tile" href="#/karten"><span class="ic">🃏</span><b>Karteikarten</b><small>Begriffe üben</small></a>
-   <a class="tile" href="#/quiz/mix"><span class="ic">🎯</span><b>Mix-Quiz</b><small>10 Fragen aus allen Themen</small></a>
+   <a class="tile" href="#/rechnen"><span class="ic">✏️</span><b>Rechentrainer</b><small>Unbegrenzt Rechenaufgaben</small></a>
   </div>
   <p class="foot">Lern-App zur Weiterbildung, keine Anlage-, Steuer- oder Rechtsberatung.<br>Inhalte Stand: Oktober 2026.<br><a href="#" id="reset" style="color:var(--muted)">Fortschritt zurücksetzen</a></p>`;
   $("#reset").onclick=e=>{e.preventDefault();if(confirm("Lernfortschritt wirklich löschen? Eigene Links bleiben erhalten.")){S.read={};S.best={};save();home();}};
@@ -590,44 +783,179 @@ function lesson(id,i){
   window.scrollTo(0,0);
 }
 
-/* Quiz */
-let Q=null;
+/* ================= FRAGEN-POOL ================= */
+const POOL={}; // id -> {id,q,a,c:[..],e,tag}
+TOPICS.forEach(t=>t.quiz.forEach((q,i)=>{POOL["t:"+t.id+":"+i]={id:"t:"+t.id+":"+i,q:q.q,a:q.a,c:[].concat(q.c),e:q.e,tag:t.ic+" "+t.title,src:"t:"+t.id};}));
+Object.entries(IHK).forEach(([b,B])=>B.qs.forEach((x,i)=>{POOL[b+":"+i]={id:b+":"+i,q:x[1],a:x[2],c:[].concat(x[3]),e:x[4],tag:B.short+" · "+B.cats[x[0]],cat:x[0],src:b};}));
+const ALLQ=Object.values(POOL);
+function newCalc(){const g=pick(GEN)();return Object.assign({num:true,tag:"🧮 "+g.t},g);}
+
+/* Streak: Tage mit Training */
+function today(){const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();}
+function markDay(){const t=today();if(!S.days.includes(t)){S.days.push(t);S.days=S.days.slice(-400);save();}}
+function streak(){let n=0;const d=new Date();for(;;){const k=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();if(S.days.includes(k)){n++;d.setDate(d.getDate()-1);}else if(n===0&&k===today()){d.setDate(d.getDate()-1);}else break;}return n;}
+function record(q,ok){
+  if(q.num){S.calc.n++;if(ok)S.calc.r++;save();return;}
+  if(!q.id)return;
+  const s=S.stats[q.id]||{n:0,r:0};s.n++;if(ok)s.r++;s.l=ok?1:0;S.stats[q.id]=s;
+  if(!ok)S.wrong[q.id]=2;else if(S.wrong[q.id]){S.wrong[q.id]--;if(S.wrong[q.id]<=0)delete S.wrong[q.id];}
+  save();
+}
+function mastery(ids){if(!ids.length)return 0;return Math.round(ids.filter(id=>S.stats[id]&&S.stats[id].l).length/ids.length*100);}
+
+/* ================= QUIZ-ENGINE ================= */
+let Q=null,TIMER=null;
+function stopTimer(){if(TIMER){clearInterval(TIMER);TIMER=null;}}
+function startSession(o){
+  stopTimer();
+  Q=Object.assign({i:0,score:0,mode:"learn",ans:[]},o);
+  Q.qs=Q.qs.map(q=>q.num?q:Object.assign({},q,{order:shuffle(q.a.map((_,k)=>k))}));
+  if(!Q.qs.length){V.innerHTML=`<div class="card"><p>${o.empty||"Keine Fragen vorhanden."}</p></div><a class="btn block" href="#/training">Zum Training</a>`;setTitle(o.title,true);return;}
+  setTitle(Q.title,true);
+  if(Q.minutes){Q.end=Date.now()+Q.minutes*60000;TIMER=setInterval(()=>{const el=$("#tm");const r=Math.max(0,Q.end-Date.now());if(el)el.textContent="⏱ "+Math.floor(r/60000)+":"+String(Math.floor(r/1000)%60).padStart(2,"0");if(r<=0){stopTimer();alert("Die Zeit ist abgelaufen.");finishExam();}},1000);}
+  renderQ();
+}
 function quiz(id){
-  let qs,title;
-  if(id==="mix"){qs=shuffle(TOPICS.flatMap(t=>t.quiz.map(q=>Object.assign({tid:t.id},q)))).slice(0,10);title="Mix-Quiz";}
-  else{const t=T(id);if(!t)return home();qs=shuffle(t.quiz);title="Quiz: "+t.title;}
-  Q={id,qs:qs.map(q=>{const order=shuffle(q.a.map((_,k)=>k));return Object.assign({},q,{order});}),i:0,score:0,title};
-  setTitle(title,true);renderQ();
+  if(id==="mix")return startSession({title:"Mix-Quiz",qs:shuffle(ALLQ.filter(q=>q.src.startsWith("t:"))).slice(0,10),key:null});
+  const t=T(id);if(!t)return home();
+  startSession({title:"Quiz: "+t.title,qs:t.quiz.map((_,i)=>POOL["t:"+id+":"+i]),key:id,back:"#/t/"+id});
 }
 function renderQ(){
-  const q=Q.qs[Q.i];
-  V.innerHTML=`<div class="qhead"><span>Frage ${Q.i+1} / ${Q.qs.length}</span><span>✓ ${Q.score}</span></div>
+  const q=Q.qs[Q.i],multi=!q.num&&q.c.length>1,exam=Q.mode==="exam";
+  const sel=Q.ans[Q.i]||[];
+  V.innerHTML=`<div class="qhead"><span>Frage ${Q.i+1} / ${Q.qs.length}</span><span id="tm"></span><span>${exam?"":"✓ "+Q.score}</span></div>
   <div class="bar" style="margin:6px 0 12px"><i style="width:${Q.i/Q.qs.length*100}%"></i></div>
-  ${q.tid?`<p class="muted small">${T(q.tid).ic} ${T(q.tid).title}</p>`:""}
+  <p class="muted small">${q.tag||""}</p>
   <h2 style="font-size:19px">${q.q}</h2>
-  <div id="opts">${q.order.map(k=>`<button class="opt" data-k="${k}">${q.a[k]}</button>`).join("")}</div>
+  ${q.num?`<label class="f">Deine Lösung${q.u?" in "+q.u:""}</label><input id="num" type="text" inputmode="decimal" placeholder="z. B. 1234,56" autocomplete="off">
+   <button class="btn block" id="chk">Prüfen</button>`
+  :`${multi?`<p class="small" style="color:var(--brand2);font-weight:600">Mehrere Antworten sind richtig – wähle alle aus.</p>`:""}
+   <div id="opts">${q.order.map(k=>`<button class="opt ${sel.includes(k)?"pick":""}" data-k="${k}">${multi?(sel.includes(k)?"☑ ":"☐ "):""}${q.a[k]}</button>`).join("")}</div>
+   ${multi||exam?`<button class="btn block" id="chk">${exam?(Q.i===Q.qs.length-1?"Prüfung abgeben":"Weiter ›"):"Antwort prüfen"}</button>`:""}
+   ${exam&&Q.i>0?`<button class="btn sec block" id="prv">‹ Vorherige Frage</button>`:""}`}
   <div id="fb"></div>`;
-  V.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(+b.dataset.k));
+  if(Q.minutes){const r=Math.max(0,Q.end-Date.now());$("#tm").textContent="⏱ "+Math.floor(r/60000)+":"+String(Math.floor(r/1000)%60).padStart(2,"0");}
+  if(q.num){
+    const go=()=>{const v=parseFloat($("#num").value.replace(/\./g,"").replace(",",".").replace(/[^\d.\-]/g,""));if(!isFinite(v)){alert("Bitte eine Zahl eingeben.");return;}checkNum(v);};
+    $("#chk").onclick=go;$("#num").addEventListener("keydown",e=>{if(e.key==="Enter")go();});
+  }else{
+    V.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+      if(q.done)return;const k=+b.dataset.k;
+      if(multi){const s=Q.ans[Q.i]||[];Q.ans[Q.i]=s.includes(k)?s.filter(x=>x!==k):s.concat(k);renderQ();}
+      else if(exam){Q.ans[Q.i]=[k];renderQ();}
+      else{Q.ans[Q.i]=[k];checkOpt();}
+    });
+    if($("#chk"))$("#chk").onclick=()=>{
+      if(exam){if(Q.i===Q.qs.length-1){const open=Q.qs.filter((_,i)=>!(Q.ans[i]||[]).length).length;if(open&&!confirm(open+" Frage(n) unbeantwortet. Trotzdem abgeben?"))return;finishExam();}else{Q.i++;renderQ();}}
+      else{if(!(Q.ans[Q.i]||[]).length){alert("Bitte mindestens eine Antwort wählen.");return;}checkOpt();}
+    };
+    if($("#prv"))$("#prv").onclick=()=>{Q.i--;renderQ();};
+  }
   window.scrollTo(0,0);
 }
-function answer(k){
+const same=(a,b)=>a.length===b.length&&a.every(x=>b.includes(x));
+function checkOpt(){
   const q=Q.qs[Q.i];if(q.done)return;q.done=1;
-  const right=k===q.c;if(right)Q.score++;
-  V.querySelectorAll(".opt").forEach(b=>{const kk=+b.dataset.k;if(kk===q.c)b.classList.add("ok");else if(kk===k)b.classList.add("bad");b.disabled=true;});
+  const sel=Q.ans[Q.i]||[],ok=same(sel,q.c);if(ok)Q.score++;record(q,ok);
+  V.querySelectorAll(".opt").forEach(b=>{const k=+b.dataset.k;b.disabled=true;if(q.c.includes(k))b.classList.add("ok");else if(sel.includes(k))b.classList.add("bad");});
+  feedback(ok,q.e);
+}
+function checkNum(v){
+  const q=Q.qs[Q.i];if(q.done)return;q.done=1;
+  const ok=Math.abs(v-q.ans)<=q.tol;if(ok)Q.score++;record(q,ok);
+  $("#num").disabled=true;$("#chk").remove();
+  feedback(ok,`Lösung: <b>${fm(q.ans,q.u==="%"||q.u==="Jahre"||q.u===""?(q.u==="%"?2:1):2)} ${q.u}</b><br>${q.e}`);
+}
+function feedback(ok,txt){
   const last=Q.i===Q.qs.length-1;
-  $("#fb").innerHTML=`<div class="box ${right?"":"warn"}"><b>${right?"Richtig! ✓":"Leider falsch."}</b> ${q.e}</div>
+  $("#fb").innerHTML=`<div class="box ${ok?"":"warn"}"><b>${ok?"Richtig! ✓":"Leider falsch."}</b> ${txt}</div>
   <button class="btn block" id="nx">${last?"Ergebnis anzeigen":"Nächste Frage ›"}</button>`;
   $("#nx").onclick=()=>{if(last)result();else{Q.i++;renderQ();}};
+  $("#nx").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function finishExam(){
+  stopTimer();
+  Q.qs.forEach((q,i)=>{const ok=same(Q.ans[i]||[],q.c);if(ok)Q.score++;record(q,ok);q.ok=ok;});
+  const pct=Math.round(Q.score/Q.qs.length*100);
+  S.exams.push({b:Q.bank,p:pct,d:today()});S.exams=S.exams.slice(-30);markDay();save();
+  const wrong=Q.qs.map((q,i)=>[q,i]).filter(([q])=>!q.ok);
+  const byCat={};Q.qs.forEach(q=>{const c=q.tag.split(" · ")[1]||"";byCat[c]=byCat[c]||[0,0];byCat[c][1]++;if(q.ok)byCat[c][0]++;});
+  V.innerHTML=`<div class="card" style="text-align:center">${ringSvg(pct)}<h2>${Q.score} von ${Q.qs.length} richtig</h2>
+  <p>${pct>=70?"Stark – auf Prüfungsniveau! 🏆":pct>=50?"Knapp – die Schwachstellen unten gezielt üben.":"Noch nicht prüfungsreif – weiter trainieren."}</p></div>
+  <h3>Ergebnis nach Gebiet</h3><div class="card"><table class="t">${Object.entries(byCat).map(([c,[r,n]])=>`<tr><td>${c}</td><td class="r">${r}/${n}</td></tr>`).join("")}</table></div>
+  ${wrong.length?`<h3>Deine Fehler (${wrong.length})</h3>`+wrong.map(([q,i])=>`<div class="card"><b>${q.q}</b><p class="small">Richtig: ${q.c.map(k=>q.a[k]).join(" · ")}</p>${(Q.ans[i]||[]).length?`<p class="small" style="color:var(--bad)">Deine Antwort: ${(Q.ans[i]).map(k=>q.a[k]).join(" · ")}</p>`:`<p class="small muted">Nicht beantwortet</p>`}<p class="small muted">${q.e}</p></div>`).join(""):""}
+  <a class="btn block" href="#/fehler">Fehler gezielt üben</a><a class="btn sec block" href="#/ihk/${Q.bank}">Zurück zur Übersicht</a>`;
+  window.scrollTo(0,0);
 }
 function result(){
+  stopTimer();markDay();
   const pct=Math.round(Q.score/Q.qs.length*100);
-  if(Q.id!=="mix"){S.best[Q.id]=Math.max(S.best[Q.id]||0,pct);save();}
-  const msg=pct>=90?"Ausgezeichnet! 🏆":pct>=70?"Sehr gut! 👍":pct>=50?"Gut – noch etwas üben.":"Lies die Lektionen noch einmal durch.";
-  V.innerHTML=`<div class="card" style="text-align:center">${ringSvg(pct)}<h2>${Q.score} von ${Q.qs.length} richtig</h2><p>${msg}</p></div>
-  <button class="btn block" id="again">Nochmal versuchen</button>
-  ${Q.id!=="mix"?`<a class="btn sec block" href="#/t/${Q.id}">Zu den Lektionen</a>`:""}
-  <a class="btn sec block" href="#/">Zur Startseite</a>`;
-  $("#again").onclick=()=>quiz(Q.id);
+  if(Q.key){S.best[Q.key]=Math.max(S.best[Q.key]||0,pct);save();}
+  const msg=pct>=90?"Ausgezeichnet! 🏆":pct>=70?"Sehr gut! 👍":pct>=50?"Gut – noch etwas üben.":"Noch einmal üben lohnt sich.";
+  V.innerHTML=`<div class="card" style="text-align:center">${ringSvg(pct)}<h2>${Q.score} von ${Q.qs.length} richtig</h2><p>${msg}</p><p class="muted small">🔥 Trainingsserie: ${streak()} Tag(e)</p></div>
+  <button class="btn block" id="again">Neue Runde</button>
+  ${Object.keys(S.wrong).length?`<a class="btn sec block" href="#/fehler">Fehlertraining (${Object.keys(S.wrong).length})</a>`:""}
+  ${Q.back?`<a class="btn sec block" href="${Q.back}">Zurück</a>`:""}
+  <a class="btn sec block" href="#/training">Zum Training</a>`;
+  $("#again").onclick=()=>route();
+  window.scrollTo(0,0);
+}
+
+/* ================= TRAINING-SEITEN ================= */
+function training(){
+  setTitle("Training",false);stopTimer();
+  const nw=Object.keys(S.wrong).length,st=streak();
+  V.innerHTML=`<div class="card ring"><span style="font-size:40px">🔥</span><div><b>${st} Tag${st===1?"":"e"} Trainingsserie</b><div class="muted small">Jeden Tag eine Runde – so bleibt das Wissen hängen.</div></div></div>
+  <div class="grid">
+   <a class="tile wide hl" href="#/tag"><span class="ic">☀️</span><div><b>Tagestraining</b><br><small>15 gemischte Fragen, deine Fehler zuerst</small></div></a>
+   <a class="tile" href="#/ihk/d34"><span class="ic">${IHK.d34.ic}</span><b>IHK ${IHK.d34.short}</b><small>Versicherungsvermittlung · ${IHK.d34.qs.length} Fragen</small><div class="bar"><i style="width:${mastery(IHK.d34.qs.map((_,i)=>"d34:"+i))}%"></i></div></a>
+   <a class="tile" href="#/ihk/f34"><span class="ic">${IHK.f34.ic}</span><b>IHK ${IHK.f34.short}</b><small>Finanzanlagenvermittlung · ${IHK.f34.qs.length} Fragen</small><div class="bar"><i style="width:${mastery(IHK.f34.qs.map((_,i)=>"f34:"+i))}%"></i></div></a>
+   <a class="tile" href="#/rechnen"><span class="ic">🧮</span><b>Rechentrainer</b><small>Unbegrenzt neue Aufgaben${S.calc.n?` · ${Math.round(S.calc.r/S.calc.n*100)} % richtig`:""}</small></a>
+   <a class="tile" href="#/fehler"><span class="ic">🩹</span><b>Fehlertraining</b><small>${nw?nw+" Frage"+(nw===1?"":"n")+" offen":"Keine Fehler offen 🎉"}</small></a>
+   <a class="tile" href="#/quiz/mix"><span class="ic">🎯</span><b>Mix-Quiz</b><small>10 Fragen aus den Lernthemen</small></a>
+   <a class="tile" href="#/alle"><span class="ic">🎲</span><b>Zufall 20</b><small>Aus allen ${ALLQ.length} Fragen</small></a>
+  </div>
+  <h3>Themen-Quiz</h3><div class="card" style="padding:0"><div class="list">${TOPICS.map(t=>`<a href="#/quiz/${t.id}"><span>${t.ic}</span>${t.title}<span class="arr">${S.best[t.id]!=null?S.best[t.id]+" %":"›"}</span></a>`).join("")}</div></div>
+  <p class="foot">Eigene Übungsfragen nach dem IHK-Rahmenplan – keine offiziellen IHK-Prüfungsfragen.</p>`;
+}
+function ihk(b,mode,cat){
+  const B=IHK[b];if(!B)return training();
+  const ids=B.qs.map((_,i)=>b+":"+i);
+  if(mode==="cat"){const sub=ids.filter(id=>POOL[id].cat===cat);return startSession({title:B.short+": "+B.cats[cat],qs:shuffle(sub.map(id=>POOL[id])),back:"#/ihk/"+b});}
+  if(mode==="mix")return startSession({title:B.short+": Übung",qs:shuffle(ids.map(id=>POOL[id])).slice(0,20),back:"#/ihk/"+b});
+  if(mode==="exam"){
+    // gleichmäßig über alle Gebiete verteilt
+    const per={};ids.forEach(id=>{const c=POOL[id].cat;(per[c]=per[c]||[]).push(id);});
+    let pickIds=[];const cats=Object.keys(per),n=Math.min(40,ids.length);
+    Object.values(per).forEach(l=>pickIds.push(...shuffle(l).slice(0,Math.floor(n/cats.length))));
+    pickIds.push(...shuffle(ids.filter(id=>!pickIds.includes(id))).slice(0,n-pickIds.length));
+    if(!confirm(`Prüfungssimulation: ${pickIds.length} Fragen, 60 Minuten. Die Auflösung gibt es erst am Ende. Starten?`))return location.hash="#/ihk/"+b;
+    return startSession({title:B.short+" Prüfung",qs:shuffle(pickIds.map(id=>POOL[id])),mode:"exam",minutes:60,bank:b});
+  }
+  setTitle("IHK "+B.short,true);stopTimer();
+  const ex=S.exams.filter(e=>e.b===b);
+  V.innerHTML=`<h2>${B.ic} ${B.title}</h2><p class="muted small">${B.info}</p>
+  <div class="card ring">${ringSvg(mastery(ids))}<div><b>Lernstand</b><div class="muted small">Anteil der Fragen, die du zuletzt richtig beantwortet hast.</div>${ex.length?`<div class="small">Letzte Simulation: <b>${ex[ex.length-1].p} %</b> · Beste: <b>${Math.max(...ex.map(e=>e.p))} %</b></div>`:""}</div></div>
+  <a class="btn block" href="#/ihk/${b}/exam">📝 Prüfungssimulation (60 Min.)</a>
+  <a class="btn sec block" href="#/ihk/${b}/mix">🎲 20 Zufallsfragen üben</a>
+  <h3>Nach Prüfungsgebiet üben</h3>
+  <div class="card" style="padding:0"><div class="list">${Object.entries(B.cats).map(([k,name])=>{const sub=ids.filter(id=>POOL[id].cat===k);const m=mastery(sub);return `<a href="#/ihk/${b}/cat/${k}"><span class="chk ${m===100?"done":""}">${m===100?"✓":m+"%"}</span><span>${name}<br><small class="muted">${sub.length} Fragen</small></span><span class="arr">›</span></a>`;}).join("")}</div></div>
+  <p class="foot">Eigene Übungsfragen nach dem IHK-Rahmenplan – keine offiziellen IHK-Prüfungsfragen. Rechtsstand Oktober 2026.</p>`;
+}
+function fehler(){
+  const ids=Object.keys(S.wrong).filter(id=>POOL[id]);
+  startSession({title:"Fehlertraining",qs:shuffle(ids.map(id=>POOL[id])).slice(0,20),empty:"Super – du hast gerade keine offenen Fehler! 🎉 Falsch beantwortete Fragen landen automatisch hier und verschwinden, wenn du sie zweimal richtig beantwortest.",back:"#/training"});
+}
+function tag(){
+  const w=shuffle(Object.keys(S.wrong).filter(id=>POOL[id])).slice(0,5).map(id=>POOL[id]);
+  const unseen=shuffle(ALLQ.filter(q=>!S.stats[q.id]&&!w.includes(q)));
+  const rest=shuffle(ALLQ.filter(q=>!w.includes(q)&&!unseen.includes(q)));
+  const qs=w.concat(unseen.slice(0,8)).concat(rest);
+  const list=qs.slice(0,13).concat([newCalc(),newCalc()]);
+  startSession({title:"Tagestraining",qs:shuffle(list),back:"#/training"});
+}
+function rechnen(){
+  startSession({title:"Rechentrainer",qs:Array.from({length:10},newCalc),back:"#/training"});
 }
 
 /* Glossar & Karteikarten */
@@ -825,9 +1153,16 @@ function calc(id){
 /* ================= ROUTER ================= */
 function route(){
   const h=(location.hash||"#/").slice(2).split("/");
-  const n={"":"home",t:"home",l:"home",quiz:"quiz",rechner:"rechner",r:"rechner",links:"links",glossar:"glossar",karten:"glossar"}[h[0]]||"home";
+  const n={"":"home",t:"home",l:"home",quiz:"quiz",training:"quiz",ihk:"quiz",fehler:"quiz",tag:"quiz",rechnen:"quiz",alle:"quiz",rechner:"rechner",r:"rechner",links:"links",glossar:"glossar",karten:"glossar"}[h[0]]||"home";
   document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on",a.dataset.n===n));
+  stopTimer();
   switch(h[0]){
+    case "training":return training();
+    case "ihk":return ihk(h[1],h[2],h[3]);
+    case "fehler":return fehler();
+    case "tag":return tag();
+    case "rechnen":return rechnen();
+    case "alle":return startSession({title:"Zufall 20",qs:shuffle(ALLQ).slice(0,20),back:"#/training"});
     case "t":return topic(h[1]);
     case "l":return lesson(h[1],h[2]);
     case "quiz":return quiz(h[1]||"mix");
