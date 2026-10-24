@@ -1,4 +1,4 @@
-const CACHE = "finanzakademie-v3";
+const CACHE = "finanzakademie-v4";
 const CORE = ["lernapp.html", "lernapp-avdepot.html", "lernapp.webmanifest", "lernapp-icon-192.png", "lernapp-icon-512.png"];
 
 self.addEventListener("install", e => {

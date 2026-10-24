@@ -1199,9 +1199,68 @@ const GEN=[
  return{t:"Unfallversicherung",q:`Grundsumme Invalidität ${fm(S,0)} €, ohne Progression. Laut Gliedertaxe beträgt der Invaliditätsgrad ${V} %. Wie hoch ist die Leistung?`,ans:a,u:"€",tol:1,e:`${fm(S,0)} € × ${V} % = ${fm(a,0)} €`};}
 ];
 
+/* ================= LERNVIDEOS ================= */
+// [YouTube-ID, Titel, Kanal/Hinweis]. Nur YouTube-Shorts oder Videos, die laut Titel wenige Minuten dauern.
+const VIDEOS={
+d34:{title:"§34d Versicherungsvermittlung",ic:"☂️",topics:[
+ {n:"Die Prüfung im Überblick",q:"34d Sachkundeprüfung erklärt",v:[["29-1w2cdJZs","Was ist die 34d-Prüfung?","Short"]]},
+ {n:"Vermittlerrecht & Status",q:"Versicherungsmakler Versicherungsvertreter Unterschied erklärt",v:[]},
+ {n:"Versicherungsvertrag (VVG)",q:"VVG Widerrufsrecht Anzeigepflicht Obliegenheiten Versicherung erklärt",v:[]},
+ {n:"Sozialversicherung & gesetzliche Rente",q:"gesetzliche Rentenversicherung einfach erklärt",v:[["7m8WIJHoYAY","In 40 Sekunden das Rentensystem verstehen","Short · Finanztip"],["Xk9BqvpwZlc","Wie berechne ich meine zukünftige gesetzliche Rente?","Short"]]},
+ {n:"Betriebliche Altersvorsorge",q:"betriebliche Altersvorsorge Durchführungswege kurz erklärt",v:[]},
+ {n:"Leben, Rente & BU",q:"Berufsunfähigkeitsversicherung Risikolebensversicherung kurz erklärt",v:[["DaArNX0U_B0","Was ist eine Berufsunfähigkeitsversicherung?","Short"],["RHmyZSsf-D8","BU trotz Vorerkrankung","Short"],["AHpwG0OcBgU","Risikolebensversicherung","Short"],["3m0d4W3MBCI","Darum ist die Risikolebensversicherung für Familien wichtig","Short"]]},
+ {n:"Kranken & Pflege",q:"PKV GKV Pflegegrad kurz erklärt",v:[["cGHjG6LTRRM","GKV = günstig und schlecht, PKV = teuer und gut? Es ist kompliziert","Short · Finanztip"],["E_cdKQ9FPjs","Pflegegrad 1 erklärt","Short"],["L2V05rDzv2Y","Pflegegrad 1 vs. Pflegegrad 2: Was ist der Unterschied?","Short"]]},
+ {n:"Haftpflicht, Hausrat & Gebäude",q:"Privathaftpflicht Hausratversicherung Unterversicherung kurz erklärt",v:[["A2XGevb89q0","Hausratversicherung, Haftpflichtversicherung – wo ist der Unterschied?","Short"],["qVxSLuC6BQo","Deckt deine Haftpflicht auch verlorene Schlüssel ab?","Short"],["UAA1wYLSLDU","Unterversicherung in zwei Minuten erklärt","ca. 2 Min."],["Al_Y-CcqSww","Die 5 wichtigsten Versicherungen für Hauseigentümer","Short"]]},
+ {n:"Kfz-Versicherung",q:"Teilkasko Vollkasko Kfz Haftpflicht kurz erklärt",v:[["R8K-cb7M4FI","Vollkasko- und Teilkaskoversicherung im Vergleich","Short"],["qquduIr216k","Welche Autoversicherung? Haftpflicht, Vollkasko oder Teilkasko?","Short"]]},
+ {n:"Kundenberatung",q:"Einwandbehandlung Bedarfsanalyse Beratungsgespräch kurz",v:[]}
+]},
+f34:{title:"§34f Finanzanlagenvermittlung",ic:"📊",topics:[
+ {n:"Die Prüfung im Überblick",q:"34f Sachkundeprüfung erklärt",v:[["RsXxiNcdRC4","Was ist ein Sachkundenachweis nach § 34f?","Short"]]},
+ {n:"Investmentfonds & ETFs",q:"Investmentfonds ETF Sondervermögen kurz erklärt",v:[["N0c-34V8qmU","Was sind ETFs? In 90 Sekunden einfach erklärt","ca. 1,5 Min."],["7guKRN1t8q0","Clever investieren: Was ist eigentlich ein ETF?","Short · Stiftung Warentest"],["CEDLhyEybBk","Was sind Fonds? Einfach erklärt für Anfänger","Short"],["kEGZ9jpJF2s","Was ist ein ETF?","Short"]]},
+ {n:"Geschlossene AIF & Vermögensanlagen",q:"geschlossene Fonds AIF Nachrangdarlehen kurz erklärt",v:[]},
+ {n:"Aktien & Anleihen",q:"Aktien Anleihen Rating kurz erklärt",v:[["a5Yt5S5S2Qw","Was sind Aktien? Einfach erklärt in 90 Sekunden","ca. 1,5 Min."],["THcY-C3X7JQ","Anleihen einfach erklärt","Short · explainity"],["fBEy8hzepBk","Welche Risiken gibt es bei Anleihen?","Short"],["IUB9RUIQjF0","Anleihen-Ratings verstehen","Short"],["gkIbLxZmQLg","Die Kennzahl für Anleihen","Short"]]},
+ {n:"Steuern",q:"Abgeltungsteuer Vorabpauschale Teilfreistellung kurz erklärt",v:[["fWlMEd4czQs","Sparer-Pauschbetrag","Short"],["XWJJtyebIB8","Vorabpauschale und Abgeltungssteuer auf ETFs: Was soll das?","Short"],["f_VftAt-1PY","ETF-Vorabpauschale einfach berechnen","Short"],["t8MbLq_wp-Q","So berechnest du die Vorabpauschale","Short"]]},
+ {n:"Volkswirtschaft",q:"Leitzins Inflation EZB kurz erklärt",v:[["K6cbLPGkx_8","Was ist ein Leitzins?","Short"],["tS3dzy2kyew","Leitzins der EZB in 3 Minuten erklärt","ca. 3 Min."]]},
+ {n:"Anlageberatung & Risiko",q:"Diversifikation Risikoklassen Geldanlage kurz erklärt",v:[["o49icJfnnTU","Was ist Diversifikation?","Short"]]},
+ {n:"Kundenberatung",q:"Anlageberatung Kundengespräch Einwandbehandlung kurz",v:[]}
+]}
+};
+const ytShort=q=>"https://www.youtube.com/results?search_query="+encodeURIComponent(q)+"&sp=EgIYAQ%253D%253D";
+function videos(b){
+  setTitle("Lernvideos",!!b);S.seen=S.seen||{};
+  if(!b){
+    V.innerHTML=`<p class="muted">Kurze Erklärvideos (YouTube-Shorts und Videos bis ca. 3 Minuten), sortiert nach Prüfung und Thema.</p>
+    <div class="grid">${Object.entries(VIDEOS).map(([k,B])=>{const all=B.topics.flatMap(t=>t.v);const seen=all.filter(v=>S.seen[v[0]]).length;
+      return `<a class="tile" href="#/videos/${k}"><span class="ic">${B.ic}</span><b>${B.title}</b><small>${all.length} Videos · ${B.topics.length} Themen</small><div class="bar"><i style="width:${all.length?seen/all.length*100:0}%"></i></div></a>`;}).join("")}</div>
+    <p class="foot">Videos von Drittanbietern auf YouTube. Ich habe sie nach Titel und Länge ausgewählt, die Inhalte aber nicht im Einzelnen geprüft. Bei Abweichungen gelten die Lektionen und das Glossar der App.</p>`;
+    return;
+  }
+  const B=VIDEOS[b];if(!B)return videos();
+  setTitle(B.title.split(" ")[0]+" Videos",true);
+  V.innerHTML=`<h2>${B.ic} ${B.title}</h2>`+B.topics.map((t,i)=>{
+    const seen=t.v.filter(v=>S.seen[v[0]]).length;
+    return `<details class="card" ${i===0?"open":""}><summary style="font-weight:700;cursor:pointer">${t.n} <span class="muted small" style="font-weight:400">· ${t.v.length?seen+"/"+t.v.length+" gesehen":"Suche"}</span></summary>
+    <div class="list" style="margin-top:8px">${t.v.map(v=>`<a href="#" data-v="${v[0]}" data-t="${esc(v[1])}"><span class="chk ${S.seen[v[0]]?"done":""}">${S.seen[v[0]]?"✓":"▶"}</span><span>${esc(v[1])}<br><small class="muted">${esc(v[2])}</small></span></a>`).join("")}
+    <a href="${ytShort(t.q)}" target="_blank" rel="noopener"><span class="chk">🔎</span><span>Weitere kurze Videos zu diesem Thema<br><small class="muted">YouTube-Suche, gefiltert auf unter 4 Minuten</small></span><span class="arr">↗</span></a></div></details>`;}).join("")+
+  `<p class="foot">Videos von Drittanbietern. Inhalte nicht im Einzelnen geprüft – maßgeblich sind Lektionen und Glossar.</p>`;
+  V.querySelectorAll("[data-v]").forEach(a=>a.onclick=e=>{e.preventDefault();play(a.dataset.v,a.dataset.t,b);});
+}
+function play(id,title,b){
+  S.seen[id]=1;save();markDay();
+  const m=document.createElement("div");
+  m.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px";
+  m.innerHTML=`<div style="width:100%;max-width:420px"><p style="color:#fff;font-weight:700;margin:0 0 10px">${esc(title)}</p>
+  <div style="position:relative;width:100%;aspect-ratio:9/16;max-height:70vh;background:#000;border-radius:12px;overflow:hidden">
+  <iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+  <div class="row" style="margin-top:12px"><a class="btn sec" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">Auf YouTube öffnen ↗</a><button class="btn" id="vclose">Schließen</button></div>
+  <p class="small" style="color:#ccc;margin-top:8px">Startet das Video nicht, öffne es direkt auf YouTube.</p></div>`;
+  document.body.appendChild(m);
+  m.querySelector("#vclose").onclick=()=>{m.remove();videos(b);};
+}
+
 /* ================= SPEICHER ================= */
 const KEY="finanzakademie_v1";
-let S={read:{},best:{},links:[],stats:{},wrong:{},days:[],calc:{r:0,n:0},exams:[],known:{},gf:{x:"alle",c:""}};
+let S={read:{},best:{},links:[],stats:{},wrong:{},days:[],calc:{r:0,n:0},exams:[],known:{},gf:{x:"alle",c:""},seen:{}};
 try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x)S=Object.assign(S,x);}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 
@@ -1238,6 +1297,7 @@ function home(){
    <a class="tile wide hl" href="lernapp-avdepot.html"><span class="ic">📊</span><div><b>Altersvorsorgedepot: Folien &amp; Rechner</b><br><small>5 interaktive Folien, Zulagen und Wachstum Jahr für Jahr</small></div></a>
    <a class="tile" href="#/ihk/d34"><span class="ic">☂️</span><b>IHK §34d</b><small>Prüfungstraining Versicherung</small></a>
    <a class="tile" href="#/ihk/f34"><span class="ic">📊</span><b>IHK §34f</b><small>Prüfungstraining Finanzanlagen</small></a>
+   <a class="tile wide" href="#/videos"><span class="ic">🎬</span><div><b>Kurze Lernvideos</b><br><small class="muted">§34d und §34f nach Themen sortiert</small></div></a>
   </div>
   <h3>Themen</h3>
   <div class="grid">
@@ -1408,6 +1468,7 @@ function training(){
    <a class="tile" href="#/rechnen"><span class="ic">🧮</span><b>Rechentrainer</b><small>Unbegrenzt neue Aufgaben${S.calc.n?` · ${Math.round(S.calc.r/S.calc.n*100)} % richtig`:""}</small></a>
    <a class="tile" href="#/fehler"><span class="ic">🩹</span><b>Fehlertraining</b><small>${nw?nw+" Frage"+(nw===1?"":"n")+" offen":"Keine Fehler offen 🎉"}</small></a>
    <a class="tile" href="#/quiz/mix"><span class="ic">🎯</span><b>Mix-Quiz</b><small>10 Fragen aus den Lernthemen</small></a>
+   <a class="tile" href="#/videos"><span class="ic">🎬</span><b>Lernvideos</b><small>Kurz erklärt: §34d & §34f</small></a>
    <a class="tile" href="#/alle"><span class="ic">🎲</span><b>Zufall 20</b><small>Aus allen ${ALLQ.length} Fragen</small></a>
   </div>
   <h3>Themen-Quiz</h3><div class="card" style="padding:0"><div class="list">${TOPICS.map(t=>`<a href="#/quiz/${t.id}"><span>${t.ic}</span>${t.title}<span class="arr">${S.best[t.id]!=null?S.best[t.id]+" %":"›"}</span></a>`).join("")}</div></div>
@@ -1701,11 +1762,12 @@ function calc(id){
 /* ================= ROUTER ================= */
 function route(){
   const h=(location.hash||"#/").slice(2).split("/");
-  const n={"":"home",t:"home",l:"home",quiz:"quiz",training:"quiz",ihk:"quiz",fehler:"quiz",tag:"quiz",rechnen:"quiz",alle:"quiz",rechner:"rechner",r:"rechner",links:"links",glossar:"glossar",karten:"glossar"}[h[0]]||"home";
+  const n={"":"home",t:"home",l:"home",quiz:"quiz",training:"quiz",ihk:"quiz",fehler:"quiz",tag:"quiz",rechnen:"quiz",alle:"quiz",videos:"quiz",rechner:"rechner",r:"rechner",links:"links",glossar:"glossar",karten:"glossar"}[h[0]]||"home";
   document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on",a.dataset.n===n));
   stopTimer();
   switch(h[0]){
     case "training":return training();
+    case "videos":return videos(h[1]);
     case "ihk":return ihk(h[1],h[2],h[3]);
     case "fehler":return fehler();
     case "tag":return tag();
