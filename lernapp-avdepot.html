@@ -37,59 +37,129 @@ h1,h2,h3{font-family:var(--display);line-height:1.2;margin:0;text-wrap:balance}
 .tabs button[aria-selected="true"]{background:var(--navy);color:var(--navyfg)}
 button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
-/* ---------- Folien ---------- */
-.deck{position:relative}
-.slide{border-radius:18px;padding:26px 22px;min-height:440px;display:flex;flex-direction:column;gap:18px}
+/* ---------- Folien (Design der Präsentation „Vorsorgedepot“) ---------- */
+.deck{position:relative;--vn:#0F2747;--vn2:#173563;--vg:#C9A24A;--vc:#F5F1E8;--vc2:#FBF8F1;--vl:#E2DCCB;--vm:#556072;--vs:#6E9BC5;--vgt:#8A6A1F}
+.slide{border-radius:18px;padding:26px 22px 22px;min-height:470px;display:flex;flex-direction:column;gap:16px;font-family:Arial,Helvetica,sans-serif;overflow:hidden}
 .slide[hidden]{display:none}
-.s-dark{background:var(--navy);color:var(--navyfg)}
-.s-light{background:var(--surface);border:1px solid var(--line)}
-.s-dark .kick{color:var(--gold)}
-.kick{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--accent)}
-.slide h2{font-size:clamp(26px,5vw,40px)}
-.s-dark p{color:var(--navymuted)}
-.big4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:auto}
-@media(max-width:640px){.big4{grid-template-columns:1fr 1fr}}
-.big4 div{border-top:3px solid var(--gold);padding-top:10px}
-.big4 b{display:block;font-family:var(--display);font-size:clamp(26px,5vw,38px)}
-.big4 span{font-size:14px;color:var(--navymuted)}
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-@media(max-width:700px){.cols{grid-template-columns:1fr}}
-.card{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
-.card h3{font-family:var(--body);font-size:18px;font-weight:800;color:var(--zulagetxt);margin-bottom:4px}
-.card p{margin:0;color:var(--muted);font-size:15px}
-.stack{display:flex;flex-direction:column;gap:12px}
-.livebox{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
-.livebox .t{font-size:14px;font-weight:700;color:var(--muted)}
-.livebox .r{font-size:19px;font-weight:800;min-height:30px;font-variant-numeric:tabular-nums}
-.livebox .r b{color:var(--zulagetxt)}
-svg text{fill:var(--muted);font-family:var(--body)}
-.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center}
-@media(max-width:700px){.flow{grid-template-columns:1fr}.flow .arr{transform:rotate(90deg);justify-self:center}}
-.flow .st{background:var(--soft);border-radius:14px;padding:14px 16px;height:100%}
-.flow .st small{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--accent)}
-.flow .st b{display:block;font-size:17px;margin:2px 0}
-.flow .st p{margin:0;font-size:14px;color:var(--muted)}
-.arr{color:var(--accent);font-size:26px;font-weight:800}
-.prods{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-@media(max-width:700px){.prods{grid-template-columns:1fr}}
-.prods div{border-top:3px solid var(--accent);padding-top:8px}
-.prods b{display:block}
-.prods p{margin:2px 0 0;font-size:14px;color:var(--muted)}
-.ex{background:rgba(255,255,255,.06);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px}
-.ex .who{font-size:20px;font-weight:800}
-.ex .sub{color:var(--navymuted);font-size:14px;margin-top:-8px}
-.ex .lab{display:flex;justify-content:space-between;font-size:14px;color:var(--navymuted)}
-.ex .lab b{color:var(--navyfg);font-variant-numeric:tabular-nums}
-.ex .bar{height:22px;border-radius:0 5px 5px 0;transition:width .8s ease}
-.ex .q{display:flex;align-items:baseline;gap:12px}
-.ex .q .n{font-family:var(--display);font-size:52px;font-weight:700;color:var(--gold);line-height:1}
-.ex .q span:last-child{font-size:13px;color:var(--navymuted)}
-.cta{align-self:flex-start;font:inherit;font-weight:800;background:var(--gold);color:#14213D;border:0;border-radius:99px;padding:12px 22px;cursor:pointer}
-.checks{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
-.checks li{display:flex;gap:10px}
-.checks li::before{content:"✓";flex:none;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:14px;display:grid;place-items:center}
-.src{font-size:12px;color:var(--muted);margin-top:auto}
-.s-dark .src{color:#8FA0B6}
+.v-dark{background:var(--vn);color:#fff}
+.v-light{background:var(--vc);color:var(--vn)}
+.v-eye{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--vg)}
+.v-light .v-eye{color:var(--vgt)}
+.slide h2{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:clamp(22px,4.6vw,32px);line-height:1.2;color:inherit}
+.v-script{font-family:Cambria,Georgia,serif;font-style:italic;color:var(--vg)}
+.v-foot{font-size:11.5px;color:var(--vm);margin-top:auto}
+.v-dark .v-foot{color:#9FB0C8}
+/* Einblenden wie in der PowerPoint */
+.anim{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s ease;transition-delay:calc(var(--d,0) * 1ms)}
+.anim.pop{transform:scale(.6)}
+.slide.in .anim{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.anim{opacity:1;transform:none;transition:none}}
+/* Folie 1 */
+.v1{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:center;flex:1}
+@media(max-width:620px){.v1{grid-template-columns:1fr}}
+.v1 .t{font-size:clamp(46px,11vw,78px);font-weight:900;line-height:.98;letter-spacing:-1px}
+.v1 .t span{color:var(--vg)}
+.v1 .claim{font-size:18px;font-weight:700;margin-top:14px}
+.v1 .v-script{font-size:18px;margin-top:4px}
+.badge{justify-self:center;width:min(230px,62vw);aspect-ratio:1;border-radius:50%;background:var(--vg);color:var(--vn);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.35);font-weight:700}
+.badge b{font-size:clamp(40px,9vw,58px);line-height:1;font-weight:900}
+.badge small{font-size:14px;letter-spacing:.04em}
+/* Folie 2 */
+.v-rl{font-size:13px;color:var(--vm)}
+.segbar{position:relative;display:flex;min-height:58px;border-radius:4px;overflow:visible}
+.segbar .s1{width:max(20%,84px);flex:none;background:var(--vg);color:var(--vn);padding:8px 10px;border-radius:4px 0 0 4px}
+.segbar .s2{flex:1;background:var(--vn);color:#fff;padding:8px 12px;border-radius:0 4px 4px 0}
+.segbar b{display:block;font-size:17px}
+.segbar small{font-size:10.5px;line-height:1.2;display:block}
+.segbar .mk{position:absolute;top:-8px;bottom:-8px;width:3px;background:#D9731A;border-radius:2px;transform:translateX(-1.5px);transition:left .25s}
+.ticks{display:flex;font-size:11px;color:var(--vm)}
+.ticks .t1{width:max(20%,84px);flex:none}
+.ticks .t2{flex:1;display:flex;justify-content:space-between}
+.v-live{background:#fff;border:1px solid var(--vl);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.v-live .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.v-live label{font-size:14px;font-weight:700;color:var(--vn)}
+.v-live output{font-size:14px;color:var(--vn)}
+.v-live output b{color:var(--vgt);font-size:17px}
+.v-live input[type=range]{width:100%;accent-color:var(--vg)}
+.v-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:620px){.v-tiles{grid-template-columns:1fr}}
+.v-tile{background:var(--vn);color:#fff;border-radius:8px;padding:14px 16px}
+.v-tile.g{background:var(--vg);color:var(--vn)}
+.v-tile b{display:block;font-size:22px;color:var(--vg);margin-bottom:6px}
+.v-tile.g b{color:var(--vn)}
+.v-tile p{margin:0;font-size:13px;line-height:1.35}
+/* Folie 3 */
+.v-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:620px){.v-cards{grid-template-columns:1fr}}
+.v-card{border:1px solid var(--vg);background:var(--vn2);border-radius:6px;padding:16px}
+.v-card img{width:46px;height:46px;display:block;margin-bottom:12px}
+.v-card .k{font-size:28px;font-weight:700;color:var(--vg);line-height:1.1}
+.v-card h3{font-family:Arial,Helvetica,sans-serif;font-size:15px;margin:6px 0 10px;color:#fff;font-weight:700}
+.v-card p{margin:0;font-size:13px;color:#C7D2E3;line-height:1.4}
+/* Folie 4 */
+.v-ex{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:620px){.v-ex{grid-template-columns:1fr}}
+.v-exc{background:var(--vc2);border:1px solid var(--vl);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.v-exc.d{background:var(--vn);color:#fff;border-color:var(--vn)}
+.v-exc .w{font-size:15px;font-weight:700}
+.v-exc .w small{display:block;font-weight:400;font-size:12px;color:var(--vm)}
+.v-exc.d .w small{color:#B8C4D6}
+.v-exc .a{font-size:36px;font-weight:700;line-height:1.1;margin-top:8px;font-variant-numeric:tabular-nums}
+.v-exc.d .a{color:var(--vg)}
+.v-exc .z{font-size:12px;color:var(--vm)}
+.v-exc.d .z{color:#B8C4D6}
+.v-exc .qb{height:9px;border-radius:9px;background:var(--vl);overflow:hidden;margin-top:6px}
+.v-exc.d .qb{background:#24427A}
+.v-exc .qb i{display:block;height:100%;width:0;background:var(--vg);border-radius:9px;transition:width 1s ease .5s}
+.v-exc .q{font-size:13px;font-weight:700}
+/* Folie 5 */
+.v5{display:grid;grid-template-columns:1.6fr 1fr;gap:16px}
+@media(max-width:620px){.v5{grid-template-columns:1fr}}
+.v5 svg text{fill:var(--vm);font-family:Arial,Helvetica,sans-serif}
+.v5 .lg{display:flex;flex-direction:column;gap:10px}
+.v5 .lg>div{display:flex;gap:10px;align-items:flex-start}
+.v5 .lg>div.tot{display:block}
+.v5 .lg i{flex:none;width:13px;height:13px;margin-top:3px}
+.v5 .lg small{display:block;font-size:12px;color:var(--vm)}
+.v5 .lg>div>span b{font-size:20px;font-variant-numeric:tabular-nums}
+.v5 .tot{border-top:2px solid var(--vn);padding-top:10px}
+.v5 .tot>b{font-size:28px;font-variant-numeric:tabular-nums}
+.v5 .vs{font-size:12.5px;color:var(--vgt);margin-top:4px}
+.v5 .ctl{display:flex;gap:10px;align-items:center;font-size:13px;font-weight:700;flex-wrap:wrap}
+.v5 .ctl input{flex:1;min-width:140px;accent-color:var(--vg)}
+.v5 .hov{font-size:12.5px;color:var(--vn);min-height:18px;font-variant-numeric:tabular-nums}
+/* Folie 6 */
+.v6{display:grid;grid-template-columns:2fr 1fr;gap:14px;align-items:start}
+@media(max-width:620px){.v6{grid-template-columns:1fr}}
+.v6 .tw{overflow-x:auto}
+.v6 table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;font-variant-numeric:tabular-nums}
+@media(max-width:420px){.v6 table{font-size:12px}.v6 th,.v6 td{padding:7px 5px}}
+.v6 th{background:var(--vn);color:#fff;text-align:left;padding:8px;font-size:12px}
+.v6 td{padding:8px;border-bottom:1px solid var(--vl);color:var(--vn);white-space:nowrap}
+.v6 td:nth-child(2){color:var(--vgt);font-weight:700}
+.v6 tr.hl td{background:#F1E6C8;font-weight:700}
+.v6 tbody tr{cursor:pointer}
+.v6 .side{display:flex;flex-direction:column;gap:12px}
+.v6 .bx{border-radius:8px;padding:14px;font-size:13px}
+.v6 .bx.g{background:var(--vg);color:var(--vn)}
+.v6 .bx.g b{display:block;font-size:24px}
+.v6 .bx.n{background:var(--vn);color:#fff;line-height:1.6}
+.v6 .bx.n b{color:var(--vg)}
+.kchips{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:13px;font-weight:700}
+.kchips button{font:inherit;font-size:13px;border:1px solid var(--vl);background:#fff;color:var(--vn);border-radius:99px;padding:5px 12px;cursor:pointer}
+.kchips button[aria-pressed="true"]{background:var(--vn);color:#fff;border-color:var(--vn)}
+/* Folie 7 */
+.v7{display:grid;grid-template-columns:1.5fr 1fr;gap:18px;align-items:center}
+@media(max-width:620px){.v7{grid-template-columns:1fr}}
+.v7 .chk{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:420px){.v7 .chk{grid-template-columns:1fr}}
+.v7 .chk div{display:flex;gap:10px;align-items:flex-start}
+.v7 .chk img{width:40px;height:40px;flex:none;border:1px solid var(--vg);border-radius:50%;padding:7px}
+.v7 .chk b{display:block;font-size:14px}
+.v7 .chk small{font-size:12px;color:#B8C4D6}
+.v7 .house{justify-self:center;width:min(200px,50vw);aspect-ratio:1;border-radius:50%;border:2px solid var(--vg);background:var(--vn2);display:grid;place-items:center}
+.v7 .house img{width:55%}
+.v-cta{align-self:flex-start;font:inherit;font-weight:700;background:var(--vg);color:var(--vn);border:0;border-radius:99px;padding:11px 20px;cursor:pointer}
 .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
 .nav button{font:inherit;font-weight:800;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:10px;padding:10px 16px;cursor:pointer;min-width:96px}
 .nav button:disabled{opacity:.4;cursor:default}
@@ -169,90 +239,113 @@ footer a{color:var(--accent)}
   <section id="pLern" role="tabpanel" aria-labelledby="tabLern">
     <div class="deck" id="deck">
 
-      <article class="slide s-dark" data-note="Das Gesetz ist beschlossen: Bundestag am 27. März 2026, Bundesrat am 8. Mai 2026, verkündet Ende Mai 2026. Ab 1. Januar 2027 dürfen Anbieter zertifizierte Verträge verkaufen. Neue Riester-Verträge gibt es dann nicht mehr.">
-        <div class="kick">Private Altersvorsorge · Start 1. Januar 2027</div>
-        <h2 style="font-size:clamp(32px,7vw,56px)">Das Altersvorsorgedepot</h2>
-        <p style="font-size:18px;margin:0">Der staatlich geförderte Nachfolger der Riester-Rente: in ETFs und Fonds sparen, Zulagen vom Staat bekommen, Steuern erst im Alter zahlen.</p>
-        <div class="big4">
-          <div><b>540 €</b><span>Grundzulage pro Jahr, maximal</span></div>
-          <div><b>300 €</b><span>Kinderzulage je Kind und Jahr</span></div>
-          <div><b>200 €</b><span>Bonus für Start unter 25</span></div>
-          <div><b>10 €</b><span>pro Monat reichen für Zulagen</span></div>
-        </div>
-        <div class="src">Grundlage: Altersvorsorgereformgesetz, BGBl. 2026 I Nr. 156 · BMF · Stand Oktober 2026</div>
-      </article>
-
-      <article class="slide s-light" hidden data-note="Die Förderung ist beitragsproportional: Bis 360 € im Jahr gibt es 50 %, zwischen 360 und 1.800 € gibt es 25 %. Bei 1.800 € (150 €/Monat) ist die volle Grundzulage von 540 € erreicht. Die Kinderzulage ist schon bei 300 € im Jahr voll. Zusätzlich sind bis zu 1.800 € plus Zulagen als Sonderausgaben absetzbar; das Finanzamt prüft automatisch, ob das mehr bringt.">
-        <div class="kick">Förderung</div>
-        <h2>So fördert der Staat</h2>
-        <div class="cols">
-          <div class="stack">
-            <div class="card"><h3>Grundzulage: bis 540 € im Jahr</h3><p>50 Cent je Euro bis 360 €, dann 25 Cent je Euro bis 1.800 €. Mindestens 120 € im Jahr einzahlen.</p></div>
-            <div class="card"><h3>Kinderzulage: bis 300 € je Kind</h3><p>1 Euro je eingezahltem Euro. Voll ab 25 € im Monat, solange Kindergeld fließt. Geht an einen Elternteil.</p></div>
-            <div class="card"><h3>Berufseinsteigerbonus: 200 €</h3><p>Einmalig, wenn du vor dem 25. Geburtstag startest. Dazu prüft das Finanzamt einen Steuervorteil.</p></div>
+      <article class="slide v-dark" data-note="Das Vorsorgedepot startet am 1. Januar 2027 und löst Riester für neue Verträge ab. Gespart wird in Fonds und ETFs, und der Staat legt auf jeden eigenen Euro eine Zulage drauf: bis zu 540 Euro Grundzulage im Jahr.">
+        <div class="v-eye anim">Neu ab 1. Januar 2027</div>
+        <div class="v1">
+          <div>
+            <div class="t anim" style="--d:150">VORSORGE<br><span>DEPOT</span></div>
+            <div class="claim anim" style="--d:900">Heute investieren. Morgen profitieren.</div>
+            <div class="v-script anim" style="--d:1400">Für deine Zukunft. Für deine Ziele.</div>
           </div>
-          <div class="livebox">
-            <div class="t">Zulage je nach Eigenbeitrag (pro Jahr)</div>
-            <div class="r" id="zr"></div>
-            <svg id="zs" viewBox="0 0 520 330" width="100%" role="img" aria-label="Grundzulage steigt bis 360 Euro mit 50 Prozent, bis 1.800 Euro mit 25 Prozent, danach flach bei 540 Euro"></svg>
+          <div class="badge anim pop" style="--d:2000"><small>BIS ZU</small><b>540 €</b><small>GRUNDZULAGE<br>PRO JAHR</small></div>
+        </div>
+        <div class="v-foot anim" style="--d:2800">Förderung abhängig vom Eigenbeitrag und den persönlichen Voraussetzungen. Staatlich gefördert nach dem Altersvorsorgereformgesetz.</div>
+      </article>
+
+      <article class="slide v-light" hidden data-note="Auf die ersten 30 Euro im Monat legt der Staat 15 Euro drauf, also 50 Prozent oder 180 Euro im Jahr. Auf alles von 30 bis 150 Euro im Monat kommen weitere 25 Prozent, also bis zu 30 Euro im Monat oder 360 Euro im Jahr. Zusammen ergibt das maximal 540 Euro Grundzulage. Mit dem Regler kannst du jeden Monatsbeitrag ausprobieren. Mindestbeitrag für die Zulage: 10 Euro im Monat.">
+        <div class="v-eye anim">Die Grundzulage</div>
+        <h2 class="anim" style="--d:100">So legt der Staat auf jeden Euro drauf</h2>
+        <div class="anim" style="--d:500">
+          <div class="v-rl" style="margin-bottom:6px">Dein monatlicher Beitrag</div>
+          <div class="segbar">
+            <div class="s1"><b>+50 %</b><small>bis 30 €</small></div>
+            <div class="s2"><b>+25 %</b><small>auf jeden weiteren Euro von 30 € bis 150 €</small></div>
+            <div class="mk" id="v2mk"></div>
+          </div>
+          <div class="ticks" style="margin-top:6px"><span class="t1">0 €</span><span class="t2"><span>30 €</span><span>150 € im Monat</span></span></div>
+        </div>
+        <div class="v-live anim" style="--d:900">
+          <div class="row"><label for="v2r">Probier es aus: dein Beitrag</label><output id="v2o"></output></div>
+          <input type="range" id="v2r" min="0" max="200" step="5" value="100" aria-describedby="v2o">
+        </div>
+        <div class="v-tiles">
+          <div class="v-tile anim" style="--d:1300"><b>+15 € / Monat</b><p>50 % auf die ersten 30 €<br><strong>= 180 € im Jahr</strong></p></div>
+          <div class="v-tile anim" style="--d:1700"><b>+30 € / Monat</b><p>25 % auf 30 € bis 150 €<br><strong>= 360 € im Jahr</strong></p></div>
+          <div class="v-tile g anim" style="--d:2100"><b>540 € / Jahr</b><p>maximale Grundzulage<br><strong>erreicht ab 150 € im Monat</strong></p></div>
+        </div>
+        <div class="v-foot anim" style="--d:2500">180 € + 360 € = 540 € Grundzulage im Jahr · Mindestbeitrag 10 € im Monat</div>
+      </article>
+
+      <article class="slide v-dark" hidden data-note="Neben der Grundzulage gibt es drei Extras: 300 Euro Kinderzulage pro Kind und Jahr, schon ab 25 Euro Eigenbeitrag im Monat. Einmalig 200 Euro Bonus für alle unter 25. Und über die Steuererklärung kann ein zusätzlicher Steuervorteil entstehen: Das Finanzamt rechnet die Zulagen an und erstattet nur den Betrag, der darüber hinausgeht. Bei Singles mit mittlerem bis hohem Steuersatz sind das grob 150 bis 500 Euro im Jahr, bei Familien mit Kinderzulage oft nichts.">
+        <div class="v-eye anim">Zusätzlich zur Grundzulage</div>
+        <h2 class="anim" style="--d:100">Drei Extras, die oben drauf kommen</h2>
+        <div class="v-cards">
+          <div class="v-card anim" style="--d:700"><img src="data:image/png;base64,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" alt=""><div class="k">300 €</div><h3>Kinderzulage pro Kind und Jahr</h3><p>Voll schon ab 25 € Eigenbeitrag im Monat, solange Anspruch auf Kindergeld besteht.</p></div>
+          <div class="v-card anim" style="--d:1700"><img src="data:image/png;base64,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" alt=""><div class="k">200 €</div><h3>Einmaliger Bonus unter 25</h3><p>Für alle, die vor ihrem 25. Geburtstag mit dem Vorsorgedepot starten.</p></div>
+          <div class="v-card anim" style="--d:2700"><img src="data:image/png;base64,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" alt=""><div class="k">bis ca. 500 €</div><h3>Steuervorteil pro Jahr</h3><p>Über die Steuererklärung, je nach Steuersatz. Die Zulagen werden angerechnet, bei Familien bleibt oft kein Extra.</p></div>
+        </div>
+        <div class="v-foot anim" style="--d:3200">Steuervorteil: Günstigerprüfung des Finanzamts, Sonderausgabenabzug bis 1.800 € plus Zulagen.</div>
+      </article>
+
+      <article class="slide v-light" hidden data-note="Drei typische Fälle. Wer allein 150 Euro im Monat spart, bekommt die vollen 540 Euro, das sind 30 Prozent. Ein Elternteil mit einem Kind bekommt schon bei 25 Euro im Monat 150 Euro Grundzulage plus 300 Euro Kinderzulage, also mehr Zulage als eigenen Beitrag. Eine Familie mit zwei Kindern und 150 Euro im Monat kommt auf 1.140 Euro im Jahr.">
+        <div class="v-eye anim">Beispiele pro Jahr</div>
+        <h2 class="anim" style="--d:100">Wer bekommt wie viel dazu?</h2>
+        <div class="v-ex">
+          <div class="v-exc anim" style="--d:600"><div class="w">Single<small>150 € im Monat · 1.800 € im Jahr</small></div><div class="a" data-count="540">+540 €</div><div class="z">Zulage pro Jahr</div><div class="qb"><i data-w="20"></i></div><div class="q">Förderquote 30 %</div></div>
+          <div class="v-exc anim" style="--d:1600"><div class="w">Elternteil, 1 Kind<small>25 € im Monat · 300 € im Jahr</small></div><div class="a" data-count="450">+450 €</div><div class="z">Zulage pro Jahr</div><div class="qb"><i data-w="100"></i></div><div class="q">Förderquote 150 %: mehr Zulage als Eigenbeitrag</div></div>
+          <div class="v-exc d anim" style="--d:2600"><div class="w">Familie, 2 Kinder<small>150 € im Monat · 1.800 € im Jahr</small></div><div class="a" data-count="1140">+1.140 €</div><div class="z">Zulage pro Jahr</div><div class="qb"><i data-w="42"></i></div><div class="q">Förderquote 63 %</div></div>
+        </div>
+        <div class="v-foot anim" style="--d:3400">Balken: Förderquote im Verhältnis zum Eigenbeitrag (voll = 150 %). Dazu kann ein Steuervorteil kommen, je nach Einkommen.</div>
+      </article>
+
+      <article class="slide v-light" hidden data-note="Dunkelblau ist das eigene Geld, Gold die Zulagen, Hellblau der Wertzuwachs. Bei 150 Euro im Monat und angenommenen 6 Prozent pro Jahr stehen nach 30 Jahren rund 185.000 Euro im Depot. Ohne Zulagen wären es rund 142.300 Euro. Der Unterschied von gut 42.000 Euro entsteht, weil auch die Zulagen mitwachsen. Mit dem Regler lässt sich der Monatsbeitrag ändern; tippe auf das Diagramm, um die Werte eines Jahres zu sehen. Das ist eine Modellrechnung, keine Garantie.">
+        <div class="v-eye anim">Beispielrechnung · <span id="v5e">150</span> € im Monat · 30 Jahre</div>
+        <h2 class="anim" style="--d:100">Die Zulagen wachsen mit</h2>
+        <div class="v5">
+          <div class="anim" style="--d:400">
+            <svg id="v5s" viewBox="0 0 520 300" width="100%" role="img" aria-label="Gestapelte Fläche: selbst eingezahlt, staatliche Zulagen und Wertzuwachs über 30 Jahre"></svg>
+            <div class="hov" id="v5h">Tippe auf das Diagramm für die Werte eines Jahres.</div>
+            <div class="ctl"><label for="v5r">Monatsbeitrag</label><input type="range" id="v5r" min="10" max="150" step="5" value="150"><span id="v5ro">150 €</span></div>
+          </div>
+          <div class="lg">
+            <div class="anim" style="--d:900"><i style="background:#0F2747"></i><span><small>Selbst eingezahlt</small><b id="v5a"></b></span></div>
+            <div class="anim" style="--d:1700"><i style="background:#C9A24A"></i><span><small>Staatliche Zulagen</small><b id="v5b"></b></span></div>
+            <div class="anim" style="--d:2500"><i style="background:#6E9BC5"></i><span><small>Wertzuwachs*</small><b id="v5c"></b></span></div>
+            <div class="tot anim" style="--d:3500"><small>Depotwert nach 30 Jahren</small><b id="v5t" style="display:block"></b><div class="vs" id="v5v"></div></div>
           </div>
         </div>
-        <div class="src">Quelle: Altersvorsorgereformgesetz, §§ 84–86 EStG ab Beitragsjahr 2027; BMF, Fragen und Antworten</div>
+        <div class="v-foot anim" style="--d:4500">*Annahme: 6 % p. a., jährliche Einzahlung, Zulage im selben Jahr gutgeschrieben, ohne Kosten und Steuern, ohne Kinderzulage und Steuervorteil. Keine Garantie, Kurse können schwanken.</div>
       </article>
 
-      <article class="slide s-light" hidden data-note="Gefördert werden Eigenbeiträge bis 1.800 €, einzahlen darf man bis 6.840 € im Jahr. Keine Steuer auf Erträge in der Ansparphase. Auszahlung frühestens mit 65 (früher nur mit gesetzlicher Altersrente), spätestens mit 70; als lebenslange Rente oder Auszahlplan bis mindestens 85, versteuert mit dem persönlichen Steuersatz. Für selbst genutztes Wohneigentum kann gefördertes Kapital entnommen werden, wenn der Vertrag das vorsieht.">
-        <div class="kick">Ablauf</div>
-        <h2>Vom Sparen bis zur Auszahlung</h2>
-        <div class="flow">
-          <div class="st"><small>Ab 2027</small><b>Ansparen</b><p>Gefördert: 120 bis 1.800 € im Jahr. Einzahlbar bis 6.840 €. Erträge steuerfrei.</p></div>
-          <div class="arr" aria-hidden="true">→</div>
-          <div class="st"><small>Mit 65 bis 70</small><b>Auszahlung startet</b><p>Früher nur mit gesetzlicher Altersrente. Ausnahme: Entnahme für die eigene Immobilie.</p></div>
-          <div class="arr" aria-hidden="true">→</div>
-          <div class="st"><small>Bis mindestens 85</small><b>Rente oder Plan</b><p>Lebenslange Rente oder Auszahlplan. Versteuert mit deinem Steuersatz.</p></div>
-        </div>
-        <h3 style="font-family:var(--body);font-size:18px;font-weight:800">Drei Produktarten zur Wahl</h3>
-        <div class="prods">
-          <div><b>Altersvorsorgedepot</b><p>Ohne Garantie. ETFs und Fonds, Aktienquote bis 100 %.</p></div>
-          <div><b>Standarddepot</b><p>Zwei Fonds, Umschichtung automatisch. Kosten höchstens 1,0 % im Jahr.</p></div>
-          <div><b>Garantieprodukt</b><p>80 % oder 100 % der Beiträge garantiert, dafür weniger Renditechance.</p></div>
-        </div>
-        <div class="src">Förderberechtigt wie bei Riester, z. B. rentenversicherungspflichtige Beschäftigte und Beamte. Höchstens zwei geförderte Verträge.</div>
-      </article>
-
-      <article class="slide s-dark" hidden data-note="Bei kleinen Beiträgen und mit Kindern ist die Förderquote am höchsten. Familie mit zwei Kindern und 50 € im Monat: 600 € Eigenbeitrag, 840 € Zulage, also 140 %. Mit dem Rechner kann jeder seine eigenen Zahlen eingeben.">
-        <div class="kick">Beispiele</div>
-        <h2>Was bringt es dir?</h2>
-        <div class="ex" aria-live="polite">
-          <div class="who" id="exW"></div><div class="sub" id="exU"></div>
-          <div><div class="lab"><span>Eigenbeitrag pro Jahr</span><b id="exE"></b></div><div class="bar" id="exBE" style="background:#3B82D6"></div></div>
-          <div><div class="lab"><span>Zulagen vom Staat</span><b id="exZ"></b></div><div class="bar" id="exBZ" style="background:#E07E22"></div></div>
-          <div class="q"><span class="n" id="exQ"></span><span>Förderquote: Zulage im<br>Verhältnis zum Eigenbeitrag</span></div>
-        </div>
-        <button class="cta" type="button" id="toCalc">Eigene Zahlen im Rechner →</button>
-        <div class="src">Beispiele ohne möglichen zusätzlichen Steuervorteil. Kinderzulage nur, solange Kindergeld gezahlt wird.</div>
-      </article>
-
-      <article class="slide s-light" hidden data-note="Riester-Bestandsverträge haben Bestandsschutz. Man kann den Altvertrag behalten, per Erklärung in die neue Förderung wechseln oder das Kapital übertragen; zurück ins alte Recht geht nicht. Kündigen ist meist teuer. Die Frühstart-Rente (10 € im Monat für Kinder von 6 bis 18) war im Oktober 2026 noch im Gesetzgebungsverfahren.">
-        <div class="kick">Riester &amp; nächste Schritte</div>
-        <h2>Was jetzt zu tun ist</h2>
-        <div class="cols">
-          <div class="card" style="background:var(--surface)">
-            <h3 style="color:var(--fg)">Was passiert mit Riester?</h3>
-            <ul style="margin:6px 0 0;padding-left:18px;color:var(--muted)">
-              <li>Bestehende Verträge laufen weiter (Bestandsschutz).</li>
-              <li>Ab 2027 keine neuen Riester-Verträge mehr.</li>
-              <li>Wechsel ins neue System möglich, ohne die Förderung zurückzuzahlen.</li>
-              <li>Beim Wechsel können gedeckelte Kosten anfallen. Kündigen kostet die Förderung.</li>
-            </ul>
+      <article class="slide v-light" hidden data-note="Die Tabelle zeigt, wie viel Zulage bei welchem Monatsbeitrag ankommt. Bis 30 Euro gibt es 50 Prozent, danach 25 Prozent bis 150 Euro. Ab 150 Euro ist die volle Grundzulage von 540 Euro erreicht, mehr Beitrag bringt keine höhere Zulage. Mit Kind kommen 300 Euro pro Jahr dazu, voll ab 25 Euro im Monat. Über die Knöpfe lässt sich die Zahl der Kinder ändern; tippe eine Zeile an, um sie hervorzuheben.">
+        <div class="v-eye anim">Auf einen Blick</div>
+        <h2 class="anim" style="--d:100">Deine Zulage je nach Monatsbeitrag</h2>
+        <div class="kchips anim" style="--d:300"><span>Kinder:</span><button type="button" data-k="0" aria-pressed="false">0</button><button type="button" data-k="1" aria-pressed="true">1</button><button type="button" data-k="2" aria-pressed="false">2</button><button type="button" data-k="3" aria-pressed="false">3</button></div>
+        <div class="v6">
+          <div class="tw anim" style="--d:500"><table><thead><tr><th>Dein Beitrag / Monat</th><th>Zulage / Monat</th><th>Zulage / Jahr</th><th id="v6kh">Mit 1 Kind / Jahr</th><th>Förderquote</th></tr></thead><tbody id="v6b"></tbody></table></div>
+          <div class="side">
+            <div class="bx g anim" style="--d:1200">Ab 150 € im Monat<b>volle 540 €</b>Mehr Beitrag bringt keine höhere Zulage.</div>
+            <div class="bx n anim" style="--d:2400"><b>Zusätzlich möglich</b><br>Steuervorteil je nach Einkommen<br>Bonus unter 25: einmalig 200 €<br>Weitere Kinder: je +300 € im Jahr</div>
           </div>
-          <ul class="checks">
-            <li><span><b>Förderberechtigung</b> klären, auch für den Ehepartner</span></li>
-            <li><span><b>Sparrate wählen:</b> 25 €/Monat für volle Kinderzulage, 150 €/Monat für volle Grundzulage</span></li>
-            <li><span><b>Ab Januar 2027 vergleichen:</b> Kosten, Fondsauswahl, Garantie, Immobilien-Option</span></li>
-            <li><span><b>Riester-Vertrag prüfen:</b> behalten, umstellen oder übertragen</span></li>
-          </ul>
         </div>
-        <div class="src">Quellen: BGBl. 2026 I Nr. 156 · BT-Drs. 21/4088 · BMF, Fragen und Antworten · keine Anlageberatung</div>
+        <div class="v-foot anim" style="--d:3200">Mindestbeitrag für die Zulage: 10 € im Monat. Förderquote ohne Kinderzulage.</div>
+      </article>
+
+      <article class="slide v-dark" hidden data-note="Zum Schluss: Das Vorsorgedepot ist flexibel, kann global investiert werden, ist staatlich gefördert und transparent. Der erste Schritt ist ein persönliches Gespräch. Mit dem Rechner lässt sich vorher durchspielen, wie viel Förderung im eigenen Fall ankommt.">
+        <div class="v-script anim" style="font-size:20px">Starte jetzt in deine Zukunft!</div>
+        <h2 class="anim" style="--d:200">Mach den ersten Schritt. Wir beraten dich gerne.</h2>
+        <div class="anim" style="--d:800;color:#C7D2E3">Persönlich. Unabhängig. Auf Augenhöhe.</div>
+        <div class="v7">
+          <div class="chk">
+            <div class="anim" style="--d:1300"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAE8UlEQVR42u2cPWwcRRTH/29mbn3n+GudxDSkgBYKOiQ3VEhBQun2gJIKQRlEA1KwhZKSnspKJAe02yEkUiDRRJbcUUCFRA9E58Qfd/bd7TwK55A5xSG2b3Zn5t5fusbnG+3smzfz3pufHiASiUS1iUJ7YObnPzMRWMzq4sUDlOeZ/r//y/NMc0ALKzgP2Mqz1ktAsoOd//w9RYo/gf5qu+jJFuRgy/n9x+tJ55G609CUlaWdYxCNviMCE5iVVvvDARfLK/bzze0Hg7V1MMHvLUn5boCiyBQRuPOXurOSNm8ycE0plWpNS8bQojG0qDUtKaVSANdWLjdvdh6p2+vrsEWeKfGAC65+IvBWnrVUb/+PxKir/aEFQKe8WLZJQ6E/sH/b1tyrq+2iNxrD1zmaF40u6logzMDD+92mArUsoAFiomc/KzMpyyCAWuWg22TG4WgM7yb2dFGoUXRBBPbwY4nA82W/j7Os4qe/OTmGb59RtPbvSvr+m3dnX0tbjfHook7pxoDKQYNtqRa4b37VhhaGQ36OB4CNISqHvEvJ8HWl7e5oDF/mlCLFbzu9wY2PfugCAP288VazqWa/Sox6bzy68OigIgbmT3vxzzIEAXvsWQQ0ita0VvvD0n7XLbu3TEvNfn15sfnx7kEfSik/j2UGSstnmShpRQt+zoUAIF1eaH6Gx7hE23ff6SpFScl8vDv5Gq7R2V4ns8fxPzFrIi4tHxkQtSwDBAowL56cwap+OssAEc0qiCQTFgOIxABiAFE9tSBm7mkJQ+sLQ4mwsTQ/88nuQR/MiCIRAwCjPQ1Ej8NPWriUoPPkaMN0y+6neIwD01DvWxtPKaIs2etSROfJ0bfpVXtLinEVa/zq1DBARZ6pG+2i6+uW+cu9t4eHBHuGcoudGXDnjQ9+OvB1Tnme6axdWEMAo12Uvl7IAOCH95OkMeQXfz4G7ZkkYUZ3NIZ/QUVRAiduxHy8tuPjGwveymcPUe73FNEcwGA+/UpSHQdy3Zf7V3pE4NEYkgec89DK80yvtoueAm8uzc9oY5Q2msiYsY8mMkbppfkZTaDNVz68ezi66fN6jr4nKgzQ2pegN5evN5ZTddsoao9Hayeii71BycXyFfvF5vaDwdra8fWfGGCCig3MCkaCJvpzMEcF55L4VtwGli1OPMDvQ37qDVA3fT31FzJ109c07au/bvradzraeRRYF30dCh0dLX0dBB3tWnVc+ARJR1eQjVZCX4dLR1eQhVVGX4dKRzv3giqxl2mgo30z2PivhY72RGIAMYAYQCQGmF4FQ0dHG4YGQUd7logBF6CvQ6SjfSxFnIe+Do6Odq26inHB0dGuVQd9HQodXcHuUw99HQQd7fzs9YC+nuo8wAf6WrCUmulrKUCPSejrGj1B0EQ/DuZK4VwKfQKiml04hkREDrGQDRB7b2fXunAiFntvZ689YBp6O7vWRenoaHs7V1EGAS5OR0fb2zmI3tExtpNxLSd0dCy9navYdtzQ0TH1dnaesTqio6NqqufcFTygo/3u7ex+9kJHx5IJi8QAYgCRGCDcWtCk6GgJQ88Zhk6Ejo6pt7PzRMwBHR1Lb+cqSxEToaOlGHd2OaGjY+zt7FqToqOj7e3sfjuaAB09Db2dvc4DpqG3s3NPmERUFXNvZ+8NMC4Bs2rMLwRN9MADBM4ViUSiYPQPFhzhRKeq3hIAAAAASUVORK5CYII=" alt=""><span><b>Flexibel</b><small>Beiträge anpassen, pausieren oder erhöhen</small></span></div>
+            <div class="anim" style="--d:1800"><img src="data:image/png;base64,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" alt=""><span><b>Global investiert</b><small>z. B. in einen weltweiten Aktien-ETF</small></span></div>
+            <div class="anim" style="--d:2300"><img src="data:image/png;base64,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" alt=""><span><b>Staatlich gefördert</b><small>Zulagen und Steuervorteil</small></span></div>
+            <div class="anim" style="--d:2800"><img src="data:image/png;base64,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" alt=""><span><b>Einfach und transparent</b><small>digital, jederzeit im Überblick</small></span></div>
+          </div>
+          <div class="house anim pop" style="--d:3500"><img src="data:image/png;base64,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" alt=""></div>
+        </div>
+        <button class="v-cta anim" style="--d:3900" type="button" id="toCalc">Eigene Zahlen im Rechner →</button>
+        <div class="v-foot anim" style="--d:4200">Hinweis: Wertentwicklungen sind Annahmen und keine Garantie für zukünftige Ergebnisse. Investitionen in Wertpapiere unterliegen Risiken. Förderung abhängig von den persönlichen Voraussetzungen.</div>
       </article>
     </div>
 
@@ -305,6 +398,11 @@ footer a{color:var(--accent)}
           <div class="hint">Kinderzulage gibt es, solange Kindergeld fließt (hier bis zum 18. Geburtstag gerechnet). Pro Kind nur für einen Elternteil.</div>
         </div>
         <div class="field">
+          <div class="row"><label for="tax">Dein Grenzsteuersatz (ca.)</label>
+            <select id="tax"><option value="0" selected>nicht rechnen</option><option value="0.25">25 %</option><option value="0.30">30 %</option><option value="0.35">35 %</option><option value="0.42">42 %</option><option value="0.45">45 %</option></select></div>
+          <div class="hint">Für den geschätzten Steuervorteil. Bei Ehepaaren mit Splitting meist niedriger als bei Singles.</div>
+        </div>
+        <div class="field">
           <div class="row"><label for="ret">Angenommene Rendite p. a.</label><span class="val" id="retOut"></span></div>
           <input type="range" id="ret" min="0" max="9" step="0.5" value="6">
           <div class="row"><label for="cost">Effektivkosten p. a.</label><span class="val" id="costOut"></span></div>
@@ -327,9 +425,10 @@ footer a{color:var(--accent)}
           <tr><td><span class="sw" style="background:var(--zulage)"></span>Kinderzulage (max. 300 € je Kind)</td><td id="rK"></td></tr>
           <tr><td><span class="sw" style="background:var(--zulage)"></span>Berufseinsteigerbonus (einmalig)</td><td id="rB"></td></tr>
           <tr class="sum"><td>Staatliche Zulagen gesamt</td><td id="rS"></td></tr>
+          <tr><td>Steuervorteil zusätzlich (geschätzt)</td><td id="rT"></td></tr>
         </table>
         <p class="note" id="tipText"></p>
-        <p class="note">Nicht eingerechnet: ein möglicher zusätzlicher Steuervorteil über die Günstigerprüfung des Finanzamts.</p>
+        <p class="note">Steuervorteil: Das Finanzamt zieht bis zu 1.800 € plus Zulagen als Sonderausgaben ab und rechnet die Zulagen an (Günstigerprüfung). Grobe Schätzung ohne Soli und Kirchensteuer; er fließt aufs Konto, nicht ins Depot.</p>
       </section>
     </div>
 
@@ -394,46 +493,61 @@ $('tabLern').onclick=()=>tab('lern'); $('tabCalc').onclick=()=>tab('calc'); $('t
 const slides=[...document.querySelectorAll('#deck .slide')]; let cur=0;
 slides.forEach((s,i)=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Folie '+(i+1));b.onclick=()=>go(i);$('dots').appendChild(b)});
 function go(i){cur=Math.max(0,Math.min(slides.length-1,i));
-  slides.forEach((s,j)=>s.hidden=j!==cur);
+  slides.forEach((s,j)=>{s.hidden=j!==cur; s.classList.remove('in');});
+  const s=slides[cur]; void s.offsetWidth; requestAnimationFrame(()=>s.classList.add('in'));
+  s.querySelectorAll('.qb i').forEach(el=>{el.style.width='0';setTimeout(()=>el.style.width=el.dataset.w+'%',reduce?0:(+el.closest('.anim').style.getPropertyValue('--d')||0)+300)});
+  s.querySelectorAll('[data-count]').forEach(countUp);
   [...$('dots').children].forEach((d,j)=>d.setAttribute('aria-current',j===cur));
   $('prev').disabled=cur===0; $('next').disabled=cur===slides.length-1;
-  $('noteText').textContent=slides[cur].dataset.note||'';}
+  if(s.contains($('v2r'))) v2();
+  $('noteText').textContent=s.dataset.note||'';}
+function countUp(el){const to=+el.dataset.count,delay=+el.closest('.anim').style.getPropertyValue('--d')||0;
+  if(reduce){el.textContent='+'+eur(to);return}
+  el.textContent='+0 €';setTimeout(()=>{let t0=null;(function f(t){if(!t0)t0=t;const k=Math.min(1,(t-t0)/900);el.textContent='+'+eur(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)})(performance.now())},delay+200);}
 $('prev').onclick=()=>go(cur-1); $('next').onclick=()=>go(cur+1);
-document.addEventListener('keydown',e=>{if($('pLern').hidden)return;if(e.key==='ArrowRight')go(cur+1);if(e.key==='ArrowLeft')go(cur-1)});
-let sx=null; $('deck').addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
+document.addEventListener('keydown',e=>{if($('pLern').hidden||e.target.tagName==='INPUT')return;if(e.key==='ArrowRight')go(cur+1);if(e.key==='ArrowLeft')go(cur-1)});
+let sx=null; $('deck').addEventListener('touchstart',e=>{sx=e.target.closest('input,svg')?null:e.touches[0].clientX},{passive:true});
 $('deck').addEventListener('touchend',e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)go(cur+(dx<0?1:-1));sx=null});
+const zul=E=>{const[a,b]=grund(E);return a+b};
 
-/* Folie 2: Zulagenkurve */
-(function(){
-  const s=$('zs'),L=60,R=505,T=14,B=290,X=v=>L+(R-L)*v/2400,Y=v=>B-(B-T)*v/600;
-  const z=e=>{const[a,b]=grund(e);return a+b};
-  let h=`<rect x="${X(0)}" y="${T}" width="${X(360)-X(0)}" height="${B-T}" fill="var(--warm2)"/><rect x="${X(360)}" y="${T}" width="${X(1800)-X(360)}" height="${B-T}" fill="var(--warm)"/>`;
-  [0,200,400,600].forEach(v=>h+=`<line x1="${L}" x2="${R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${L-8}" y="${Y(v)+5}" text-anchor="end" font-size="15">${v}</text>`);
-  [0,360,1800,2400].forEach(v=>h+=`<text x="${X(v)}" y="${B+24}" text-anchor="middle" font-size="15">${v.toLocaleString('de-DE')}</text>`);
-  h+=`<text x="${(X(0)+X(360))/2}" y="${T+22}" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--zulagetxt)">50 %</text><text x="${(X(360)+X(1800))/2}" y="${T+22}" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--zulagetxt)">25 %</text><text x="${(X(1800)+X(2400))/2}" y="${T+22}" text-anchor="middle" font-size="14">ohne Zulage</text>`;
-  h+=`<path d="M${X(0)} ${Y(0)} L${X(119)} ${Y(0)} L${X(120)} ${Y(60)} L${X(360)} ${Y(180)} L${X(1800)} ${Y(540)} L${X(2400)} ${Y(540)}" fill="none" stroke="var(--zulage)" stroke-width="4" stroke-linejoin="round"/>`;
-  h+=`<line id="zg" y1="${T}" y2="${B}" stroke="var(--accent)" stroke-width="2" stroke-dasharray="5 5"/><circle id="zd" r="9" fill="var(--zulage)" stroke="var(--surface)" stroke-width="3"/>`;
+/* Folie 2: Regler auf dem Balken */
+function v2(){const m=+$('v2r').value,E=m*12,Z=zul(E);
+  const s1=document.querySelector('.segbar .s1'),bar=s1.parentElement,w1=s1.offsetWidth,wa=bar.offsetWidth;
+  $('v2mk').style.left=(m<=30?w1*m/30:w1+(wa-w1)*Math.min(1,(m-30)/120))+'px';
+  $('v2o').innerHTML=m+' € → <b>+'+(Z/12).toLocaleString('de-DE',{maximumFractionDigits:2})+' €</b> / Monat = '+eur(Z)+' im Jahr'+(E>=120?' ('+Math.round(Z/E*100)+' %)':' (unter 10 €: keine Zulage)');}
+$('v2r').addEventListener('input',v2); window.addEventListener('resize',v2); v2();
+
+/* Folie 5: gestapelte Fläche */
+function v5(){
+  const m=+$('v5r').value,E=m*12,Z=zul(E),Y=30,r=.06,rows=[{e:0,z:0,w:0}];let B=0,B0=0;
+  for(let y=1;y<=Y;y++){B=B*(1+r)+E+Z;B0=B0*(1+r)+E;rows.push({e:E*y,z:Z*y,w:B-E*y-Z*y,t:B});}
+  $('v5e').textContent=m;$('v5ro').textContent=m+' €';
+  const last=rows[Y];$('v5a').textContent=eur(last.e);$('v5b').textContent=eur(last.z);const r100=v=>Math.round(v/100)*100;$('v5c').textContent='≈ '+eur(r100(last.w));
+  $('v5t').textContent='≈ '+eur(r100(last.t));$('v5v').innerHTML='Ohne Förderung ≈ '+eur(r100(B0))+'. Das sind rund <b>'+eur(r100(last.t-B0))+' mehr</b> durch die Zulagen.';
+  const s=$('v5s'),L=62,R=510,T=10,Bt=262,max=200000*Math.max(1,Math.ceil(last.t/200000)),X=y=>L+(R-L)*y/Y,Yp=v=>Bt-(Bt-T)*v/max;
+  const area=(lo,hi)=>'M'+rows.map((d,i)=>X(i)+','+Yp(hi(d))).join('L')+'L'+rows.map((d,i)=>[X(i),Yp(lo(d))]).reverse().map(p=>p.join(',')).join('L')+'Z';
+  let h='';for(let v=0;v<=max;v+=max/4)h+=`<line x1="${L}" x2="${R}" y1="${Yp(v)}" y2="${Yp(v)}" stroke="#E2DCCB"/><text x="${L-6}" y="${Yp(v)+4}" text-anchor="end" font-size="11">${v.toLocaleString('de-DE')} €</text>`;
+  h+=`<path d="${area(d=>d.e+d.z,d=>d.e+d.z+d.w)}" fill="#6E9BC5"/><path d="${area(d=>d.e,d=>d.e+d.z)}" fill="#C9A24A"/><path d="${area(()=>0,d=>d.e)}" fill="#0F2747"/>`;
+  for(let y=0;y<=Y;y+=(innerWidth<500?5:2))h+=`<text x="${X(y)}" y="${Bt+16}" text-anchor="${y===Y?'end':y?'middle':'start'}" font-size="11">${y?y:'Start'}</text>`;
+  h+=`<text x="${(L+R)/2}" y="${Bt+33}" text-anchor="middle" font-size="11">Jahre</text><line id="v5g" y1="${T}" y2="${Bt}" stroke="#D9731A" stroke-width="2" opacity="0"/><rect id="v5hit" x="${L}" y="${T}" width="${R-L}" height="${Bt-T}" fill="transparent"/>`;
   s.innerHTML=h;
-  const d=$('zd'),g=$('zg'),stops=[120,360,600,1200,1800,2400];let i=0,c=120;
-  function show(e){const v=z(e);d.setAttribute('cx',X(e));d.setAttribute('cy',Y(v));g.setAttribute('x1',X(e));g.setAttribute('x2',X(e));
-    $('zr').innerHTML=Math.round(e).toLocaleString('de-DE')+' € ('+Math.round(e/12)+' €/Monat) → <b>'+Math.round(v)+' € Zulage</b>'}
-  function step(){const to=stops[i++%stops.length],from=c;
-    if(reduce||to<from){c=to;show(to);setTimeout(step,2400);return}
-    let t0=null;(function f(t){if(!t0)t0=t;let k=Math.min(1,(t-t0)/900);k=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;show(from+(to-from)*k);if(k<1)requestAnimationFrame(f);else{c=to;setTimeout(step,1800)}})(performance.now());
-  }
-  show(c);setTimeout(step,1200);
-})();
+  const hit=$('v5hit'),g=$('v5g');
+  const pick=ev=>{const p=s.createSVGPoint();p.x=ev.clientX;p.y=ev.clientY;const q=p.matrixTransform(s.getScreenCTM().inverse());
+    const y=Math.max(1,Math.min(Y,Math.round((q.x-L)/(R-L)*Y))),d=rows[y];g.setAttribute('x1',X(y));g.setAttribute('x2',X(y));g.setAttribute('opacity',1);
+    $('v5h').textContent=`Jahr ${y}: ${eur(d.t)} = ${eur(d.e)} eigenes Geld + ${eur(d.z)} Zulagen + ${eur(d.w)} Wertzuwachs`;};
+  hit.addEventListener('pointermove',pick);hit.addEventListener('pointerdown',pick);
+}
+$('v5r').addEventListener('input',v5); v5();
 
-/* Folie 4: Beispiele */
-(function(){
-  const S=[["Single","30 € im Monat",30,0,0],["Berufseinsteiger, 22 Jahre","25 € im Monat, erstes Jahr",25,0,1],["Familie mit 2 Kindern","50 € im Monat",50,2,0],["Familie mit 1 Kind","150 € im Monat",150,1,0],["Volle Grundzulage","150 € im Monat, ohne Kinder",150,0,0]];
-  let i=0;
-  function show(){const s=S[i],E=s[2]*12,[a,b]=grund(E),Z=a+b+kidZ(E,s[3])+(s[4]?200:0);
-    $('exW').textContent=s[0];$('exU').textContent=s[1];$('exE').textContent=eur(E);$('exZ').textContent=eur(Z);
-    $('exBE').style.width=(E/1800*100)+'%';$('exBZ').style.width=(Z/1800*100)+'%';$('exQ').textContent=Math.round(Z/E*100)+' %';
-    i=(i+1)%S.length}
-  show();setInterval(show,3600);
-})();
+/* Folie 6: Tabelle mit Kinder-Auswahl */
+let v6k=1,v6sel=150;
+function v6(){const rates=[10,25,30,50,75,100,150,200];
+  $('v6kh').textContent=v6k?'Mit '+v6k+(v6k===1?' Kind':' Kindern')+' / Jahr':'Ohne Kind / Jahr';
+  $('v6b').innerHTML=rates.map(m=>{const E=m*12,Z=zul(E),K=Z+kidZ(E,v6k),fm=v=>(v/12).toLocaleString('de-DE',{minimumFractionDigits:v%12?2:0,maximumFractionDigits:2});
+    return `<tr data-m="${m}" class="${m===v6sel?'hl':''}"><td>${m} €</td><td>+${fm(Z)} €</td><td>+${eur(Z)}</td><td>+${eur(K)}</td><td>${(Z/E*100).toLocaleString('de-DE',{maximumFractionDigits:1})} %</td></tr>`}).join('');
+  $('v6b').querySelectorAll('tr').forEach(tr=>tr.onclick=()=>{v6sel=+tr.dataset.m;v6()});
+  document.querySelectorAll('.kchips button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.k===v6k));}
+document.querySelectorAll('.kchips button').forEach(b=>b.onclick=()=>{v6k=+b.dataset.k;v6()}); v6();
 
 /* ---------- Rechner ---------- */
 let mode='haus';
@@ -456,6 +570,8 @@ function calc(){
 
   const [g1,g2]=grund(E), eligKids=ages.filter(a=>a<18).length, k=kidZ(E,eligKids), b=(u25&&E>=120)?200:0, S=g1+g2+k+b;
   $('rE').textContent=eur(E);$('rG1').textContent=eur(g1);$('rG2').textContent=eur(g2);$('rK').textContent=eur(k);$('rB').textContent=eur(b);$('rS').textContent=eur(S);
+  const tx=+$('tax').value, SA=Math.min(E,1800)+S, TV=E>=120?Math.max(0,SA*tx-S):0;
+  $('rT').textContent=tx?eur(TV):'–';
   $('tZul').textContent=eur(S);$('tQuote').textContent=E?Math.round(S/E*100)+' %':'–';$('tDepot').textContent=eur(E+S);
   let t='';
   if(E>0&&E<120) t='Unter 120 € im Jahr gibt es keine Zulage. Schon 10 € im Monat reichen.';
@@ -515,7 +631,7 @@ function draw(rows){
   });
 }
 function nice(v){const p=Math.pow(10,Math.floor(Math.log10(v))),f=v/p;return(f<=1?1:f<=2?2:f<=5?5:10)*p}
-['rate','age','kids','start','hold','ret','cost','kid0','kid1','kid2','kid3'].forEach(id=>$(id).addEventListener('input',calc));
+['rate','age','kids','start','hold','ret','cost','tax','kid0','kid1','kid2','kid3'].forEach(id=>$(id).addEventListener('input',calc));
 window.addEventListener('resize',()=>{if(!$('pCalc').hidden)calc()});
 
 go(0); setMode('haus');
