@@ -444,45 +444,538 @@ quiz:[
 ]}
 ];
 
+const GCATS = {
+recht:{n:"Vermittlerrecht & Pflichten",x:"beide"},
+vvg:{n:"Versicherungsvertrag (VVG)",x:"34d"},
+sv:{n:"Sozialversicherung",x:"34d"},
+av:{n:"Altersvorsorge & Förderung",x:"34d"},
+leben:{n:"Leben, Rente & BU",x:"34d"},
+kv:{n:"Kranken & Pflege",x:"34d"},
+sach:{n:"Sach, Haftpflicht, Kfz & Unfall",x:"34d"},
+inv:{n:"Investmentfonds & KAGB",x:"34f"},
+gesch:{n:"Geschlossene AIF & Vermögensanlagen",x:"34f"},
+wp:{n:"Wertpapiere & Börse",x:"34f"},
+st:{n:"Steuern",x:"34f"},
+vwl:{n:"Volkswirtschaft",x:"34f"},
+risk:{n:"Anlageberatung & Risiko",x:"34f"},
+ber:{n:"Kundenberatung & Gesprächsführung",x:"beide"},
+immo:{n:"Immobilien & Finanzierung",x:"allg"}
+};
 const GLOSSAR = [
-["Abgeltungsteuer","25 % Steuer auf Kapitalerträge, plus Soli und ggf. Kirchensteuer."],
-["Altersvorsorgedepot","Ab 2027 staatlich gefördertes Fonds-/ETF-Depot für die Rente, Nachfolger von Riester. Bis 540 € Grundzulage plus 300 € je Kind."],
-["Annuität","Gleichbleibende Rate aus Zins und Tilgung."],
-["Basisinformationsblatt","Pflicht-Kurzinfo zu einem Finanzprodukt mit Risikoindikator, Kosten und Szenarien."],
-["Basisrente (Rürup)","Schicht-1-Vorsorge, Beiträge steuerlich absetzbar, nur als lebenslange Rente auszahlbar."],
-["Beitragsbemessungsgrenze","Bis zu diesem Einkommen werden Sozialversicherungsbeiträge erhoben."],
-["Berufsunfähigkeit","Man kann seinen zuletzt ausgeübten Beruf zu mindestens 50 % nicht mehr ausüben."],
-["bAV","Betriebliche Altersvorsorge, z. B. über Entgeltumwandlung."],
-["Cost-Average-Effekt","Bei festen Sparraten werden bei niedrigen Kursen mehr Anteile gekauft."],
-["Diversifikation","Streuung des Geldes über viele Anlagen, Länder und Branchen."],
-["Dynamik","Jährliche automatische Erhöhung der Sparrate oder Versicherungssumme."],
-["Effektivkosten","Renditeminderung durch alle Kosten eines Produkts pro Jahr."],
-["Elementarschaden","Schäden durch Naturgewalten wie Starkregen, Überschwemmung, Erdrutsch."],
-["Entgeltumwandlung","Teil des Bruttogehalts wird in eine Betriebsrente eingezahlt."],
-["ETF","Börsengehandelter Indexfonds, bildet einen Index passiv nach."],
-["Forward-Darlehen","Sicherung des Zinses für eine spätere Anschlussfinanzierung."],
-["Freistellungsauftrag","Auftrag an die Bank, Erträge bis zum Sparerpauschbetrag steuerfrei zu lassen."],
-["Frühstartrente","Geplant: 10 € pro Monat vom Staat für Kinder von 6 bis 18 Jahren."],
-["Grundzulage","Staatliche Zulage im Altersvorsorgedepot: 50 % bis 360 €, 25 % bis 1.800 € Eigenbeitrag."],
-["Inflation","Anstieg des Preisniveaus, Geld verliert an Kaufkraft."],
-["Kinderzulage","Im Altersvorsorgedepot 1 € je eingezahltem Euro, max. 300 € je Kind und Jahr."],
-["Liquidität","Wie schnell man an sein Geld kommt."],
-["MSCI World","Aktienindex mit über 1.000 Unternehmen aus 23 Industrieländern."],
-["Nachgelagerte Besteuerung","Beiträge werden in der Ansparphase entlastet, die Auszahlung im Alter wird besteuert."],
-["Neuwert","Betrag für die Wiederbeschaffung einer gleichwertigen neuen Sache."],
-["Notgroschen","Rücklage von 3 bis 6 Netto-Monatsgehältern für Unvorhergesehenes."],
-["Obliegenheit","Pflicht des Versicherten, z. B. Schaden sofort melden."],
-["Rebalancing","Zurückführen eines Depots auf die ursprüngliche Aufteilung."],
-["Rentenlücke","Differenz zwischen gewünschtem Alterseinkommen und erwarteten Renten."],
-["Restschuld","Offener Kreditbetrag am Ende der Zinsbindung."],
-["Sondervermögen","Fondsvermögen, das bei Pleite der Fondsgesellschaft geschützt ist."],
-["Sparerpauschbetrag","1.000 € (Ehepaare 2.000 €) Kapitalerträge pro Jahr steuerfrei."],
-["Teilfreistellung","30 % der Erträge von Aktienfonds bleiben steuerfrei."],
-["Thesaurierend","Erträge eines Fonds werden automatisch wieder angelegt."],
-["Umlageverfahren","Heutige Beiträge finanzieren direkt die heutigen Renten."],
-["Unterversicherung","Versicherungssumme zu niedrig – die Leistung wird anteilig gekürzt."],
-["Vorabpauschale","Jährlich besteuerter fiktiver Mindestertrag bei thesaurierenden Fonds."],
-["Zinseszins","Auch die Erträge werden wieder verzinst."]
+/* ---------- Vermittlerrecht & Pflichten ---------- */
+["§ 34d GewO","Erlaubnispflicht für Versicherungsvermittler (Vertreter und Makler) und Versicherungsberater. Die Erlaubnis erteilt die zuständige IHK.","recht"],
+["§ 34f GewO","Erlaubnispflicht für Finanzanlagenvermittler. Sie umfasst offene Investmentvermögen, geschlossene Investmentvermögen und Vermögensanlagen und kann auf einzelne Bereiche beschränkt werden.","recht"],
+["§ 34h GewO","Erlaubnis für Honorar-Finanzanlagenberater. Sie werden ausschließlich vom Kunden bezahlt; Zuwendungen von Produktgebern müssen an den Kunden ausgekehrt werden.","recht"],
+["§ 34i GewO","Erlaubnis für Immobiliardarlehensvermittler, z. B. bei der Vermittlung von Baufinanzierungen.","recht"],
+["Erlaubnisvoraussetzungen","Zuverlässigkeit, geordnete Vermögensverhältnisse, Berufshaftpflichtversicherung, Sachkundenachweis und Wohnsitz oder Niederlassung im Inland bzw. EU/EWR.","recht"],
+["Zuverlässigkeit","Voraussetzung für die Erlaubnis. Sie fehlt in der Regel bei einschlägigen Verurteilungen (z. B. Betrug, Untreue, Diebstahl, Geldwäsche) in den letzten fünf Jahren.","recht"],
+["Geordnete Vermögensverhältnisse","Voraussetzung für die Erlaubnis. Sie fehlen in der Regel bei Insolvenzverfahren oder Eintrag im Schuldnerverzeichnis.","recht"],
+["Sachkundeprüfung","IHK-Prüfung mit schriftlichem Teil (Multiple Choice) und praktischem Teil (simuliertes Kundengespräch). Bestimmte Berufsabschlüsse, z. B. Kaufmann/-frau für Versicherungen und Finanzanlagen, sind gleichgestellt.","recht"],
+["Weiterbildungspflicht","Versicherungs- und Finanzanlagenvermittler müssen jeweils 15 Stunden Weiterbildung pro Kalenderjahr nachweisen.","recht"],
+["Berufshaftpflichtversicherung","Pflichtversicherung für Vermittler. Sie deckt Vermögensschäden von Kunden durch Beratungsfehler. Die Mindestdeckungssummen sind gesetzlich vorgegeben und werden regelmäßig angepasst.","recht"],
+["Vermittlerregister","Öffentliches Register beim DIHK, in dem alle registrierten Versicherungs- und Finanzanlagenvermittler mit Registrierungsnummer eingetragen sind (vermittlerregister.info).","recht"],
+["Versicherungsvertreter","Vermittler, der von einem oder mehreren Versicherern betraut ist (§ 59 Abs. 2 VVG). Er steht im Lager des Versicherers und ist Handelsvertreter nach § 92 HGB.","recht"],
+["Ausschließlichkeitsvertreter","Versicherungsvertreter, der nur für einen Versicherer oder eine Versicherungsgruppe tätig ist.","recht"],
+["Mehrfachagent","Versicherungsvertreter, der für mehrere Versicherer tätig ist, aber nicht wie ein Makler im Lager des Kunden steht.","recht"],
+["Gebundener Vermittler","Vertreter, der keine eigene Erlaubnis braucht, weil der Versicherer die uneingeschränkte Haftung übernimmt (§ 34d Abs. 7 GewO). Er muss trotzdem registriert sein.","recht"],
+["Produktakzessorischer Vermittler","Vermittelt Versicherungen nur als Ergänzung zu einer Ware oder Dienstleistung, z. B. Reiseversicherung im Reisebüro. Es gelten Erleichterungen.","recht"],
+["Versicherungsmakler","Vermittler, der für den Kunden tätig ist, ohne von einem Versicherer betraut zu sein (§ 59 Abs. 3 VVG). Er ist „Sachwalter“ des Kunden und muss eine ausreichende Marktauswahl zugrunde legen.","recht"],
+["Maklervertrag","Vertrag zwischen Kunde und Makler. Regelt Auftrag, Umfang und oft die Maklervollmacht.","recht"],
+["Versicherungsberater","Berät Kunden gegen Honorar und darf keine Vergütung von Versicherern annehmen (§ 34d Abs. 2 GewO).","recht"],
+["Tippgeber","Gibt nur Kontaktdaten möglicher Kunden weiter, ohne zu beraten oder zu vermitteln. Er braucht keine Erlaubnis.","recht"],
+["Erstinformation","Statusinformation, die der Vermittler beim ersten Geschäftskontakt in Textform übergibt: Name, Anschrift, Status, Registrierungsnummer, Schlichtungsstellen, Art der Vergütung.","recht"],
+["VersVermV","Versicherungsvermittlungsverordnung. Regelt u. a. Sachkundeprüfung, Informationspflichten, Berufshaftpflicht und Weiterbildung bei § 34d.","recht"],
+["FinVermV","Finanzanlagenvermittlungsverordnung. Regelt die Pflichten von § 34f-Vermittlern, z. B. Information, Geeignetheit, Zuwendungen, Interessenkonflikte und Taping.","recht"],
+["IDD","Insurance Distribution Directive – EU-Versicherungsvertriebsrichtlinie, seit 2018 in deutsches Recht umgesetzt. Grundlage für Weiterbildungspflicht und Kundeninteresse.","recht"],
+["MiFID II","EU-Finanzmarktrichtlinie für Anlegerschutz. Regelt u. a. Geeignetheitsprüfung, Kostentransparenz, Zielmarkt und Zuwendungen.","recht"],
+["Geeignetheitsprüfung","Pflicht bei Anlageberatung: Kenntnisse und Erfahrungen, finanzielle Verhältnisse inkl. Verlusttragfähigkeit und Anlageziele inkl. Risikotoleranz und Nachhaltigkeitspräferenzen erfragen. Nur geeignete Produkte dürfen empfohlen werden.","recht"],
+["Angemessenheitsprüfung","Bei reiner Vermittlung ohne Beratung: Prüfung, ob der Kunde ausreichende Kenntnisse und Erfahrungen hat. Fehlen sie, ist ein Warnhinweis nötig.","recht"],
+["Geeignetheitserklärung","Schriftliche Begründung, warum die Empfehlung zum Kunden passt. Sie muss vor Vertragsschluss auf einem dauerhaften Datenträger übergeben werden.","recht"],
+["Beratungsdokumentation","Nach § 61 VVG festzuhalten: Wünsche und Bedürfnisse des Kunden, der erteilte Rat und die Gründe dafür. Übergabe vor Vertragsschluss in Textform.","recht"],
+["Beratungsverzicht","Der Kunde kann auf Beratung und Dokumentation nur durch gesonderte schriftliche Erklärung verzichten, mit ausdrücklichem Hinweis auf mögliche Nachteile.","recht"],
+["Zuwendungen","Provisionen und andere Vorteile von Dritten. Sie müssen offengelegt werden und dürfen die Qualität der Dienstleistung nicht beeinträchtigen.","recht"],
+["Interessenkonflikt","Situation, in der Interessen des Vermittlers und des Kunden auseinanderlaufen können. Konflikte müssen erkannt, vermieden oder offengelegt werden.","recht"],
+["Taping","Pflicht zur Aufzeichnung von Telefongesprächen und Protokollierung persönlicher Gespräche bei Finanzanlagenvermittlung (§ 18a FinVermV).","recht"],
+["Kosteninformation","Ex-ante: Aufstellung aller Kosten vor Vertragsschluss. Ex-post: jährliche Information über die tatsächlich angefallenen Kosten.","recht"],
+["Textform","Lesbare Erklärung auf einem dauerhaften Datenträger, die den Erklärenden nennt (§ 126b BGB), z. B. E-Mail oder PDF. Eine Unterschrift ist nicht nötig.","recht"],
+["Schriftform","Erklärung mit eigenhändiger Unterschrift (§ 126 BGB).","recht"],
+["Dauerhafter Datenträger","Medium, das Informationen unverändert speichert und wiedergibt, z. B. Papier, PDF, E-Mail oder USB-Stick.","recht"],
+["Geldwäschegesetz (GwG)","Verpflichtet u. a. Lebensversicherungsvermittler und Finanzdienstleister zur Identifizierung von Kunden, zu Sorgfaltspflichten und zur Verdachtsmeldung.","recht"],
+["FIU","Financial Intelligence Unit – Zentralstelle für Finanztransaktionsuntersuchungen beim Zoll. Empfänger von Geldwäsche-Verdachtsmeldungen.","recht"],
+["Wirtschaftlich Berechtigter","Natürliche Person, in deren Eigentum oder unter deren Kontrolle der Kunde letztlich steht, z. B. mit mehr als 25 % der Anteile.","recht"],
+["PEP","Politisch exponierte Person, z. B. Abgeordnete oder Minister. Für sie gelten verstärkte Sorgfaltspflichten nach dem GwG.","recht"],
+["DSGVO","Datenschutz-Grundverordnung. Personenbezogene Daten dürfen nur rechtmäßig, zweckgebunden und sparsam verarbeitet werden; der Kunde hat u. a. Auskunfts- und Löschungsrechte.","recht"],
+["UWG","Gesetz gegen den unlauteren Wettbewerb. Werbeanrufe bei Verbrauchern sind nur mit vorheriger ausdrücklicher Einwilligung erlaubt.","recht"],
+["Versicherungsombudsmann","Kostenlose Schlichtungsstelle für Verbraucher. Entscheidungen bis 10.000 € Beschwerdewert sind für den Versicherer bindend, bis 100.000 € gibt es Empfehlungen.","recht"],
+["PKV-Ombudsmann","Schlichtungsstelle für Streitigkeiten mit privaten Kranken- und Pflegeversicherern.","recht"],
+["BaFin","Bundesanstalt für Finanzdienstleistungsaufsicht. Beaufsichtigt Banken, Versicherer, Kapitalverwaltungsgesellschaften und den Wertpapierhandel.","recht"],
+["Handelsvertreter","Selbstständiger Gewerbetreibender, der ständig für einen Unternehmer Geschäfte vermittelt (§ 84 HGB). Versicherungsvertreter sind Handelsvertreter (§ 92 HGB).","recht"],
+["Abschlussprovision","Vergütung des Vermittlers für den Abschluss eines Vertrags.","recht"],
+["Bestandsprovision","Laufende Vergütung für die Betreuung bestehender Verträge.","recht"],
+["Courtage","Vergütung des Versicherungsmaklers, meist vom Versicherer gezahlt.","recht"],
+["Stornohaftung","Der Vermittler muss Provisionen anteilig zurückzahlen, wenn ein Vertrag innerhalb der Haftungszeit vorzeitig endet.","recht"],
+["Provisionsabgabeverbot","Versicherungsvermittler dürfen ihre Provision grundsätzlich nicht an Kunden weitergeben (§ 48b VAG). Ausnahmen gibt es nur für geringwertige Vorteile.","recht"],
+
+/* ---------- Versicherungsvertrag (VVG) ---------- */
+["VVG","Versicherungsvertragsgesetz. Regelt die Rechte und Pflichten zwischen Versicherer und Versicherungsnehmer.","vvg"],
+["VAG","Versicherungsaufsichtsgesetz. Regelt die Aufsicht über Versicherungsunternehmen.","vvg"],
+["Versicherungsnehmer","Vertragspartner des Versicherers. Er schließt den Vertrag ab und zahlt die Beiträge.","vvg"],
+["Versicherte Person","Person, deren Leben, Gesundheit oder Arbeitskraft versichert ist. Sie muss nicht der Versicherungsnehmer sein.","vvg"],
+["Bezugsberechtigter","Person, die die Versicherungsleistung erhält. Widerruflich: kann jederzeit geändert werden. Unwiderruflich: nur mit Zustimmung des Begünstigten änderbar.","vvg"],
+["Antragsmodell","Der Kunde stellt einen Antrag, der Versicherer nimmt ihn mit dem Versicherungsschein an. Heute das übliche Verfahren.","vvg"],
+["Invitatiomodell","Der Kunde fordert ein Angebot an, der Versicherer macht ein verbindliches Angebot und der Kunde nimmt es an.","vvg"],
+["Versicherungsschein (Police)","Urkunde über den Versicherungsvertrag mit den wichtigsten Vertragsdaten.","vvg"],
+["AVB","Allgemeine Versicherungsbedingungen. Sie regeln den Inhalt des Vertrags im Detail und gelten als allgemeine Geschäftsbedingungen.","vvg"],
+["Widerrufsrecht","Der Kunde kann binnen 14 Tagen ohne Begründung in Textform widerrufen, bei Lebensversicherungen binnen 30 Tagen. Die Frist beginnt mit Zugang aller Unterlagen.","vvg"],
+["Vorläufige Deckung","Versicherungsschutz für die Zeit, bis der Versicherer über den Antrag entschieden hat, z. B. bei der Kfz-Versicherung (eVB-Nummer).","vvg"],
+["Formeller Versicherungsbeginn","Zeitpunkt, an dem der Vertrag geschlossen wird.","vvg"],
+["Materieller Versicherungsbeginn","Zeitpunkt, ab dem tatsächlich Versicherungsschutz besteht. Grundsätzlich erst mit Zahlung der Erstprämie.","vvg"],
+["Technischer Versicherungsbeginn","Zeitpunkt, ab dem der Beitrag berechnet wird.","vvg"],
+["Einlösungsprinzip","Der Versicherungsschutz beginnt erst mit Zahlung der Erstprämie (§ 37 VVG). Bei Nichtzahlung kann der Versicherer zurücktreten und ist leistungsfrei.","vvg"],
+["Qualifizierte Mahnung","Bei Verzug mit der Folgeprämie muss der Versicherer eine Zahlungsfrist von mindestens zwei Wochen setzen und auf die Rechtsfolgen hinweisen (§ 38 VVG).","vvg"],
+["Vorvertragliche Anzeigepflicht","Der Kunde muss alle gefahrerheblichen Umstände anzeigen, nach denen der Versicherer in Textform fragt (§ 19 VVG). Bei Verletzung drohen Rücktritt, Kündigung oder Vertragsanpassung.","vvg"],
+["Gefahrerhöhung","Nachträgliche Veränderung, die das versicherte Risiko erhöht, z. B. ein dauerhaft leerstehendes Haus. Sie ist dem Versicherer anzuzeigen (§ 23 VVG).","vvg"],
+["Obliegenheiten","Pflichten des Versicherungsnehmers vor und nach dem Versicherungsfall, z. B. Schaden unverzüglich melden. Bei Verletzung kann die Leistung gekürzt oder versagt werden.","vvg"],
+["Quotelungsprinzip","Bei grob fahrlässiger Verletzung von Obliegenheiten oder Herbeiführung des Versicherungsfalls kürzt der Versicherer die Leistung entsprechend der Schwere des Verschuldens. Ersetzt seit 2008 das Alles-oder-nichts-Prinzip.","vvg"],
+["Grobe Fahrlässigkeit","Die erforderliche Sorgfalt wird in besonders schwerem Maß verletzt, z. B. brennende Kerze unbeaufsichtigt lassen. Kann in vielen Tarifen mitversichert werden.","vvg"],
+["Vorsatz","Bewusstes und gewolltes Herbeiführen des Schadens. Der Versicherer ist leistungsfrei.","vvg"],
+["Kausalitätsgegenbeweis","Der Kunde kann nachweisen, dass eine Obliegenheitsverletzung für den Schaden nicht ursächlich war. Dann bleibt der Versicherer leistungspflichtig (außer bei Arglist).","vvg"],
+["Schadenminderungspflicht","Der Versicherte muss den Schaden abwenden oder gering halten (§ 82 VVG). Die Kosten dafür (Rettungskosten) ersetzt der Versicherer.","vvg"],
+["Unterversicherung","Die Versicherungssumme ist niedriger als der Versicherungswert. Der Schaden wird nur im Verhältnis Versicherungssumme zu Versicherungswert ersetzt (§ 75 VVG).","vvg"],
+["Überversicherung","Die Versicherungssumme übersteigt den Versicherungswert erheblich. Beide Seiten können eine Herabsetzung von Summe und Beitrag verlangen (§ 74 VVG).","vvg"],
+["Mehrfachversicherung","Dasselbe Risiko ist bei mehreren Versicherern versichert. Die Versicherer haften als Gesamtschuldner, insgesamt aber höchstens bis zur Höhe des Schadens.","vvg"],
+["Unterversicherungsverzicht","Der Versicherer verzichtet auf die Kürzung wegen Unterversicherung, z. B. in der Hausrat bei ausreichender Summe je m².","vvg"],
+["Selbstbeteiligung","Eigenanteil des Kunden an jedem Schaden. Senkt den Beitrag.","vvg"],
+["Subsidiaritätsklausel","Der Vertrag leistet nur nachrangig, wenn kein anderer Vertrag zahlt.","vvg"],
+["Forderungsübergang (Regress)","Hat der Versicherer gezahlt, gehen die Ersatzansprüche des Kunden gegen den Schädiger auf ihn über (§ 86 VVG).","vvg"],
+["Kündigung nach Schadenfall","Nach einem Versicherungsfall können in der Schadenversicherung beide Seiten innerhalb eines Monats nach Abschluss der Regulierung kündigen (§ 92 VVG).","vvg"],
+["Sonderkündigungsrecht bei Beitragserhöhung","Erhöht der Versicherer den Beitrag ohne Leistungsverbesserung, kann der Kunde innerhalb eines Monats nach Mitteilung kündigen (§ 40 VVG).","vvg"],
+["Vertragslaufzeit (§ 11 VVG)","Verträge verlängern sich stillschweigend um höchstens ein Jahr. Die Kündigungsfrist liegt zwischen einem und drei Monaten. Verträge über drei Jahre sind zum Ende des dritten Jahres kündbar.","vvg"],
+["Verjährung","Ansprüche aus dem Versicherungsvertrag verjähren in der Regel nach drei Jahren, beginnend mit dem Ende des Jahres, in dem sie entstanden sind.","vvg"],
+["Versicherungswert","Tatsächlicher Wert des versicherten Gegenstands, z. B. Neuwert oder Zeitwert.","vvg"],
+["Neuwert","Betrag, der nötig ist, um eine Sache gleicher Art und Güte neu zu beschaffen.","vvg"],
+["Zeitwert","Neuwert abzüglich Wertminderung durch Alter und Abnutzung.","vvg"],
+["Sachverständigenverfahren","Bei Streit über die Schadenhöhe bestimmen Versicherer und Kunde je einen Sachverständigen; bei Uneinigkeit entscheidet ein Obmann.","vvg"],
+
+/* ---------- Sozialversicherung ---------- */
+["Sozialversicherung","Fünf Zweige: Kranken-, Pflege-, Renten-, Arbeitslosen- und Unfallversicherung.","sv"],
+["Beitragsbemessungsgrenze","Einkommen bis zu dieser Grenze ist beitragspflichtig. Für Renten- und Arbeitslosenversicherung liegt sie höher als für Kranken- und Pflegeversicherung. Sie wird jährlich angepasst.","sv"],
+["Versicherungspflichtgrenze","Jahresarbeitsentgeltgrenze. Angestellte mit höherem Einkommen können sich privat krankenversichern. Wird jährlich angepasst.","sv"],
+["Geringfügige Beschäftigung","Minijob bis zur Geringfügigkeitsgrenze. Rentenversicherungspflicht mit Befreiungsmöglichkeit, keine Kranken- und Arbeitslosenversicherung für den Arbeitnehmer.","sv"],
+["Familienversicherung","Kinder und Ehepartner ohne bzw. mit geringem eigenem Einkommen sind in der GKV beitragsfrei mitversichert.","sv"],
+["Umlageverfahren","Die Beiträge der heutigen Erwerbstätigen finanzieren direkt die heutigen Renten (Generationenvertrag).","sv"],
+["Kapitaldeckungsverfahren","Jeder spart für die eigene Versorgung Kapital an, z. B. in der privaten Rentenversicherung oder der PKV.","sv"],
+["Entgeltpunkte","Für ein Jahr mit Durchschnittsverdienst gibt es einen Entgeltpunkt. Rente = Entgeltpunkte × Zugangsfaktor × aktueller Rentenwert × Rentenartfaktor.","sv"],
+["Aktueller Rentenwert","Monatsrente für einen Entgeltpunkt. Wird jährlich zum 1. Juli angepasst.","sv"],
+["Zugangsfaktor","Berücksichtigt Abschläge (0,3 % je Monat früher) oder Zuschläge (0,5 % je Monat später) bei Rentenbeginn.","sv"],
+["Regelaltersgrenze","Alter für die reguläre Altersrente ohne Abschläge. Steigt schrittweise auf 67 Jahre (ab Jahrgang 1964).","sv"],
+["Allgemeine Wartezeit","Mindestversicherungszeit von 5 Jahren für die Regelaltersrente und Renten wegen Erwerbsminderung.","sv"],
+["Langjährig Versicherte","Mit 35 Jahren Wartezeit ist eine Altersrente ab 63 mit Abschlägen möglich.","sv"],
+["Besonders langjährig Versicherte","Mit 45 Jahren Wartezeit ist eine abschlagsfreie Rente zwei Jahre vor der Regelaltersgrenze möglich (steigt schrittweise auf 65).","sv"],
+["Erwerbsminderungsrente","Voll: unter 3 Stunden täglich arbeitsfähig. Teilweise: 3 bis unter 6 Stunden. Voraussetzung: 5 Jahre Wartezeit und 3 Jahre Pflichtbeiträge in den letzten 5 Jahren.","sv"],
+["Berufsunfähigkeitsrente (gesetzlich)","Gibt es nur noch für Versicherte, die vor dem 2. Januar 1961 geboren sind.","sv"],
+["Große Witwenrente","55 % der Rente des Verstorbenen (altes Recht 60 %), wenn der Hinterbliebene ein bestimmtes Alter erreicht hat (steigt auf 47), ein Kind erzieht oder erwerbsgemindert ist. Eigenes Einkommen wird angerechnet.","sv"],
+["Kleine Witwenrente","25 % der Rente des Verstorbenen, nach neuem Recht für höchstens 24 Monate.","sv"],
+["Waisenrente","Halbwaisenrente 10 %, Vollwaisenrente 20 % der Rente des Verstorbenen, grundsätzlich bis 18 bzw. in Ausbildung bis 27.","sv"],
+["Rentenniveau","Verhältnis einer Standardrente nach 45 Jahren Durchschnittsverdienst zum aktuellen Durchschnittsverdienst, vor Steuern.","sv"],
+["Renteninformation","Jährliche Mitteilung der Deutschen Rentenversicherung ab 27 Jahren mit bisheriger und hochgerechneter Rente.","sv"],
+["Entgeltfortzahlung","Bei Krankheit zahlt der Arbeitgeber das Gehalt bis zu 6 Wochen weiter.","sv"],
+["Krankengeld","Leistung der GKV nach der Entgeltfortzahlung: 70 % des Bruttoentgelts, höchstens 90 % des Nettoentgelts, für bis zu 78 Wochen innerhalb von drei Jahren wegen derselben Krankheit.","sv"],
+["Arbeitslosengeld I","60 % des pauschalierten Nettoentgelts, mit Kind 67 %. Voraussetzung: mindestens 12 Monate Versicherungspflicht in den letzten 30 Monaten.","sv"],
+["Gesetzliche Unfallversicherung","Versichert Arbeitsunfälle, Wegeunfälle und Berufskrankheiten. Träger sind Berufsgenossenschaften und Unfallkassen; Beiträge zahlt allein der Arbeitgeber.","sv"],
+["Berufsgenossenschaft","Träger der gesetzlichen Unfallversicherung für die gewerbliche Wirtschaft.","sv"],
+["Verletztenrente","Rente der gesetzlichen Unfallversicherung ab einer Minderung der Erwerbsfähigkeit von mindestens 20 %.","sv"],
+["Wegeunfall","Unfall auf dem direkten Weg zwischen Wohnung und Arbeitsstätte. Gesetzlich unfallversichert.","sv"],
+["Grundsicherung im Alter","Sozialleistung für Rentner, deren Einkommen nicht für den Lebensunterhalt reicht. Wird von den Sozialämtern gezahlt.","sv"],
+
+/* ---------- Altersvorsorge & Förderung ---------- */
+["3-Schichten-Modell","Einteilung der Altersvorsorge nach steuerlicher Behandlung. Schicht 1: Basisversorgung. Schicht 2: Zusatzversorgung (bAV, Riester, Altersvorsorgedepot). Schicht 3: private Vorsorge.","av"],
+["Rentenlücke","Differenz zwischen dem gewünschten Alterseinkommen und den erwarteten Renten.","av"],
+["Basisrente (Rürup)","Schicht 1. Beiträge sind bis zum Höchstbetrag als Sonderausgaben absetzbar. Nur lebenslange Rente ab 62, nicht vererbbar, beleihbar, übertragbar oder kapitalisierbar.","av"],
+["Riester-Rente","Staatlich geförderte private Altersvorsorge der Schicht 2. Neuabschlüsse nur bis Ende 2026, bestehende Verträge haben Bestandsschutz.","av"],
+["Altersvorsorgedepot","Ab 1. Januar 2027 gefördertes Fonds- und ETF-Depot als Nachfolger von Riester, ohne Garantiepflicht. Bis 540 € Grundzulage, 300 € je Kind. Auszahlung ab 65.","av"],
+["Grundzulage","Im Altersvorsorgedepot 50 % auf die ersten 360 € und 25 % auf 360 bis 1.800 € Eigenbeitrag, höchstens 540 € im Jahr. Mindestbeitrag 120 €.","av"],
+["Kinderzulage","Im Altersvorsorgedepot 1 € je eingezahltem Euro, höchstens 300 € je kindergeldberechtigtem Kind und Jahr.","av"],
+["Berufseinsteigerbonus","Einmalig 200 € beim Abschluss eines geförderten Altersvorsorgevertrags vor dem 25. Geburtstag.","av"],
+["Standarddepot","Pflichtangebot jedes Anbieters beim Altersvorsorgedepot mit vorgegebener Anlage und Effektivkosten von höchstens 1 % pro Jahr.","av"],
+["Frühstartrente","Geplante staatliche Einzahlung von 10 € pro Monat für Kinder von 6 bis 18 Jahren in ein Altersvorsorgedepot. Gesetzgebung Stand Oktober 2026 noch nicht abgeschlossen.","av"],
+["Auszahlplan","Das Kapital wird in Raten ausgezahlt. Beim Altersvorsorgedepot mindestens bis zum 85. Lebensjahr.","av"],
+["Schädliche Verwendung","Verwendung von gefördertem Kapital entgegen den Regeln, z. B. Kündigung eines Riester-Vertrags. Zulagen und Steuervorteile müssen zurückgezahlt werden.","av"],
+["Wohn-Riester","Einsatz von Riester-Kapital für selbst genutztes Wohneigentum. Die Besteuerung erfolgt über ein Wohnförderkonto.","av"],
+["Betriebliche Altersversorgung (bAV)","Altersvorsorge über den Arbeitgeber. Schicht 2. Es gibt fünf Durchführungswege.","av"],
+["Entgeltumwandlung","Teil des Bruttogehalts wird in eine Betriebsrente eingezahlt. Rechtsanspruch für Arbeitnehmer.","av"],
+["Arbeitgeberzuschuss bAV","Bei Entgeltumwandlung muss der Arbeitgeber 15 % zuschießen, soweit er Sozialversicherungsbeiträge spart.","av"],
+["Durchführungswege bAV","Direktversicherung, Pensionskasse, Pensionsfonds (extern) sowie Unterstützungskasse und Direktzusage (intern).","av"],
+["Direktversicherung","Lebens- oder Rentenversicherung, die der Arbeitgeber für den Arbeitnehmer abschließt. Häufigster bAV-Weg bei kleinen Firmen.","av"],
+["Pensionskasse","Rechtsfähige Versorgungseinrichtung, die Betriebsrenten zahlt. Unterliegt der Versicherungsaufsicht.","av"],
+["Pensionsfonds","Externe Versorgungseinrichtung mit freierer Kapitalanlage als Pensionskassen.","av"],
+["Unterstützungskasse","Rechtsfähige Einrichtung des Arbeitgebers ohne Rechtsanspruch des Arbeitnehmers gegen die Kasse; der Arbeitgeber haftet.","av"],
+["Direktzusage","Der Arbeitgeber zahlt die Betriebsrente selbst und bildet dafür Pensionsrückstellungen.","av"],
+["PSVaG","Pensions-Sicherungs-Verein. Sichert Direktzusage, Unterstützungskasse und Pensionsfonds bei Insolvenz des Arbeitgebers ab.","av"],
+["Unverfallbarkeit","Anspruch auf die Betriebsrente bleibt beim Jobwechsel erhalten. Bei Entgeltumwandlung sofort, bei Arbeitgeberfinanzierung nach 3 Jahren Zusagedauer und ab 21 Jahren.","av"],
+["Portabilität","Recht, das Kapital einer bAV beim Arbeitgeberwechsel zum neuen Arbeitgeber mitzunehmen (bei externen Durchführungswegen).","av"],
+["Steuerfreiheit bAV (§ 3 Nr. 63 EStG)","Beiträge in Direktversicherung, Pensionskasse und Pensionsfonds sind bis 8 % der Beitragsbemessungsgrenze (RV) steuerfrei und bis 4 % sozialversicherungsfrei.","av"],
+
+/* ---------- Leben, Rente & BU ---------- */
+["Risikolebensversicherung","Zahlt nur im Todesfall während der Laufzeit. Kein Sparanteil, deshalb günstig.","leben"],
+["Kapitallebensversicherung","Zahlt im Todesfall oder bei Ablauf. Verbindet Todesfallschutz und Sparen. Für Neuverträge seit 2005 steuerlich weniger attraktiv.","leben"],
+["Restschuldversicherung","Sichert einen Kredit bei Tod, oft auch Arbeitsunfähigkeit oder Arbeitslosigkeit ab.","leben"],
+["Sterbegeldversicherung","Kleine Lebensversicherung zur Deckung der Bestattungskosten.","leben"],
+["Fallende Versicherungssumme","Die Todesfallsumme sinkt mit der Laufzeit, passend zur Restschuld eines Kredits.","leben"],
+["Überkreuzversicherung","Partner A versichert das Leben von B und umgekehrt. Vermeidet Erbschaftsteuer, vor allem bei unverheirateten Paaren.","leben"],
+["Private Rentenversicherung","Zahlt eine lebenslange Rente oder wahlweise eine Kapitalabfindung. Sichert das Langlebigkeitsrisiko ab.","leben"],
+["Aufgeschobene Rentenversicherung","Beitragszahlung über viele Jahre, die Rente beginnt erst später.","leben"],
+["Sofortrente","Gegen Einmalbeitrag beginnt die Rentenzahlung sofort.","leben"],
+["Rentengarantiezeit","Stirbt die versicherte Person, läuft die Rente bis zum Ende dieser Zeit an die Hinterbliebenen weiter.","leben"],
+["Beitragsrückgewähr","Bei Tod vor Rentenbeginn werden die eingezahlten Beiträge zurückgezahlt.","leben"],
+["Kapitalwahlrecht","Recht, statt der Rente eine einmalige Kapitalauszahlung zu wählen.","leben"],
+["Fondsgebundene Rentenversicherung","Die Sparbeiträge fließen in Investmentfonds. Höhere Chancen, aber der Kunde trägt das Anlagerisiko.","leben"],
+["Indexpolice","Die Überschüsse werden an die Entwicklung eines Index gekoppelt, mit Garantie für das eingezahlte Kapital.","leben"],
+["Höchstrechnungszins","Maximaler Garantiezins für neue Lebensversicherungen. Seit 1. Januar 2025 1,0 %.","leben"],
+["Überschussbeteiligung","Anteil des Kunden an den Gewinnen des Versicherers aus Kapitalanlage, Risiko und Kosten. Nicht garantiert.","leben"],
+["Bewertungsreserven","Differenz zwischen Markt- und Buchwert der Kapitalanlagen. Kunden werden bei Vertragsende zur Hälfte beteiligt.","leben"],
+["Protektor","Sicherungsfonds für Lebensversicherer. Übernimmt Verträge, wenn ein Versicherer insolvent wird.","leben"],
+["Rückkaufswert","Betrag, den der Kunde bei Kündigung erhält. Liegt in den ersten Jahren oft unter den Beiträgen.","leben"],
+["Zillmerung","Verrechnung der Abschlusskosten mit den ersten Beiträgen. Gesetzlich müssen sie auf mindestens 5 Jahre verteilt werden (§ 169 VVG).","leben"],
+["Stornoabzug","Abzug vom Rückkaufswert bei Kündigung. Muss vereinbart, beziffert und angemessen sein.","leben"],
+["Beitragsfreistellung","Der Vertrag läuft ohne weitere Beiträge mit reduzierter Leistung weiter. Alternative zur Kündigung.","leben"],
+["Policendarlehen","Darlehen des Versicherers in Höhe eines Teils des Rückkaufswerts, ohne den Vertrag zu kündigen.","leben"],
+["Dynamik","Regelmäßige Erhöhung von Beitrag und Leistung ohne neue Gesundheitsprüfung, z. B. zum Ausgleich der Inflation.","leben"],
+["Berufsunfähigkeitsversicherung","Zahlt eine Rente, wenn die versicherte Person ihren zuletzt ausgeübten Beruf voraussichtlich mindestens 6 Monate zu mindestens 50 % nicht mehr ausüben kann.","leben"],
+["Prognosezeitraum","Zeitraum, für den die Berufsunfähigkeit voraussichtlich bestehen muss. In guten Tarifen 6 Monate.","leben"],
+["Abstrakte Verweisung","Der Versicherer verweist auf einen anderen Beruf, den der Versicherte ausüben könnte, auch wenn er ihn nicht ausübt. Gute Tarife verzichten darauf.","leben"],
+["Konkrete Verweisung","Der Versicherer verweist auf einen tatsächlich ausgeübten, vergleichbaren Beruf mit ähnlichem Einkommen und Ansehen.","leben"],
+["Nachversicherungsgarantie","Erhöhung der Leistung ohne neue Gesundheitsprüfung bei bestimmten Ereignissen wie Heirat, Geburt oder Immobilienkauf.","leben"],
+["AU-Klausel","Leistung aus der BU bei längerer Arbeitsunfähigkeit (Krankschreibung), zeitlich begrenzt, ohne Nachweis der Berufsunfähigkeit.","leben"],
+["Leistungsdynamik","Garantierte jährliche Steigerung einer laufenden BU-Rente.","leben"],
+["Erwerbsunfähigkeitsversicherung","Leistet erst, wenn der Versicherte praktisch keine Tätigkeit mehr ausüben kann. Günstiger, aber schwächer als die BU.","leben"],
+["Grundfähigkeitsversicherung","Zahlt eine Rente bei Verlust bestimmter Fähigkeiten wie Sehen, Gehen, Treppensteigen oder Hände gebrauchen.","leben"],
+["Dread-Disease-Versicherung","Schwere-Krankheiten-Versicherung. Einmalzahlung bei Diagnose z. B. von Krebs, Herzinfarkt oder Schlaganfall.","leben"],
+["Sterbetafel","Statistische Übersicht der Sterbewahrscheinlichkeiten. Grundlage für die Beitragsberechnung in der Lebensversicherung.","leben"],
+
+/* ---------- Kranken & Pflege ---------- */
+["GKV","Gesetzliche Krankenversicherung. Beitrag nach Einkommen, Sachleistungsprinzip, Familienversicherung.","kv"],
+["PKV","Private Krankenversicherung. Beitrag nach Eintrittsalter, Gesundheit und Tarif. Für Selbstständige, Beamte und Angestellte über der Versicherungspflichtgrenze.","kv"],
+["Zusatzbeitrag","Kassenindividueller Beitrag in der GKV zusätzlich zum allgemeinen Beitragssatz. Bei Erhöhung besteht ein Sonderkündigungsrecht.","kv"],
+["Sachleistungsprinzip","GKV: Der Patient erhält die Leistung, die Kasse rechnet direkt mit dem Arzt ab.","kv"],
+["Kostenerstattungsprinzip","PKV: Der Patient erhält die Rechnung, bezahlt sie und reicht sie beim Versicherer ein.","kv"],
+["GOÄ","Gebührenordnung für Ärzte. Grundlage der Abrechnung von Privatpatienten mit Steigerungsfaktoren.","kv"],
+["Altersrückstellungen","Teil der PKV-Beiträge, der angespart wird, um Beitragssteigerungen im Alter zu dämpfen.","kv"],
+["Übertragungswert","Teil der Altersrückstellungen (im Umfang des Basistarifs), der beim Wechsel des PKV-Versicherers mitgenommen werden kann.","kv"],
+["Basistarif","PKV-Tarif mit GKV-ähnlichen Leistungen und Annahmepflicht. Beitrag höchstens wie der GKV-Höchstbeitrag.","kv"],
+["Standardtarif","Sozialtarif der PKV für ältere Versicherte mit Verträgen vor 2009.","kv"],
+["Notlagentarif","Tarif für PKV-Versicherte mit Beitragsrückständen. Nur Notfall- und Akutversorgung.","kv"],
+["Kontrahierungszwang","Annahmepflicht, z. B. der PKV im Basistarif oder der Kfz-Haftpflichtversicherer.","kv"],
+["Beitragsrückerstattung (PKV)","Rückzahlung eines Teils der Beiträge, wenn im Jahr keine Rechnungen eingereicht wurden.","kv"],
+["Wartezeit (KV)","Zeit nach Vertragsbeginn ohne Leistung: allgemein 3 Monate, für Entbindung, Psychotherapie und Zahnersatz meist 8 Monate.","kv"],
+["Krankentagegeld","Ersetzt den Verdienstausfall bei Arbeitsunfähigkeit. Wichtig für Selbstständige und Angestellte mit Einkommen über der Beitragsbemessungsgrenze.","kv"],
+["Krankenhaustagegeld","Fester Betrag für jeden Tag im Krankenhaus, frei verwendbar.","kv"],
+["Ergänzungsversicherung","Private Zusatzversicherung für GKV-Versicherte, z. B. Zahn, stationär (Chefarzt, Einbettzimmer), ambulant oder Brille.","kv"],
+["Auslandsreisekrankenversicherung","Übernimmt Behandlungskosten im Ausland und einen medizinisch sinnvollen Rücktransport.","kv"],
+["Anwartschaftsversicherung","Sichert den Gesundheitszustand und ggf. das Eintrittsalter für einen späteren PKV-Tarif, z. B. bei Auslandsaufenthalt.","kv"],
+["Soziale Pflegeversicherung","Teilabsicherung für Pflegebedürftige. Pflege folgt Krankenversicherung: GKV-Versicherte in der sozialen, PKV-Versicherte in der privaten Pflegepflichtversicherung.","kv"],
+["Pflegegrad","Einstufung der Pflegebedürftigkeit von 1 bis 5 durch den Medizinischen Dienst nach dem Grad der Selbstständigkeit.","kv"],
+["Pflegegeld","Geldleistung der Pflegeversicherung bei Pflege durch Angehörige (ab Pflegegrad 2).","kv"],
+["Pflegesachleistung","Leistung für einen ambulanten Pflegedienst.","kv"],
+["Eigenanteil im Pflegeheim","Kosten, die Pflegebedürftige im Heim selbst tragen müssen, z. B. für Unterkunft, Verpflegung und Investitionskosten.","kv"],
+["Pflegetagegeld","Private Zusatzversicherung. Zahlt je nach Pflegegrad einen Tagessatz, frei verwendbar.","kv"],
+["Pflegekostenversicherung","Erstattet einen Teil der Pflegekosten, die die gesetzliche Pflegeversicherung nicht übernimmt, gegen Nachweis.","kv"],
+["Pflegerentenversicherung","Lebensversicherung, die bei Pflegebedürftigkeit eine Rente zahlt.","kv"],
+["Pflege-Bahr","Staatlich geförderte Pflegetagegeldversicherung mit 5 € Zulage pro Monat, ohne Gesundheitsprüfung.","kv"],
+
+/* ---------- Sach, Haftpflicht, Kfz & Unfall ---------- */
+["Verschuldenshaftung","Haftung für vorsätzlich oder fahrlässig verursachte Schäden (§ 823 BGB), unbegrenzt mit dem gesamten Vermögen.","sach"],
+["Gefährdungshaftung","Haftung ohne Verschulden für eine erlaubte, aber gefährliche Sache, z. B. Kfz-Halter (§ 7 StVG) oder Halter von Hunden und Pferden (§ 833 BGB).","sach"],
+["Privathaftpflichtversicherung","Prüft die Haftung, wehrt unberechtigte Ansprüche ab (passiver Rechtsschutz) und zahlt berechtigte Schadenersatzansprüche.","sach"],
+["Deckungssumme","Höchstbetrag, den der Versicherer pro Schadenfall zahlt. Empfehlung Privathaftpflicht: mindestens 10 Mio. € pauschal.","sach"],
+["Personenschaden","Verletzung oder Tod eines Menschen, inkl. Folgekosten wie Verdienstausfall und Schmerzensgeld.","sach"],
+["Sachschaden","Beschädigung oder Zerstörung einer Sache.","sach"],
+["Vermögensschaden","Unechter Vermögensschaden: Folge eines Personen- oder Sachschadens. Echter Vermögensschaden: reiner finanzieller Schaden ohne Personen- oder Sachschaden.","sach"],
+["Deliktunfähigkeit","Kinder unter 7 Jahren haften nicht, im fließenden Straßenverkehr unter 10 Jahren (§ 828 BGB). Viele Tarife zahlen trotzdem.","sach"],
+["Gefälligkeitsschaden","Schaden bei einer unentgeltlichen Hilfe, z. B. beim Umzug von Freunden. Oft nur versichert, wenn ausdrücklich eingeschlossen.","sach"],
+["Forderungsausfalldeckung","Zahlt, wenn der Versicherte von einem Dritten geschädigt wird und dieser nicht zahlen kann.","sach"],
+["Mietsachschaden","Schäden an gemieteten Räumen, z. B. Wasserflecken im Parkett. Baustein der Privathaftpflicht.","sach"],
+["Tierhalterhaftpflicht","Pflicht für Hunde in mehreren Bundesländern, in NRW für große und gefährliche Hunde. Halter haften verschuldensunabhängig.","sach"],
+["Haus- und Grundbesitzerhaftpflicht","Für vermietete Immobilien und unbebaute Grundstücke. Das selbst bewohnte Einfamilienhaus ist meist in der Privathaftpflicht enthalten.","sach"],
+["Bauherrenhaftpflicht","Sichert die Haftung des Bauherrn für Gefahren auf der Baustelle ab.","sach"],
+["Gewässerschadenhaftpflicht","Für Schäden durch auslaufende Stoffe, z. B. aus einem Öltank.","sach"],
+["Hausratversicherung","Versichert bewegliche Sachen im Haushalt zum Neuwert gegen Feuer, Leitungswasser, Einbruchdiebstahl, Raub, Vandalismus nach Einbruch sowie Sturm und Hagel.","sach"],
+["Versicherungsort","Ort, an dem Versicherungsschutz besteht, z. B. die im Vertrag genannte Wohnung.","sach"],
+["Außenversicherung","Hausrat ist vorübergehend auch außerhalb der Wohnung versichert, meist bis zu 3 Monate und begrenzt auf einen Teil der Versicherungssumme.","sach"],
+["Einbruchdiebstahl","Täter dringt in einen Raum ein, z. B. durch Aufbrechen oder mit falschem Schlüssel. Einfacher Diebstahl ohne Einbruch ist nicht versichert.","sach"],
+["Wertsachen","Schmuck, Bargeld, Kunst usw. In der Hausrat gelten dafür Entschädigungsgrenzen.","sach"],
+["Überspannungsschäden","Schäden an Elektrogeräten durch Blitz-Überspannung. Häufiger Zusatzbaustein.","sach"],
+["Wohngebäudeversicherung","Versichert Gebäude und fest eingebaute Bestandteile gegen Feuer, Leitungswasser sowie Sturm und Hagel.","sach"],
+["Feuer (Sachversicherung)","Umfasst Brand, Blitzschlag, Explosion, Implosion und Absturz eines Luftfahrzeugs.","sach"],
+["Leitungswasser","Wasser, das bestimmungswidrig aus Rohren, Heizung oder angeschlossenen Geräten austritt. Regen, Grund- und Hochwasser zählen nicht dazu.","sach"],
+["Sturm","Wetterbedingte Luftbewegung ab Windstärke 8.","sach"],
+["Elementarschäden","Überschwemmung, Starkregen, Rückstau, Erdbeben, Erdrutsch, Erdsenkung, Schneedruck, Lawinen, Vulkanausbruch. Muss meist zusätzlich versichert werden.","sach"],
+["Gleitender Neuwert","Versicherungswert in der Wohngebäudeversicherung, der über einen Baupreisindex jährlich angepasst wird. Schützt vor Unterversicherung.","sach"],
+["Wert 1914","Rechengröße für den gleitenden Neuwert. Der Gebäudewert wird in Preisen von 1914 angegeben und mit dem Index hochgerechnet.","sach"],
+["Glasversicherung","Ersetzt Bruchschäden an Glasscheiben, Ceranfeldern oder Duschkabinen.","sach"],
+["Feuerrohbauversicherung","Versichert ein Haus in der Bauphase gegen Feuer. Oft beitragsfrei als Vorstufe der Wohngebäudeversicherung.","sach"],
+["Bauleistungsversicherung","Versichert Schäden am Bau durch unvorhersehbare Ereignisse, z. B. Unwetter oder Vandalismus.","sach"],
+["Photovoltaikversicherung","Versichert eine Solaranlage gegen Technikschäden, Diebstahl und oft Ertragsausfall.","sach"],
+["Kfz-Haftpflicht","Gesetzlich vorgeschriebene Versicherung (Pflichtversicherungsgesetz) für Schäden, die mit dem Fahrzeug anderen zugefügt werden.","sach"],
+["Teilkasko","Kfz-Versicherung u. a. für Diebstahl, Brand, Glasbruch, Sturm, Hagel, Überschwemmung, Wildunfall und Marderbiss.","sach"],
+["Vollkasko","Umfasst die Teilkasko und zusätzlich selbst verschuldete Unfallschäden am eigenen Fahrzeug sowie Vandalismus.","sach"],
+["Schadenfreiheitsklasse (SF)","Je mehr schadenfreie Jahre, desto niedriger der Beitrag in Kfz-Haftpflicht und Vollkasko.","sach"],
+["Typklasse","Einstufung des Fahrzeugmodells nach der Schadenbilanz. Beeinflusst den Kfz-Beitrag.","sach"],
+["Regionalklasse","Einstufung nach Zulassungsbezirk anhand der Schadenhäufigkeit.","sach"],
+["GAP-Deckung","Zahlt bei Totalschaden oder Diebstahl eines geleasten oder finanzierten Autos die Differenz zwischen Wiederbeschaffungswert und Restschuld.","sach"],
+["Rabattschutz","Ein Schaden pro Jahr führt nicht zur Rückstufung der SF-Klasse.","sach"],
+["Fahrerschutz","Versichert Personenschäden des Fahrers, wenn er einen Unfall selbst verschuldet.","sach"],
+["Werkstattbindung","Reparatur nur in einer Partnerwerkstatt des Versicherers, dafür niedrigerer Beitrag.","sach"],
+["Schutzbrief","Pannen- und Unfallhilfe, z. B. Abschleppen und Mietwagen.","sach"],
+["Private Unfallversicherung","Zahlt bei unfallbedingter dauerhafter Invalidität, weltweit und rund um die Uhr, auch in der Freizeit.","sach"],
+["Unfallbegriff","Ein plötzlich von außen auf den Körper wirkendes Ereignis, durch das die versicherte Person unfreiwillig eine Gesundheitsschädigung erleidet.","sach"],
+["Gliedertaxe","Tabelle mit festen Invaliditätsgraden für den Verlust oder die Funktionsunfähigkeit bestimmter Körperteile und Sinnesorgane.","sach"],
+["Invaliditätsgrad","Prozentualer Grad der dauerhaften Beeinträchtigung. Leistung = Grundsumme × Invaliditätsgrad (ggf. mit Progression).","sach"],
+["Progression","Bei höheren Invaliditätsgraden steigt die Leistung überproportional, z. B. 225 % oder 350 % der Grundsumme bei 100 % Invalidität.","sach"],
+["Mitwirkung von Krankheiten","Haben Krankheiten an den Unfallfolgen mitgewirkt, wird die Leistung ab einem bestimmten Anteil gekürzt.","sach"],
+["Rechtsschutzversicherung","Übernimmt Anwalts-, Gerichts- und Gutachterkosten. Bausteine: Privat, Beruf, Verkehr, Wohnen.","sach"],
+["Wartezeit (Rechtsschutz)","Meist 3 Monate nach Vertragsbeginn, im Verkehrsrecht und bei Schadenersatz in der Regel keine.","sach"],
+["Freie Anwaltswahl","Recht des Versicherten, seinen Anwalt selbst auszuwählen.","sach"],
+
+/* ---------- Investmentfonds & KAGB ---------- */
+["KAGB","Kapitalanlagegesetzbuch. Regelt offene und geschlossene Investmentvermögen sowie Kapitalverwaltungsgesellschaften.","inv"],
+["Investmentvermögen","Organismus für gemeinsame Anlagen, der Kapital von Anlegern einsammelt und nach einer festgelegten Anlagestrategie investiert.","inv"],
+["Kapitalverwaltungsgesellschaft (KVG)","Gesellschaft, die Investmentvermögen verwaltet. Braucht eine Erlaubnis der BaFin.","inv"],
+["Verwahrstelle","Meist eine Bank. Verwahrt das Fondsvermögen und kontrolliert die KVG.","inv"],
+["Sondervermögen","Fondsvermögen, das getrennt vom Vermögen der KVG verwaltet wird. Bei Insolvenz der KVG ist es geschützt.","inv"],
+["OGAW","Organismus für gemeinsame Anlagen in Wertpapieren (UCITS). Offener Publikumsfonds nach EU-Richtlinie mit strengen Regeln zur Risikostreuung.","inv"],
+["AIF","Alternativer Investmentfonds. Jedes Investmentvermögen, das kein OGAW ist, z. B. offene Immobilienfonds oder geschlossene Fonds.","inv"],
+["Publikums-AIF","AIF, der auch Privatanlegern angeboten werden darf.","inv"],
+["Spezial-AIF","AIF nur für professionelle und semiprofessionelle Anleger.","inv"],
+["5-10-40-Regel","Anlagegrenze für OGAW: höchstens 5 % je Emittent; bis 10 % sind erlaubt, wenn alle Positionen über 5 % zusammen höchstens 40 % ausmachen.","inv"],
+["Aktienfonds","Investiert überwiegend in Aktien. Steuerlich gilt er als Aktienfonds bei mehr als 50 % Aktienquote.","inv"],
+["Rentenfonds","Investiert überwiegend in Anleihen.","inv"],
+["Mischfonds","Investiert in Aktien und Anleihen, oft mit flexibler Gewichtung.","inv"],
+["Geldmarktfonds","Investiert in kurzfristige Zinspapiere. Geringe Schwankungen, geringe Rendite.","inv"],
+["Dachfonds","Fonds, der in andere Fonds investiert. Breite Streuung, aber doppelte Kostenebene.","inv"],
+["Offener Immobilienfonds","Investiert in Gewerbeimmobilien. Für Käufe ab 2013: 24 Monate Mindesthaltedauer und 12 Monate Kündigungsfrist bei Rückgabe.","inv"],
+["ETF","Exchange Traded Fund. Börsengehandelter Indexfonds, der einen Index passiv und kostengünstig nachbildet.","inv"],
+["Physische Replikation","Der ETF kauft die Wertpapiere des Index, vollständig oder als repräsentative Auswahl (Sampling).","inv"],
+["Synthetische Replikation","Der ETF bildet den Index über ein Tauschgeschäft (Swap) mit einer Bank nach. Zusätzliches Kontrahentenrisiko, gesetzlich begrenzt.","inv"],
+["Tracking Difference","Tatsächliche Abweichung der ETF-Rendite von der Indexrendite über einen Zeitraum.","inv"],
+["Tracking Error","Schwankung der Abweichung zwischen ETF und Index.","inv"],
+["Wertpapierleihe","Der Fonds verleiht Wertpapiere gegen Gebühr und Sicherheiten.","inv"],
+["Aktiv gemanagter Fonds","Ein Fondsmanager wählt die Wertpapiere aus und will eine Benchmark schlagen. Höhere Kosten als ETFs.","inv"],
+["Benchmark","Vergleichsindex, an dem ein Fonds gemessen wird.","inv"],
+["Anteilswert (NAV)","Net Asset Value: Fondsvermögen abzüglich Verbindlichkeiten, geteilt durch die Zahl der Anteile.","inv"],
+["Ausgabeaufschlag","Einmalige Gebühr beim Kauf von Fondsanteilen. Ausgabepreis = Anteilswert + Ausgabeaufschlag.","inv"],
+["Rücknahmepreis","Preis, zu dem die KVG Anteile zurücknimmt. In der Regel der Anteilswert.","inv"],
+["Laufende Kosten (TER)","Total Expense Ratio. Jährliche Kosten des Fonds in Prozent, z. B. Verwaltung und Verwahrstelle. Transaktionskosten sind nicht enthalten.","inv"],
+["Performance Fee","Erfolgsabhängige Gebühr des Fondsmanagers bei Übertreffen einer Benchmark.","inv"],
+["Thesaurierend","Erträge werden im Fonds wieder angelegt.","inv"],
+["Ausschüttend","Erträge werden regelmäßig an die Anleger ausgezahlt.","inv"],
+["Basisinformationsblatt (PRIIPs)","Pflichtdokument mit höchstens 3 Seiten: Ziele, Risikoindikator, Performance-Szenarien und Kosten.","inv"],
+["Verkaufsprospekt","Ausführliches Dokument mit allen Angaben zu einem Fonds oder einer Vermögensanlage.","inv"],
+["Jahres- und Halbjahresbericht","Regelmäßige Berichte des Fonds über Vermögensaufstellung, Erträge und Kosten.","inv"],
+["Fondssparplan","Regelmäßige Einzahlung eines festen Betrags in einen Fonds.","inv"],
+["Vermögensverwaltung","Ein Verwalter trifft im Rahmen der vereinbarten Strategie selbst Anlageentscheidungen für den Kunden. Erfordert eine Erlaubnis nach dem WpIG, nicht § 34f.","inv"],
+["Robo-Advisor","Digitale, automatisierte Vermögensverwaltung, meist mit ETFs.","inv"],
+["ELTIF","European Long-Term Investment Fund. EU-Fonds für langfristige Investitionen, z. B. Infrastruktur oder Private Equity.","inv"],
+
+/* ---------- Geschlossene AIF & Vermögensanlagen ---------- */
+["Geschlossener AIF","Investmentvermögen ohne Rückgaberecht während der Laufzeit, z. B. für Immobilien, Schiffe oder erneuerbare Energien.","gesch"],
+["Kommanditgesellschaft (KG)","Übliche Rechtsform geschlossener Publikums-AIF, meist als GmbH & Co. KG.","gesch"],
+["Kommanditist","Gesellschafter einer KG, der nur bis zur Höhe seiner Haftsumme haftet. Anleger in geschlossenen AIF sind Kommanditisten.","gesch"],
+["Komplementär","Persönlich haftender Gesellschafter einer KG, oft eine GmbH.","gesch"],
+["Treuhandkommanditist","Hält die Beteiligung treuhänderisch für den Anleger und ist im Handelsregister eingetragen.","gesch"],
+["Haftsumme","Im Handelsregister eingetragener Betrag, bis zu dem ein Kommanditist haftet.","gesch"],
+["Wiederaufleben der Haftung","Werden Ausschüttungen gezahlt, die nicht durch Gewinne gedeckt sind, lebt die Haftung des Kommanditisten bis zur Haftsumme wieder auf (§ 172 Abs. 4 HGB).","gesch"],
+["Nachschusspflicht","Pflicht, später weiteres Kapital einzuzahlen. Bei geschlossenen Publikums-AIF ausgeschlossen.","gesch"],
+["Risikomischung","Geschlossene Publikums-AIF müssen grundsätzlich in mindestens drei Sachwerte investieren oder wirtschaftlich gestreut sein.","gesch"],
+["Leverage","Einsatz von Fremdkapital zur Hebelung der Rendite. Bei geschlossenen Publikums-AIF gesetzlich begrenzt.","gesch"],
+["Platzierungsphase","Zeitraum, in dem das Eigenkapital eines Fonds bei Anlegern eingesammelt wird.","gesch"],
+["Blind Pool","Die konkreten Anlageobjekte stehen bei Zeichnung noch nicht fest.","gesch"],
+["Zweitmarkt","Markt für den Verkauf von Anteilen an geschlossenen Fonds vor Laufzeitende. Oft nur mit Abschlag möglich.","gesch"],
+["Fungibilität","Handelbarkeit einer Anlage. Bei geschlossenen AIF und Vermögensanlagen gering.","gesch"],
+["Totalverlustrisiko","Risiko, das gesamte eingesetzte Kapital zu verlieren. Typisch für unternehmerische Beteiligungen.","gesch"],
+["Prognoserisiko","Risiko, dass die prognostizierten Erträge, z. B. Mieten oder Strompreise, nicht eintreten.","gesch"],
+["Anlagebedingungen","Regeln, in was ein AIF investieren darf. Sie werden von der BaFin genehmigt.","gesch"],
+["Vermögensanlagen","Nicht verbriefte Anlagen nach dem Vermögensanlagengesetz, z. B. Nachrangdarlehen, Genussrechte, Namensschuldverschreibungen, partiarische Darlehen und Direktinvestments.","gesch"],
+["VermAnlG","Vermögensanlagengesetz. Regelt Prospektpflicht und Anlegerschutz bei Vermögensanlagen.","gesch"],
+["Vermögensanlagen-Informationsblatt (VIB)","Kurzes Informationsblatt (höchstens 3 Seiten) mit den wichtigsten Angaben zu einer Vermögensanlage.","gesch"],
+["Nachrangdarlehen","Darlehen, das im Insolvenzfall erst nach allen anderen Gläubigern zurückgezahlt wird. Hohes Verlustrisiko.","gesch"],
+["Qualifizierter Rangrücktritt","Der Anleger darf keine Zahlung verlangen, wenn diese zur Insolvenz des Emittenten führen würde.","gesch"],
+["Genussrecht","Gewährt Vermögensrechte wie Gewinnbeteiligung, aber keine Mitgliedschafts- oder Stimmrechte. Oft mit Verlustbeteiligung.","gesch"],
+["Namensschuldverschreibung","Auf einen bestimmten Gläubiger ausgestelltes Schuldversprechen. Nicht börsengehandelt.","gesch"],
+["Partiarisches Darlehen","Darlehen, bei dem der Anleger statt eines festen Zinses einen Anteil am Gewinn erhält, ohne Verlustbeteiligung.","gesch"],
+["Direktinvestment","Anleger erwirbt direkt Eigentum an Sachwerten, z. B. Containern, die vermietet werden. Gilt als Vermögensanlage.","gesch"],
+["Crowdinvesting","Viele Anleger finanzieren gemeinsam ein Projekt, meist über Nachrangdarlehen auf Online-Plattformen.","gesch"],
+["Emittent","Herausgeber eines Wertpapiers oder einer Vermögensanlage.","gesch"],
+
+/* ---------- Wertpapiere & Börse ---------- */
+["Aktie","Anteil am Grundkapital einer Aktiengesellschaft. Gewährt Stimmrecht, Dividendenanspruch und Bezugsrecht.","wp"],
+["Stammaktie","Aktie mit Stimmrecht in der Hauptversammlung.","wp"],
+["Vorzugsaktie","Aktie meist ohne Stimmrecht, dafür mit Vorteilen bei der Dividende.","wp"],
+["Inhaberaktie","Aktie, deren Rechte der jeweilige Inhaber ausüben kann. Einfach übertragbar.","wp"],
+["Namensaktie","Aktie, deren Inhaber im Aktienregister der Gesellschaft eingetragen wird.","wp"],
+["Stückaktie","Aktie ohne Nennbetrag. Jede Aktie ist mit gleichem Anteil am Grundkapital beteiligt.","wp"],
+["Dividende","Gewinnausschüttung einer Aktiengesellschaft an ihre Aktionäre. Beschlossen von der Hauptversammlung.","wp"],
+["Hauptversammlung","Versammlung der Aktionäre. Beschließt u. a. über Gewinnverwendung und Entlastung von Vorstand und Aufsichtsrat.","wp"],
+["Bezugsrecht","Recht der Aktionäre, bei einer Kapitalerhöhung neue Aktien entsprechend ihrem Anteil zu erwerben. Schützt vor Verwässerung.","wp"],
+["Kapitalerhöhung","Ausgabe neuer Aktien, um der Gesellschaft Eigenkapital zuzuführen.","wp"],
+["Aktiensplit","Teilung einer Aktie in mehrere, z. B. 1:4. Der Kurs sinkt entsprechend, der Wert für den Aktionär bleibt gleich.","wp"],
+["Marktkapitalisierung","Börsenwert eines Unternehmens: Aktienkurs × Anzahl der Aktien.","wp"],
+["KGV","Kurs-Gewinn-Verhältnis: Aktienkurs ÷ Gewinn je Aktie. Kennzahl zur Bewertung.","wp"],
+["Dividendenrendite","Dividende ÷ Aktienkurs × 100.","wp"],
+["Anleihe","Verzinsliches Wertpapier. Der Anleger leiht dem Emittenten Geld gegen Zinsen und Rückzahlung am Laufzeitende.","wp"],
+["Kupon","Nominalzins einer Anleihe, bezogen auf den Nennwert.","wp"],
+["Nennwert","Betrag, zu dem eine Anleihe am Laufzeitende zurückgezahlt wird.","wp"],
+["Effektivverzinsung","Tatsächliche Rendite einer Anleihe unter Berücksichtigung von Kaufkurs, Kupon und Restlaufzeit.","wp"],
+["Stückzinsen","Zinsen seit dem letzten Zinstermin, die der Käufer einer Anleihe an den Verkäufer zahlt.","wp"],
+["Zerobond","Nullkuponanleihe ohne laufende Zinsen. Ertrag aus der Differenz zwischen Kaufkurs und Rückzahlung.","wp"],
+["Floater","Anleihe mit variablem Zins, der regelmäßig an einen Referenzzins angepasst wird.","wp"],
+["Wandelanleihe","Anleihe mit dem Recht, sie in Aktien des Emittenten umzutauschen.","wp"],
+["Pfandbrief","Gedeckte Anleihe von Banken, besichert durch Hypotheken oder Staatskredite. Sehr sicher.","wp"],
+["Bundesanleihe","Anleihe der Bundesrepublik Deutschland, meist mit 10 oder 30 Jahren Laufzeit.","wp"],
+["Rating","Bonitätsnote einer Ratingagentur (z. B. S&P, Moody's, Fitch) von AAA (beste) bis D (Zahlungsausfall).","wp"],
+["Investment Grade","Anleihen mit guter Bonität, bei S&P von AAA bis BBB-.","wp"],
+["High Yield","Hochzinsanleihen mit schlechterem Rating unterhalb von BBB-. Höhere Rendite, höheres Ausfallrisiko.","wp"],
+["Duration","Durchschnittliche Kapitalbindungsdauer einer Anleihe. Maß für die Zinsempfindlichkeit des Kurses.","wp"],
+["Zinsänderungsrisiko","Steigen die Marktzinsen, fallen die Kurse bestehender Anleihen und umgekehrt.","wp"],
+["Emittentenrisiko","Risiko, dass der Herausgeber eines Wertpapiers zahlungsunfähig wird. Besonders bei Anleihen und Zertifikaten.","wp"],
+["Zertifikat","Schuldverschreibung einer Bank, deren Wert von einem Basiswert abhängt. Kein Sondervermögen, daher Emittentenrisiko.","wp"],
+["Derivat","Finanzinstrument, dessen Wert von einem Basiswert abgeleitet ist, z. B. Optionen, Futures, Swaps.","wp"],
+["Option","Recht, einen Basiswert zu einem festgelegten Preis zu kaufen (Call) oder zu verkaufen (Put).","wp"],
+["Optionsschein","Verbrieftes Optionsrecht mit Hebelwirkung. Totalverlust möglich.","wp"],
+["Future","Unbedingtes Termingeschäft: Pflicht, einen Basiswert zu einem festen Preis an einem späteren Termin zu kaufen oder zu verkaufen.","wp"],
+["Hebel","Ein Derivat bewegt sich prozentual stärker als der Basiswert – in beide Richtungen.","wp"],
+["Index","Kennzahl, die die Entwicklung eines Marktes abbildet, z. B. DAX (40 deutsche Unternehmen) oder MSCI World (Industrieländer).","wp"],
+["Kursindex / Performanceindex","Kursindex: nur Kursentwicklung. Performanceindex (z. B. DAX): Dividenden werden rechnerisch reinvestiert.","wp"],
+["Limit-Order","Kauf- oder Verkaufsauftrag mit Preisgrenze.","wp"],
+["Stop-Loss-Order","Verkaufsauftrag, der bei Erreichen eines bestimmten Kurses ausgelöst wird, um Verluste zu begrenzen.","wp"],
+["Spread","Differenz zwischen Kauf- (Brief) und Verkaufskurs (Geld).","wp"],
+["Hausse / Baisse","Hausse: lang anhaltend steigende Kurse (Bullenmarkt). Baisse: fallende Kurse (Bärenmarkt).","wp"],
+["Einlagensicherung","Gesetzlicher Schutz für Bankguthaben bis 100.000 € je Kunde und Bank, in Sonderfällen höher.","wp"],
+["Anlegerentschädigung","Bei Pleite eines Wertpapierinstituts sichert die EdW 90 % der Forderungen, höchstens 20.000 € je Anleger.","wp"],
+["Depot","Konto zur Verwahrung von Wertpapieren.","wp"],
+
+/* ---------- Steuern ---------- */
+["Abgeltungsteuer","Pauschale Steuer von 25 % auf Kapitalerträge, plus 5,5 % Solidaritätszuschlag darauf und ggf. Kirchensteuer.","st"],
+["Kapitalertragsteuer","Erhebungsform der Abgeltungsteuer. Die Bank führt sie direkt an das Finanzamt ab.","st"],
+["Sparerpauschbetrag","1.000 € Kapitalerträge pro Person (2.000 € für zusammenveranlagte Ehepaare) bleiben jährlich steuerfrei.","st"],
+["Freistellungsauftrag","Auftrag an die Bank, Kapitalerträge bis zum Sparerpauschbetrag ohne Steuerabzug auszuzahlen.","st"],
+["NV-Bescheinigung","Nichtveranlagungsbescheinigung. Kapitalerträge bleiben ganz steuerfrei, wenn das Einkommen unter dem Grundfreibetrag liegt.","st"],
+["Günstigerprüfung","Das Finanzamt prüft, ob der persönliche Steuersatz niedriger als 25 % ist, und besteuert die Kapitalerträge dann damit. Muss beantragt werden.","st"],
+["Teilfreistellung","Steuerfreier Anteil der Fondserträge: Aktienfonds 30 %, Mischfonds 15 %, Immobilienfonds 60 % (Auslandsfokus 80 %).","st"],
+["Vorabpauschale","Mindestbesteuerung für Fonds: Wert am Jahresanfang × Basiszins × 70 %, höchstens der tatsächliche Wertzuwachs, abzüglich Ausschüttungen.","st"],
+["Basiszins","Von der Bundesbank ermittelter Zins, Grundlage der Vorabpauschale. Wird jährlich vom BMF veröffentlicht.","st"],
+["Investmentsteuergesetz","Regelt die Besteuerung von Investmentfonds und ihren Anlegern, u. a. Teilfreistellung und Vorabpauschale.","st"],
+["Verlustverrechnungstopf","Die Bank verrechnet Verluste automatisch mit Gewinnen. Verluste aus Aktienverkäufen nur mit Gewinnen aus Aktienverkäufen.","st"],
+["Quellensteuer","Steuer, die das Ausland auf Dividenden einbehält. Kann teilweise auf die deutsche Abgeltungsteuer angerechnet werden.","st"],
+["Einkünfte aus Kapitalvermögen","Zinsen, Dividenden, Fondserträge und Veräußerungsgewinne. Werden mit der Abgeltungsteuer besteuert.","st"],
+["Einkünfte aus Vermietung und Verpachtung","Mieteinnahmen abzüglich Werbungskosten. Werden mit dem persönlichen Steuersatz besteuert, auch bei geschlossenen Immobilien-KGs.","st"],
+["Sonderausgaben","Bestimmte private Ausgaben, die das zu versteuernde Einkommen mindern, z. B. Beiträge zur Basisrente oder zur Kranken- und Pflegeversicherung.","st"],
+["Nachgelagerte Besteuerung","Beiträge sind in der Ansparphase steuerlich entlastet, die Leistungen im Alter werden voll versteuert. Gilt z. B. für bAV, Basisrente und Altersvorsorgedepot.","st"],
+["Ertragsanteil","Steuerpflichtiger Anteil einer privaten Leibrente, abhängig vom Alter bei Rentenbeginn, z. B. 17 % bei Beginn mit 67.","st"],
+["Halbeinkünfteverfahren (LV)","Bei Kapitalauszahlung einer privaten Lebens- oder Rentenversicherung ist nur der halbe Ertrag steuerpflichtig, wenn der Vertrag mindestens 12 Jahre lief und die Auszahlung ab 62 erfolgt.","st"],
+["Grenzsteuersatz","Steuersatz auf den letzten verdienten Euro. Wichtig für die Wirkung von Steuerabzügen.","st"],
+["Durchschnittssteuersatz","Gezahlte Einkommensteuer im Verhältnis zum zu versteuernden Einkommen.","st"],
+["Ehegattensplitting","Das gemeinsame Einkommen wird halbiert, besteuert und verdoppelt. Vorteilhaft bei unterschiedlich hohen Einkommen.","st"],
+["Erbschaftsteuer-Freibeträge","Ehepartner 500.000 €, Kinder 400.000 €, Enkel 200.000 €. Erneut nutzbar alle 10 Jahre (auch für Schenkungen).","st"],
+["Spekulationsfrist Immobilien","Gewinne aus dem Verkauf vermieteter Immobilien sind nach 10 Jahren Haltedauer steuerfrei. Selbst genutzte Immobilien unter Bedingungen sofort.","st"],
+
+/* ---------- Volkswirtschaft ---------- */
+["Bruttoinlandsprodukt (BIP)","Wert aller im Inland in einem Jahr produzierten Waren und Dienstleistungen. Wichtigster Indikator der Wirtschaftsleistung.","vwl"],
+["Magisches Viereck","Ziele der Wirtschaftspolitik: stabiles Preisniveau, hoher Beschäftigungsstand, außenwirtschaftliches Gleichgewicht und angemessenes Wirtschaftswachstum.","vwl"],
+["Inflation","Anhaltender Anstieg des allgemeinen Preisniveaus. Das Geld verliert Kaufkraft.","vwl"],
+["Deflation","Anhaltender Rückgang des Preisniveaus. Kann zu Konsumzurückhaltung und Rezession führen.","vwl"],
+["Stagflation","Gleichzeitig stagnierende Wirtschaft und hohe Inflation.","vwl"],
+["Verbraucherpreisindex (VPI)","Misst die durchschnittliche Preisentwicklung eines Warenkorbs. Im Euroraum gilt der harmonisierte Index (HVPI).","vwl"],
+["EZB","Europäische Zentralbank. Zuständig für die Geldpolitik im Euroraum mit dem Ziel einer Inflation von 2 % mittelfristig.","vwl"],
+["Leitzins","Zinssatz, zu dem sich Banken bei der Zentralbank Geld leihen oder anlegen. Wichtigstes Instrument der Geldpolitik.","vwl"],
+["Expansive Geldpolitik","Senkung der Leitzinsen oder Kauf von Anleihen, um Kredite zu verbilligen und die Konjunktur anzukurbeln.","vwl"],
+["Restriktive Geldpolitik","Erhöhung der Leitzinsen, um die Inflation zu bremsen.","vwl"],
+["Quantitative Easing","Anleihekäufe der Zentralbank in großem Umfang, um die Zinsen zu senken.","vwl"],
+["Fiskalpolitik","Wirtschaftspolitik des Staates über Steuern und Staatsausgaben.","vwl"],
+["Konjunkturzyklus","Wiederkehrende Phasen: Aufschwung (Expansion), Boom, Abschwung und Rezession bzw. Depression.","vwl"],
+["Rezession","Wirtschaftlicher Rückgang, oft definiert als zwei Quartale in Folge mit sinkendem BIP.","vwl"],
+["Frühindikator","Kennzahl, die Konjunkturentwicklungen vorab anzeigt, z. B. Ifo-Geschäftsklima, Auftragseingänge, Einkaufsmanagerindex.","vwl"],
+["Spätindikator","Kennzahl, die der Konjunktur nachläuft, z. B. die Arbeitslosenquote.","vwl"],
+["Zinsstrukturkurve","Zeigt Zinsen in Abhängigkeit von der Laufzeit. Normal: lange Laufzeiten höher verzinst. Invers: kurze höher – oft ein Rezessionssignal.","vwl"],
+["Angebot und Nachfrage","Der Marktpreis bildet sich dort, wo angebotene und nachgefragte Menge übereinstimmen.","vwl"],
+["Wechselkurs","Preis einer Währung in einer anderen. Beeinflusst Exporte, Importe und Auslandsanlagen.","vwl"],
+["Handelsbilanz","Gegenüberstellung von Exporten und Importen von Waren.","vwl"],
+
+/* ---------- Anlageberatung & Risiko ---------- */
+["Magisches Dreieck der Geldanlage","Rendite, Sicherheit und Liquidität. Alle drei Ziele lassen sich nicht gleichzeitig maximal erreichen.","risk"],
+["Risikoindikator (SRI)","Gesamtrisikoindikator im Basisinformationsblatt von 1 (niedriges Risiko) bis 7 (hohes Risiko).","risk"],
+["Zielmarkt","Vom Hersteller festgelegte Kundengruppe, für die ein Produkt geeignet ist. Der negative Zielmarkt beschreibt, für wen es nicht geeignet ist.","risk"],
+["Product Governance","Pflicht, Produkte nur innerhalb des Zielmarkts zu vertreiben und Produkt und Vertrieb regelmäßig zu überprüfen.","risk"],
+["Risikotoleranz","Bereitschaft des Kunden, Schwankungen und Verluste zu akzeptieren.","risk"],
+["Verlusttragfähigkeit","Wie viel Verlust ein Kunde wirtschaftlich verkraften kann, ohne in Not zu geraten.","risk"],
+["Anlagehorizont","Zeitraum, für den Geld angelegt werden kann. Je länger, desto mehr Aktienrisiko ist vertretbar.","risk"],
+["Nachhaltigkeitspräferenzen","Müssen seit 2022 in der Anlageberatung abgefragt werden: Mindestanteil nach Taxonomie, Mindestanteil nachhaltiger Investitionen oder Berücksichtigung negativer Auswirkungen (PAI).","risk"],
+["ESG","Environmental, Social, Governance – Kriterien für Umwelt, Soziales und gute Unternehmensführung.","risk"],
+["Offenlegungsverordnung (SFDR)","EU-Verordnung zur Nachhaltigkeitstransparenz. Artikel-8-Fonds bewerben ökologische oder soziale Merkmale, Artikel-9-Fonds haben nachhaltige Investitionen als Ziel.","risk"],
+["Taxonomie-Verordnung","EU-Klassifizierung, welche wirtschaftlichen Tätigkeiten als ökologisch nachhaltig gelten.","risk"],
+["Diversifikation","Streuung des Kapitals über Anlageklassen, Regionen, Branchen und Einzelwerte zur Risikominderung.","risk"],
+["Korrelation","Maß für den Gleichlauf zweier Anlagen von –1 bis +1. Niedrige Korrelation verbessert die Streuung.","risk"],
+["Systematisches Risiko","Marktrisiko, das alle Anlagen betrifft. Lässt sich durch Streuung nicht beseitigen.","risk"],
+["Unsystematisches Risiko","Unternehmens- oder branchenspezifisches Risiko. Lässt sich durch Streuung verringern.","risk"],
+["Klumpenrisiko","Zu hohe Konzentration auf eine Anlage, Branche oder Region.","risk"],
+["Volatilität","Schwankungsbreite eines Kurses, meist als Standardabweichung gemessen.","risk"],
+["Maximum Drawdown","Größter Wertverlust vom Höchststand bis zum Tiefpunkt in einem Zeitraum.","risk"],
+["Sharpe Ratio","Überrendite gegenüber einer risikolosen Anlage im Verhältnis zur Volatilität. Je höher, desto besser.","risk"],
+["Liquiditätsrisiko","Eine Anlage kann nicht oder nur mit Abschlag verkauft werden.","risk"],
+["Inflationsrisiko","Die Rendite liegt unter der Inflationsrate, real geht Kaufkraft verloren.","risk"],
+["Währungsrisiko","Verluste durch Wechselkursänderungen bei Anlagen in fremder Währung.","risk"],
+["Länderrisiko","Risiko durch politische oder wirtschaftliche Probleme eines Staates, z. B. Transferbeschränkungen.","risk"],
+["Asset Allocation","Aufteilung des Vermögens auf Anlageklassen wie Aktien, Anleihen, Immobilien und Liquidität.","risk"],
+["Rebalancing","Regelmäßige Rückführung des Depots auf die ursprünglich festgelegte Aufteilung.","risk"],
+["Cost-Average-Effekt","Bei regelmäßigen festen Sparraten werden bei niedrigen Kursen mehr, bei hohen weniger Anteile gekauft.","risk"],
+["Zinseszins","Auch die Erträge werden wieder verzinst. Kapital wächst exponentiell.","risk"],
+["72er-Regel","72 ÷ Zinssatz ≈ Jahre bis zur Verdopplung des Kapitals.","risk"],
+["Realzins","Nominalzins abzüglich Inflationsrate.","risk"],
+["Risikopyramide","Anlagen nach Risiko geordnet: unten sichere Basis (Tagesgeld), in der Mitte Anleihen und Fonds, oben spekulative Anlagen.","risk"],
+
+/* ---------- Kundenberatung ---------- */
+["Bedarfsanalyse","Erfassung der persönlichen und finanziellen Situation, der Ziele und der vorhandenen Absicherung. Grundlage jeder Beratung.","ber"],
+["Ganzheitliche Beratung","Betrachtung aller Finanzbereiche des Kunden: Absicherung, Vorsorge, Vermögen und Verbindlichkeiten.","ber"],
+["Offene Frage","W-Frage, die zum Erzählen einlädt, z. B. „Wie stellen Sie sich Ihren Ruhestand vor?“","ber"],
+["Geschlossene Frage","Frage, die mit Ja oder Nein beantwortet wird. Gut zur Bestätigung.","ber"],
+["Alternativfrage","Frage mit zwei Wahlmöglichkeiten, z. B. „Passt Ihnen Dienstag oder Donnerstag?“","ber"],
+["Suggestivfrage","Frage, die die Antwort vorgibt. Im Beratungsgespräch zu vermeiden.","ber"],
+["Aktives Zuhören","Zuwendung, Nachfragen und Zusammenfassen mit eigenen Worten. Zeigt Verständnis und vermeidet Missverständnisse.","ber"],
+["Einwandbehandlung","Professioneller Umgang mit Bedenken des Kunden: zuhören, nachfragen, ernst nehmen und Nutzen erklären.","ber"],
+["Ja-aber-Methode","Einwandbehandlung: dem Kunden teilweise zustimmen und dann einen neuen Aspekt einbringen.","ber"],
+["Bumerang-Methode","Einwandbehandlung: der Einwand wird zum Argument für das Produkt umgedeutet.","ber"],
+["Nutzenargumentation","Nicht das Produktmerkmal, sondern der konkrete Vorteil für den Kunden steht im Mittelpunkt.","ber"],
+["AIDA-Modell","Ablauf eines Verkaufsgesprächs: Attention (Aufmerksamkeit), Interest (Interesse), Desire (Wunsch), Action (Abschluss).","ber"],
+["Kaufsignal","Hinweis, dass der Kunde abschlussbereit ist, z. B. Fragen nach Details oder Vertragsbeginn.","ber"],
+["Cross-Selling","Verkauf weiterer Produkte aus anderen Bereichen an einen bestehenden Kunden, wenn Bedarf besteht.","ber"],
+["Up-Selling","Verkauf eines höherwertigen Produkts oder Tarifs.","ber"],
+["Lebensphasen","Heirat, Geburt, Hauskauf, Jobwechsel oder Ruhestand verändern den Absicherungs- und Vorsorgebedarf.","ber"],
+["Vier-Seiten-Modell","Nach Schulz von Thun hat jede Nachricht vier Seiten: Sachinhalt, Selbstoffenbarung, Beziehung und Appell.","ber"],
+["Nachbetreuung","Regelmäßiger Kontakt nach dem Abschluss, um Verträge an neue Lebensumstände anzupassen.","ber"],
+
+/* ---------- Immobilien & Finanzierung ---------- */
+["Annuitätendarlehen","Darlehen mit gleichbleibender Rate aus Zins und Tilgung. Der Zinsanteil sinkt, der Tilgungsanteil steigt.","immo"],
+["Sollzins","Vereinbarter Zinssatz eines Darlehens ohne Nebenkosten.","immo"],
+["Effektiver Jahreszins","Gesamtkosten eines Kredits pro Jahr inkl. Nebenkosten. Wichtigste Vergleichsgröße.","immo"],
+["Anfangstilgung","Tilgungssatz im ersten Jahr in Prozent der Darlehenssumme. Empfehlung mindestens 2 %.","immo"],
+["Zinsbindung","Zeitraum, für den der Zins fest vereinbart ist, z. B. 10 oder 15 Jahre.","immo"],
+["Restschuld","Offener Darlehensbetrag am Ende der Zinsbindung.","immo"],
+["Anschlussfinanzierung","Neues Darlehen oder Verlängerung für die Restschuld nach Ablauf der Zinsbindung.","immo"],
+["Forward-Darlehen","Sicherung des Zinses für eine Anschlussfinanzierung bis zu etwa 5 Jahre im Voraus, gegen einen Aufschlag.","immo"],
+["Sondertilgung","Zusätzliche Tilgung über die reguläre Rate hinaus, z. B. 5 % pro Jahr. Muss vereinbart werden.","immo"],
+["Sonderkündigungsrecht (§ 489 BGB)","Darlehen mit fester Zinsbindung sind 10 Jahre nach Vollauszahlung mit 6 Monaten Frist kündbar.","immo"],
+["Vorfälligkeitsentschädigung","Ausgleich an die Bank bei vorzeitiger Rückzahlung eines Darlehens während der Zinsbindung.","immo"],
+["Bereitstellungszinsen","Gebühr für noch nicht abgerufene Darlehensbeträge nach einer zinsfreien Zeit.","immo"],
+["Beleihungswert","Von der Bank ermittelter, vorsichtig angesetzter dauerhafter Wert der Immobilie.","immo"],
+["Beleihungsauslauf","Darlehen im Verhältnis zum Beleihungswert. Je niedriger, desto besser der Zins.","immo"],
+["Grundschuld","Pfandrecht an einem Grundstück zur Sicherung eines Darlehens. Nicht an eine bestimmte Forderung gebunden.","immo"],
+["Hypothek","Pfandrecht an einem Grundstück, das an eine bestimmte Forderung gebunden ist. Heute selten.","immo"],
+["Grundbuch","Öffentliches Register beim Amtsgericht. Bestandsverzeichnis und drei Abteilungen: I Eigentümer, II Lasten und Beschränkungen, III Grundpfandrechte.","immo"],
+["Auflassungsvormerkung","Eintrag im Grundbuch, der den Anspruch des Käufers auf Eigentumsübertragung sichert.","immo"],
+["Kaufnebenkosten","Grunderwerbsteuer (NRW 6,5 %), Notar und Grundbuch (ca. 2 %) und ggf. Makler.","immo"],
+["Bausparvertrag","Ansparphase mit niedrigen Zinsen, danach Anspruch auf ein zinsgünstiges Bauspardarlehen. Wohnungsbauprämie möglich.","immo"],
+["KfW-Förderung","Zinsgünstige Kredite und Zuschüsse der staatlichen KfW, z. B. für energieeffizientes Bauen, Sanierung und Wohneigentum für Familien.","immo"],
+["Instandhaltungsrücklage","Rücklage für Reparaturen und Modernisierung, Faustregel etwa 1 € pro m² und Monat.","immo"]
 ];
 
 const LINKS = [
@@ -708,7 +1201,7 @@ const GEN=[
 
 /* ================= SPEICHER ================= */
 const KEY="finanzakademie_v1";
-let S={read:{},best:{},links:[],stats:{},wrong:{},days:[],calc:{r:0,n:0},exams:[]};
+let S={read:{},best:{},links:[],stats:{},wrong:{},days:[],calc:{r:0,n:0},exams:[],known:{},gf:{x:"alle",c:""}};
 try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x)S=Object.assign(S,x);}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 
@@ -751,7 +1244,7 @@ function home(){
    ${TOPICS.map(t=>`<a class="tile ${t.hl?"hl":""}" href="#/t/${t.id}"><span class="ic">${t.ic}</span><b>${t.title}</b><small>${t.sub}</small><div class="bar"><i style="width:${topicPct(t)}%"></i></div></a>`).join("")}
    <a class="tile" href="#/rechner"><span class="ic">🧮</span><b>Rechner</b><small>Sparplan, Zulagen, Rentenlücke, Kredit</small></a>
    <a class="tile wide hl" href="#/links"><span class="ic">🔗</span><div><b>Nützliche Links</b><br><small>Live-Rechner für ETF-Sparplan, Altersvorsorgedepot, Rente</small></div></a>
-   <a class="tile" href="#/karten"><span class="ic">🃏</span><b>Karteikarten</b><small>Begriffe üben</small></a>
+   <a class="tile" href="#/glossar"><span class="ic">🃏</span><b>Glossar & Karteikarten</b><small>${GLOSSAR.length} Fachbegriffe §34d/§34f</small></a>
    <a class="tile" href="#/rechnen"><span class="ic">✏️</span><b>Rechentrainer</b><small>Unbegrenzt Rechenaufgaben</small></a>
   </div>
   <p class="foot">Lern-App zur Weiterbildung, keine Anlage-, Steuer- oder Rechtsberatung.<br>Inhalte Stand: Oktober 2026.<br><a href="#" id="reset" style="color:var(--muted)">Fortschritt zurücksetzen</a></p>`;
@@ -961,29 +1454,81 @@ function rechnen(){
 }
 
 /* Glossar & Karteikarten */
+function gFilter(){
+  const f=S.gf||{x:"alle",c:""};
+  return GLOSSAR.filter(g=>{const C=GCATS[g[2]];
+    if(f.c)return g[2]===f.c;
+    if(f.x==="alle")return true;
+    return C.x===f.x||C.x==="beide";});
+}
 function glossar(){
   setTitle("Glossar",false);
+  S.gf=S.gf||{x:"alle",c:""};
+  const xs=[["alle","Alle"],["34d","§34d"],["34f","§34f"]];
+  const catsFor=x=>Object.entries(GCATS).filter(([k,C])=>x==="alle"||C.x===x||C.x==="beide");
   V.innerHTML=`<input id="gs" placeholder="Begriff suchen …" autocomplete="off">
-  <a class="btn sec block" href="#/karten">🃏 Als Karteikarten üben</a>
-  <dl class="gl card" id="gl"></dl>`;
-  const draw=f=>{f=f.toLowerCase();$("#gl").innerHTML=GLOSSAR.filter(g=>(g[0]+g[1]).toLowerCase().includes(f)).map(g=>`<dt>${g[0]}</dt><dd>${g[1]}</dd>`).join("")||"<p class='muted'>Kein Treffer.</p>";};
-  draw("");$("#gs").oninput=e=>draw(e.target.value);
+  <div style="margin:10px 0 4px">${xs.map(([k,n])=>`<button class="chip ${S.gf.x===k?"on":""}" data-x="${k}">${n}</button>`).join("")}</div>
+  <select id="gc"><option value="">Alle Gebiete</option>${catsFor(S.gf.x).map(([k,C])=>`<option value="${k}" ${S.gf.c===k?"selected":""}>${C.n}</option>`).join("")}</select>
+  <a class="btn block" id="gk" href="#/karten" style="margin-top:10px"></a>
+  <p class="muted small" id="gn"></p>
+  <div id="gl"></div>`;
+  const draw=()=>{
+    const f=$("#gs").value.toLowerCase().trim();
+    const base=gFilter();
+    const list=f?GLOSSAR.filter(g=>(g[0]+" "+g[1]).toLowerCase().includes(f)):base;
+    const known=base.filter(g=>S.known&&S.known[g[0]]).length;
+    $("#gk").textContent=`🃏 ${base.length} Begriffe als Karteikarten üben`;
+    $("#gn").textContent=f?`${list.length} Treffer in allen ${GLOSSAR.length} Begriffen`:`${list.length} Begriffe · ${known} davon als gelernt markiert`;
+    let html="";
+    Object.entries(GCATS).forEach(([k,C])=>{
+      const items=list.filter(g=>g[2]===k).sort((a,b)=>a[0].localeCompare(b[0],"de"));
+      if(!items.length)return;
+      const badge=C.x==="beide"?"§34d · §34f":C.x==="allg"?"Allgemein":"§"+C.x;
+      html+=`<h3>${C.n} <span class="chip" style="font-size:11px;padding:3px 8px;vertical-align:middle">${badge}</span></h3><dl class="gl card">`+
+        items.map(g=>`<dt>${S.known&&S.known[g[0]]?"✅ ":""}${esc(g[0])}</dt><dd>${esc(g[1])}</dd>`).join("")+`</dl>`;
+    });
+    $("#gl").innerHTML=html||"<p class='muted'>Kein Treffer.</p>";
+  };
+  V.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>{S.gf={x:b.dataset.x,c:""};save();glossar();});
+  $("#gc").onchange=e=>{S.gf.c=e.target.value;save();draw();};
+  $("#gs").oninput=draw;
+  draw();
 }
 let K=null;
-function karten(){
+function karten(onlyNew){
   setTitle("Karteikarten",true);
-  K={list:shuffle(GLOSSAR),i:0};drawK();
+  S.known=S.known||{};
+  const base=gFilter();
+  if(onlyNew===undefined)onlyNew=true;
+  let deck=base.filter(g=>!onlyNew||!S.known[g[0]]);
+  K={base,deck:shuffle(deck),onlyNew,done:0};
+  drawK();
 }
 function drawK(){
-  const g=K.list[K.i];
-  V.innerHTML=`<p class="muted small" style="text-align:center">Karte ${K.i+1} von ${K.list.length} · Tippen zum Umdrehen</p>
-  <div class="flip" id="fl"><div class="in"><div class="fa">${g[0]}</div><div class="fb">${g[1]}</div></div></div>
-  <div class="row"><button class="btn sec" id="kp">‹ Zurück</button><button class="btn" id="kn">Weiter ›</button></div>
-  <button class="btn sec block" id="kmix">🔀 Neu mischen</button>`;
+  const f=S.gf||{x:"alle",c:""};
+  const label=f.c?GCATS[f.c].n:(f.x==="alle"?"Alle Gebiete":"§"+f.x);
+  const known=K.base.filter(g=>S.known[g[0]]).length,pct=Math.round(known/K.base.length*100);
+  if(!K.deck.length){
+    V.innerHTML=`<div class="card" style="text-align:center">${ringSvg(pct)}<h2>Stapel geschafft! 🎉</h2><p>${label}: ${known} von ${K.base.length} Begriffen gelernt.</p></div>
+    <button class="btn block" id="kall">Alle ${K.base.length} Karten nochmal üben</button>
+    <a class="btn sec block" href="#/glossar">Anderes Gebiet wählen</a>
+    ${known?`<button class="btn sec block" id="kreset">Lernstand für dieses Gebiet zurücksetzen</button>`:""}`;
+    $("#kall").onclick=()=>karten(false);
+    if($("#kreset"))$("#kreset").onclick=()=>{if(confirm("Gelernt-Markierungen für dieses Gebiet löschen?")){K.base.forEach(g=>delete S.known[g[0]]);save();karten(true);}};
+    return;
+  }
+  const g=K.deck[0],C=GCATS[g[2]];
+  V.innerHTML=`<p class="muted small" style="text-align:center;margin:0">${label} · noch ${K.deck.length} Karte${K.deck.length===1?"":"n"} im Stapel</p>
+  <div class="bar" style="margin:6px 0"><i style="width:${pct}%"></i></div>
+  <p class="muted small" style="text-align:center;margin:0">${known} von ${K.base.length} gelernt · Tippen zum Umdrehen</p>
+  <div class="flip" id="fl"><div class="in"><div class="fa"><div>${esc(g[0])}<div style="font-size:12px;font-weight:400;opacity:.8;margin-top:10px">${C.n}</div></div></div><div class="fb">${esc(g[1])}</div></div></div>
+  <div class="row"><button class="btn sec" id="kn">↻ Nochmal</button><button class="btn" id="ky" style="background:var(--ok)">✓ Kann ich</button></div>
+  <div class="row" style="margin-top:8px"><a class="btn sec" href="#/glossar">Gebiet wählen</a>
+  <button class="btn sec" id="kmode">${K.onlyNew?"Alle Karten":"Nur ungelernte"}</button></div>`;
   $("#fl").onclick=()=>$("#fl").classList.toggle("on");
-  $("#kp").onclick=()=>{K.i=(K.i-1+K.list.length)%K.list.length;drawK();};
-  $("#kn").onclick=()=>{K.i=(K.i+1)%K.list.length;drawK();};
-  $("#kmix").onclick=karten;
+  $("#kn").onclick=()=>{const c=K.deck.shift();const pos=Math.min(K.deck.length,3+Math.floor(Math.random()*4));K.deck.splice(pos,0,c);drawK();};
+  $("#ky").onclick=()=>{const c=K.deck.shift();S.known[c[0]]=1;save();markDay();drawK();};
+  $("#kmode").onclick=()=>karten(!K.onlyNew);
 }
 
 /* Links */
