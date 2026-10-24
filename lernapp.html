@@ -742,6 +742,7 @@ function home(){
   </div>
   <div class="grid" style="margin-bottom:6px">
    <a class="tile wide hl" href="#/tag"><span class="ic">☀️</span><div><b>Tagestraining</b><br><small>15 Fragen · 🔥 ${streak()} Tag${streak()===1?"":"e"} Serie</small></div></a>
+   <a class="tile wide hl" href="lernapp-avdepot.html"><span class="ic">📊</span><div><b>Altersvorsorgedepot: Folien &amp; Rechner</b><br><small>5 interaktive Folien, Zulagen und Wachstum Jahr für Jahr</small></div></a>
    <a class="tile" href="#/ihk/d34"><span class="ic">☂️</span><b>IHK §34d</b><small>Prüfungstraining Versicherung</small></a>
    <a class="tile" href="#/ihk/f34"><span class="ic">📊</span><b>IHK §34f</b><small>Prüfungstraining Finanzanlagen</small></a>
   </div>
@@ -764,6 +765,7 @@ function topic(id){
   V.innerHTML=`<p class="muted">${t.sub}</p>
   <div class="card" style="padding:0">
   <div class="list">${t.lessons.map((l,i)=>`<a href="#/l/${t.id}/${i}"><span class="chk ${S.read[t.id+":"+i]?"done":""}">${S.read[t.id+":"+i]?"✓":i+1}</span>${l.t}<span class="arr">›</span></a>`).join("")}</div></div>
+  ${t.id==="avd"?`<a class="btn block sec" href="lernapp-avdepot.html">📊 Folien &amp; Rechner (interaktiv)</a>`:""}
   <a class="btn block" href="#/quiz/${t.id}">🎯 Quiz starten (${t.quiz.length} Fragen)</a>
   ${S.best[t.id]!=null?`<p class="muted small" style="text-align:center">Bestes Ergebnis: ${S.best[t.id]} %</p>`:""}`;
 }
@@ -1027,6 +1029,7 @@ const CALCS=[
 function rechner(){
   setTitle("Rechner",false);
   V.innerHTML=`<div class="grid">${CALCS.map(c=>`<a class="tile" href="#/r/${c[0]}"><span class="ic">${c[1]}</span><b>${c[2]}</b><small>${c[3]}</small></a>`).join("")}
+  <a class="tile" href="lernapp-avdepot.html#rechner"><span class="ic">📊</span><b>AV-Depot Jahr für Jahr</b><small>Haltedauer, Immobilie, Wachstum pro Jahr</small></a>
   <a class="tile hl" href="#/links"><span class="ic">🔗</span><b>Online-Rechner</b><small>Links zu weiteren Live-Rechnern</small></a></div>
   <p class="foot">Alle Rechner sind vereinfachte Modellrechnungen ohne Steuern. Renditen sind nicht garantiert.</p>`;
 }
