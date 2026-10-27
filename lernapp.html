@@ -1686,7 +1686,8 @@ avd(){
   ${field("r","Rendite p. a.",6,"%")}${field("c","Kosten p. a.",0.5,"%")}</div>
   <label style="display:flex;align-items:center;margin-top:12px"><input type="checkbox" id="u"> Jünger als 25 (Berufseinsteigerbonus)</label>
   <div class="res" id="o"></div><div id="ch"></div></div>
-  <div class="box small">Regeln ab 2027: 50 % Zulage auf die ersten 360 €, 25 % auf 360–1.800 € Eigenbeitrag (max. 540 €), mind. 120 €/Jahr. Kinderzulage 1 € je Euro, max. 300 € je Kind. Vereinfachte Schätzung – die Kinderzulage gibt es nur, solange Kindergeld bezogen wird.</div>`;
+  <div class="box small">Regeln ab 2027: 50 % Zulage auf die ersten 360 €, 25 % auf 360–1.800 € Eigenbeitrag (max. 540 €), mind. 120 €/Jahr. Kinderzulage 1 € je Euro, max. 300 € je Kind. Vereinfachte Schätzung – die Kinderzulage gibt es nur, solange Kindergeld bezogen wird.</div>
+  <a class="btn block" href="lernapp-avdepot.html#rechner">📊 Ausführlicher Rechner mit Tabelle & PDF</a>`;
   bindCalc(()=>{
     const b=Math.max(0,num("a"))*12,kids=Math.max(0,Math.round(num("k"))),ok=b>=120;
     const g=ok?0.5*Math.min(b,360)+0.25*Math.max(0,Math.min(b,1800)-360):0;
