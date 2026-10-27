@@ -586,7 +586,7 @@ function calc(){
   const [g1,g2]=grund(E), eligKids=ages.filter(a=>a<18).length, k=kidZ(E,eligKids), b=(u25&&E>=120)?200:0, S=g1+g2+k+b;
   $('rE').textContent=eur(E);$('rG1').textContent=eur(g1);$('rG2').textContent=eur(g2);$('rK').textContent=eur(k);$('rB').textContent=eur(b);$('rS').textContent=eur(S);
   const tx=+$('tax').value, SA=Math.min(E,1800)+S, TV=E>=120?Math.max(0,SA*tx-S):0;
-  $('rT').textContent=tx?eur(TV):'–';
+  $('rT').textContent=!tx?'–':TV>0?eur(TV):'0 € (Zulagen sind höher)';
   $('tZul').textContent=eur(S);$('tQuote').textContent=E?Math.round(S/E*100)+' %':'–';$('tDepot').textContent=eur(E+S);
   let t='';
   if(E>0&&E<120) t='Unter 120 € im Jahr gibt es keine Zulage. Schon 10 € im Monat reichen.';
