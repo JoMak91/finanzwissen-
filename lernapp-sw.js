@@ -1,5 +1,5 @@
-const CACHE = "finanzakademie-v6";
-const CORE = ["lernapp.html", "lernapp-avdepot.html", "lernapp.webmanifest", "lernapp-icon-192.png", "lernapp-icon-512.png"];
+const CACHE = "finanzakademie-v7";
+const CORE = ["lernapp.html", "lernapp-avdepot.html", "lernapp-haushaltscheck.html", "lernapp.webmanifest", "lernapp-icon-192.png", "lernapp-icon-512.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));

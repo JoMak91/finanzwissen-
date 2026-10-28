@@ -3,29 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Haushaltscheck</title>
-<meta name="description" content="Fixkosten, Überschuss und Sparquote für Kunden">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<meta name="claude:viewport-fit-sides" content="cover">
-<meta name="theme-color" content="#1C2F4D">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<title>Haushaltscheck · Finanz-Akademie</title>
+<meta name="theme-color" content="#123c69">
+<link rel="manifest" href="lernapp.webmanifest">
+<link rel="icon" href="lernapp-icon-192.png">
+<link rel="apple-touch-icon" href="lernapp-icon-192.png">
+<meta name="description" content="Haushaltscheck für Kunden: Einnahmen, Fixkosten, Überschuss und Sparempfehlung – mit PDF">
 <style>
-/* Layout: Beratungsbogen in drei Schritten (Einnahmen → Kosten → Ergebnis) mit fester Ergebnisleiste unten */
+/* Haushaltscheck – Modul der Finanz-Akademie, offline-fähig (keine externen Dateien)
+   Layout: Beratungsbogen in drei Schritten (Einnahmen → Kosten → Ergebnis) mit fester Ergebnisleiste unten */
 :root{
   --bg:#EEF1F5; --surface:#FFFFFF; --sunk:#E2E7EF; --line:#CBD3DF;
-  --fg:#152033; --muted:#5B6678; --accent:#2B4C7E; --accent-ink:#FFFFFF; --head:#1C2F4D; --head-ink:#E8EEF7;
-  --brass:#B07A1F; --good:#2E7D4F; --warn:#B86E00; --crit:#B3261E; --info:#3D5F8C;
+  --fg:#152033; --muted:#5B6678; --accent:#123c69; --accent-ink:#FFFFFF; --head:#123c69; --head-ink:#E8EEF7;
+  --brass:#e0a526; --good:#2E7D4F; --warn:#B86E00; --crit:#B3261E; --info:#3D5F8C;
   --good-bg:#E2F1E7; --warn-bg:#FBEBD2; --crit-bg:#F8DEDB; --info-bg:#E1E9F4;
   --c-fix:#5B6C8F; --c-leben:#C98B1E; --c-spar:#2E7D4F; --c-plus:#7FC29B; --c-frei:#C9D3E0; --c-minus:#B3261E;
-  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
-  --f-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
-  --f-num:"IBM Plex Mono",ui-monospace,Menlo,monospace; --r:12px;
+  --f-display:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-num:ui-monospace,"SF Mono","Roboto Mono",Menlo,monospace; --r:12px;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0F141C; --surface:#171E2A; --sunk:#202A39; --line:#2E3A4C;
@@ -40,6 +35,11 @@
   --good-bg:#173226; --warn-bg:#3A2C12; --crit-bg:#3D1C1A; --info-bg:#1B2840;
   --c-fix:#8396BD; --c-leben:#D9A548; --c-spar:#5CC48A; --c-plus:#2F7A52; --c-frei:#3A475B; --c-minus:#F07167; color-scheme:dark;}
 *{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+[hidden]{display:none!important}
+.back{color:inherit;text-decoration:none;font-weight:600;font-size:.9rem;opacity:.85;white-space:nowrap}
+.pdfrow{display:flex;gap:8px;flex-wrap:wrap}
 html,body{background:var(--bg);color:var(--fg)}
 body{font-family:var(--f-body);font-size:15px;line-height:1.45;padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--head)}
@@ -143,12 +143,14 @@ input[type=range]{padding:0;min-height:28px;border:0;background:transparent;acce
 </style>
 </head>
 <body>
+
+
 <header class="top"><div class="top-in">
   <div class="brand">
     <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="3" y="5" width="28" height="24" rx="4" fill="none" stroke="currentColor" stroke-width="2" opacity=".55"/><path d="M8 22 L14 15 L19 19 L26 10" fill="none" stroke="#D9A548" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <div style="min-width:0"><h1>Haushaltscheck</h1><div class="sub" id="hSub">Fixkosten, Überschuss und Sparrate</div></div>
   </div>
-  <button class="btn ghost small" type="button" id="hBtn">Alle Kunden</button>
+  <a class="back" id="hBack" href="lernapp.html">‹ Finanz-Akademie</a><button class="btn ghost small" type="button" id="hBtn">‹ Alle Kunden</button>
 </div></header>
 <main id="app"></main>
 <div class="dock" id="dock" hidden><div class="dock-in">
@@ -248,7 +250,7 @@ const C=()=>S.customers.find(c=>c.id===cur);
 const app=document.getElementById('app');
 function render(){
   const c=C();
-  document.getElementById('hBtn').hidden = !c;
+  document.getElementById('hBtn').hidden = !c; document.getElementById('hBack').hidden = !!c;
   document.getElementById('dock').hidden = !c;
   document.getElementById('hSub').textContent = c ? `${c.name} · ${c.adults} Erw.${c.kids?`, ${c.kids} Kind${c.kids>1?'er':''}`:''}` : 'Fixkosten, Überschuss und Sparrate';
   if(!c){ app.innerHTML=vList(); return; }
@@ -256,6 +258,7 @@ function render(){
   <div class="steps" role="tablist" aria-label="Schritte"><button class="step" type="button" data-step="1" aria-current="${step===1?'step':'false'}"><b>1</b>Einnahmen</button><button class="step" type="button" data-step="2" aria-current="${step===2?'step':'false'}"><b>2</b>Kosten</button><button class="step" type="button" data-step="3" aria-current="${step===3?'step':'false'}"><b>3</b>Ergebnis</button></div>
   ${step===1?vIncome(c):step===2?vCosts(c):vResult(c)}`;
   dock();
+  const sb=document.getElementById('pdfShareBtn'); if(sb && canShareFiles()) sb.hidden=false;
 }
 function dock(){
   const c=C(); if(!c) return; const r=calc(c);
@@ -333,7 +336,9 @@ function vResult(c){
     </tbody></table></div><p class="small muted" style="margin:10px 0 0">Die 10 % sind die Untergrenze für Vermögensaufbau, 20 % das Ideal der 50/30/20-Regel.</p></section>
   <section class="card"><div class="sec-h"><h2>Gesprächspunkte</h2><span class="small muted">${P.length}</span></div><div class="points">${P.map(p=>`<div class="point ${p.sev}"><div class="stripe"></div><div><h3>${esc(p.t)}</h3><p>${esc(p.p)}</p></div></div>`).join('') || '<p class="muted">Keine Auffälligkeiten.</p>'}</div></section>
   <section class="card"><div class="sec-h"><h2>Kosten nach Bereichen</h2></div><div class="tablewrap"><table><thead><tr><th>Bereich</th><th>€ / Monat</th><th>Anteil</th></tr></thead><tbody>${GROUPS.filter(g=>r.byG[g.id]>0).map(g=>`<tr><td>${g.name}</td><td class="num">${eur(r.byG[g.id])}</td><td class="num">${r.net?pct(r.byG[g.id]/r.net):'–'}</td></tr>`).join('')}</tbody></table></div></section>
-  <div class="actions"><button class="btn soft" type="button" data-step="2">Zurück</button><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn soft" type="button" data-act="dup">Als Kopie anlegen</button><button class="btn" type="button" data-act="summary">Zusammenfassung kopieren</button></span></div>
+  <section class="card" style="display:flex;flex-direction:column;gap:10px"><h2>Als PDF speichern</h2><p class="small muted" style="margin:0">Alle Eingaben als Tabelle plus Grafiken zur Aufteilung und zu den Kosten – zum Mitgeben oder Verschicken an den Kunden.</p>
+    <div class="pdfrow"><button class="btn" type="button" data-act="pdf">📄 PDF speichern</button><button class="btn soft" type="button" data-act="pdfShare" id="pdfShareBtn" hidden>Teilen …</button></div><p class="small muted" id="pdfMsg" style="margin:0" hidden></p></section>
+  <div class="actions"><button class="btn soft" type="button" data-step="2">Zurück</button><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn soft" type="button" data-act="dup">Als Kopie anlegen</button><button class="btn soft" type="button" data-act="summary">Zusammenfassung kopieren</button></span></div>
   <div class="actions"><button class="btn danger small" type="button" data-act="delCust">Kunde löschen</button></div>`;
 }
 function summaryText(c){
@@ -375,6 +380,8 @@ document.addEventListener('click',e=>{
     Object.entries(P).forEach(([l,v])=>{ const ex=c.costs.find(x=>x.group==='leben'&&x.label===l); if(ex){ if(!+ex.amount){ex.amount=v;n++;} } else { c.costs.push({id:uid(),group:'leben',label:l,amount:v,iv:'m',provider:'',note:'Pauschale'}); n++; } });
     touch(); render(); toast(n?`${n} Pauschalen eingesetzt – bitte mit dem Kunden prüfen`:'Alle Positionen haben schon Werte'); }
   else if(act==='summary') copyOrShow(summaryText(c),'Zusammenfassung');
+  else if(act==='pdf') pdfSave(c);
+  else if(act==='pdfShare') pdfShare(c);
   else if(act==='dup'){ const d=JSON.parse(JSON.stringify(c)); d.id=uid(); d.name=c.name+' (Variante)'; d.sample=false; d.created=new Date().toISOString().slice(0,10); d.income.forEach(x=>x.id=uid()); d.costs.forEach(x=>x.id=uid()); S.customers.push(d); cur=d.id; step=2; save(); render(); toast('Kopie angelegt – ideal zum Durchspielen von Spar-Szenarien'); }
   else if(act==='delCust'){ if(t.dataset.armed){ S.customers=S.customers.filter(x=>x.id!==c.id); cur=null; save(); render(); toast('Kunde gelöscht'); } else { t.dataset.armed=1; t.textContent=`„${c.name}“ wirklich löschen?`; } }
   else if(act==='backup'){ try{ const b=new Blob([JSON.stringify({app:'haushaltscheck',version:1,data:S})],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='haushaltscheck-sicherung-'+new Date().toISOString().slice(0,10)+'.json'; document.body.appendChild(a); a.click(); a.remove(); toast('Sicherung wird gespeichert. Klappt das nicht, nutze „Sicherung kopieren“.'); }catch(err){ toast('Download hier nicht möglich – nutze „Sicherung kopieren“.'); } }
@@ -416,8 +423,171 @@ function updateSums(){ const c=C(); if(!c) return; const r=calc(c);
 document.getElementById('hBtn').onclick=()=>{ cur=null; render(); scrollTo(0,0); };
 document.getElementById('dGo').onclick=()=>{ step=3; render(); scrollTo(0,0); };
 document.getElementById('backupIn').onchange=e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>restore(r.result); r.readAsText(f); e.target.value=''; };
+const PDFW={
+ r:[278,278,355,556,556,889,667,191,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,278,278,584,584,584,556,1015,667,667,722,722,667,611,778,722,278,500,667,556,833,722,778,667,778,722,667,611,722,667,944,667,667,611,278,278,278,469,556,333,556,556,500,556,556,278,556,556,222,222,500,222,833,556,556,556,556,333,500,278,556,500,722,500,500,500,334,260,334,584],
+ b:[278,333,474,556,556,889,722,238,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,333,333,584,584,584,611,975,722,722,722,722,667,611,778,722,278,556,722,611,833,722,778,667,778,722,667,611,722,667,944,667,667,611,333,278,333,584,556,333,556,611,556,611,556,333,611,611,278,278,556,278,889,611,611,611,611,389,556,333,611,556,778,556,556,500,389,280,389,584]
+};
+const PDFX={'€':[128,556,556],'ä':[228,556,556],'ö':[246,556,611],'ü':[252,556,611],'Ä':[196,667,722],'Ö':[214,778,778],'Ü':[220,722,722],'ß':[223,611,611],'–':[150,556,556],'—':[151,1000,1000],'·':[183,278,278],'„':[132,333,500],'“':[147,333,500],'”':[148,333,500],'’':[146,222,278],'×':[215,584,584],'é':[233,556,556],'%':[37,889,889],'•':[149,350,350],'…':[133,1000,1000],'≈':[126,584,584]};
+function pdfNorm(s){return String(s).replace(/[   ]/g,' ');}
+function pdfW(s,size,bold){let w=0;for(const ch of pdfNorm(s)){const c=ch.charCodeAt(0);
+  if(PDFX[ch])w+=PDFX[ch][bold?2:1];else if(c>=32&&c<=126)w+=PDFW[bold?'b':'r'][c-32];else w+=556;}return w*size/1000;}
+function pdfEsc(s){let o='';for(const ch of pdfNorm(s)){const c=ch.charCodeAt(0);
+  if(ch==='\\'||ch==='('||ch===')')o+='\\'+ch;else if(c>=32&&c<=126)o+=ch;
+  else if(PDFX[ch])o+='\\'+PDFX[ch][0].toString(8).padStart(3,'0');else o+='?';}return o;}
+function pdfWrap(s,size,bold,maxW){const words=pdfNorm(s).split(' ');const lines=[];let cur='';
+  words.forEach(w=>{const t=cur?cur+' '+w:w;if(pdfW(t,size,bold)<=maxW||!cur)cur=t;else{lines.push(cur);cur=w;}});if(cur)lines.push(cur);return lines;}
+function hexRGB(h){h=h.replace('#','');return[0,2,4].map(i=>(parseInt(h.substr(i,2),16)/255).toFixed(3)).join(' ');}
+
+function PdfDoc(){
+  const W=595.28,H=841.89,pages=[];let c=null;
+  const api={W,H,
+    page(){c=[];pages.push(c);return api;},
+    fill(hex){c.push(hexRGB(hex)+' rg');return api;},
+    stroke(hex){c.push(hexRGB(hex)+' RG');return api;},
+    rect(x,y,w,h,hex){c.push('q '+hexRGB(hex)+' rg '+[x,H-y-h,w,h].map(v=>v.toFixed(2)).join(' ')+' re f Q');return api;},
+    line(x1,y1,x2,y2,hex,lw){c.push('q '+hexRGB(hex||'#D9DFE3')+' RG '+(lw||0.6)+' w '+x1.toFixed(2)+' '+(H-y1).toFixed(2)+' m '+x2.toFixed(2)+' '+(H-y2).toFixed(2)+' l S Q');return api;},
+    text(x,y,s,o){o=o||{};const size=o.size||10,bold=!!o.bold;let tx=x;
+      if(o.align==='right')tx=x-pdfW(s,size,bold);else if(o.align==='center')tx=x-pdfW(s,size,bold)/2;
+      c.push('BT /'+(bold?'F2':'F1')+' '+size+' Tf '+hexRGB(o.color||'#16263A')+' rg '+tx.toFixed(2)+' '+(H-y).toFixed(2)+' Td ('+pdfEsc(s)+') Tj ET');return api;},
+    build(){
+      const objs=[];const add=s=>{objs.push(s);return objs.length;};
+      const cat=add(''),pg=add(''),f1=add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>'),f2=add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
+      const kids=[];
+      pages.forEach(p=>{const st=p.join('\n');const cs=add('<< /Length '+st.length+' >>\nstream\n'+st+'\nendstream');
+        kids.push(add('<< /Type /Page /Parent '+pg+' 0 R /MediaBox [0 0 '+W+' '+H+'] /Resources << /Font << /F1 '+f1+' 0 R /F2 '+f2+' 0 R >> >> /Contents '+cs+' 0 R >>'));});
+      objs[cat-1]='<< /Type /Catalog /Pages '+pg+' 0 R >>';
+      objs[pg-1]='<< /Type /Pages /Kids ['+kids.map(k=>k+' 0 R').join(' ')+'] /Count '+kids.length+' >>';
+      let out='%PDF-1.4\n%âãÏÓ\n';const off=[];
+      objs.forEach((o,i)=>{off.push(out.length);out+=(i+1)+' 0 obj\n'+o+'\nendobj\n';});
+      const x=out.length;out+='xref\n0 '+(objs.length+1)+'\n0000000000 65535 f \n'+off.map(n=>String(n).padStart(10,'0')+' 00000 n \n').join('');
+      out+='trailer\n<< /Size '+(objs.length+1)+' /Root '+cat+' 0 R >>\nstartxref\n'+x+'\n%%EOF';
+      const bytes=new Uint8Array(out.length);for(let i=0;i<out.length;i++)bytes[i]=out.charCodeAt(i)&255;
+      return new Blob([bytes],{type:'application/pdf'});}
+  };
+  return api;
+}
+
+
+function canShareFiles(){ try{ return !!(navigator.canShare && navigator.canShare({files:[new File([''],'t.pdf',{type:'application/pdf'})]})); }catch(e){ return false; } }
+function niceStep(x){ if(x<=0) return 1; const p=Math.pow(10,Math.floor(Math.log10(x))); const n=x/p; return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*p; }
+function recoPlain(c,r){
+  const rate=c.rate||10;
+  if(r.net<=0) return ['Empfehlung','–','Noch keine Einnahmen erfasst.'];
+  if(r.free<0) return ['Fehlbetrag',eur0(-r.free)+' / Monat','Pro Monat wird mehr ausgegeben als eingenommen. Zuerst die Kosten um mindestens diesen Betrag senken, danach '+eur0(r.gap)+' für die '+rate+'-%-Sparquote einplanen.'];
+  if(r.gap<=0) return ['Sparziel '+rate+' %','erreicht','Es werden bereits '+eur0(r.saved)+' pro Monat ('+pct(r.rateNow)+') gespart. Zusätzlich frei: '+eur0(r.free)+' pro Monat.'];
+  if(r.free>=r.gap) return ['Empfohlene zusätzliche Sparrate',eur0(r.gap)+' / Monat','Damit werden '+rate+' % vom Netto gespart ('+eur0(r.target)+' insgesamt'+(r.saved>0?', davon '+eur0(r.saved)+' schon vorhanden':'')+'). Danach bleiben noch '+eur0(r.after)+' pro Monat frei.'];
+  return ['Mögliche Sparrate',eur0(r.free)+' / Monat','Für '+rate+' % ('+eur0(r.target)+') fehlen noch '+eur0(r.gap-r.free)+'. Die Sparquote läge damit bei '+pct(r.rateAfter)+'.'];
+}
+function buildPdf(c){
+  const r=calc(c), doc=PdfDoc(), M=40, CW=doc.W-2*M;
+  const NAVY='#123c69',INK='#16263A',MUT='#566578',LINE='#D9DFE3',SOFT='#E7EEF7';
+  const COL={fix:'#5B6C8F',leben:'#C98B1E',spar:'#2E7D4F',plus:'#7FC29B',frei:'#C9D3E0',minus:'#B3261E'};
+  const today=new Date().toLocaleDateString('de-DE');
+  let y=0,pageNo=0;
+  const footer=()=>{doc.line(M,doc.H-46,doc.W-M,doc.H-46,LINE);
+    pdfWrap('Vereinfachte Haushaltsrechnung auf Basis der Angaben des Kunden, Beträge auf den Monat umgerechnet. Keine Anlage-, Steuer- oder Rechtsberatung.',7.5,false,CW-60).forEach((l,i)=>doc.text(M,doc.H-34+i*10,l,{size:7.5,color:MUT}));
+    doc.text(doc.W-M,doc.H-34,'Seite '+pageNo,{size:7.5,color:MUT,align:'right'});};
+  const newPage=(first)=>{if(pageNo)footer();doc.page();pageNo++;
+    if(first){doc.rect(0,0,doc.W,92,NAVY);
+      doc.text(M,38,'Haushaltscheck – '+c.name,{size:17,bold:true,color:'#FFFFFF'});
+      doc.text(M,58,c.adults+' Erwachsene'+(c.kids?', '+c.kids+(c.kids>1?' Kinder':' Kind'):'')+'  ·  Erstellt am '+today,{size:10,color:'#C9D3E0'});
+      doc.text(M,75,'Einnahmen, Ausgaben und Sparempfehlung pro Monat',{size:10,color:'#C9D3E0'});
+      y=118;}
+    else{doc.text(M,40,'Haushaltscheck – '+c.name,{size:10,bold:true,color:NAVY});doc.line(M,48,doc.W-M,48,LINE);y=70;}};
+  const ensure=h=>{if(y+h>doc.H-60)newPage(false);};
+  const h2=t=>{ensure(48);doc.text(M,y,t,{size:13,bold:true,color:NAVY});y+=8;doc.line(M,y,doc.W-M,y,NAVY,1);y+=16;};
+  const para=(t,size,color,bold)=>{pdfWrap(t,size||9.5,bold,CW).forEach(l=>{ensure(14);doc.text(M,y,l,{size:size||9.5,color:color||INK,bold});y+=(size||9.5)*1.35;});};
+
+  newPage(true);
+  /* Kennzahlen-Kacheln */
+  const reco=recoPlain(c,r);
+  const tiles=[['Netto-Einnahmen',eur0(r.net),NAVY],['Ausgaben inkl. Sparen',eur0(r.spend+r.saved),NAVY],['Frei pro Monat',eur0(r.free),r.free<0?COL.minus:COL.spar],[reco[0].replace('Empfohlene zusätzliche ','Zusätzlich '),reco[1].replace(' / Monat',''),r.free<0?COL.minus:COL.spar]];
+  const tw=(CW-24)/4;
+  tiles.forEach((t,i)=>{const x=M+i*(tw+8);doc.rect(x,y,tw,48,SOFT);doc.text(x+9,y+22,t[1],{size:13,bold:true,color:t[2]});pdfWrap(t[0],7.5,false,tw-14).slice(0,2).forEach((l,j)=>doc.text(x+9,y+35+j*9,l,{size:7.5,color:MUT}));});
+  y+=64;
+
+  /* Grafik 1: Aufteilung des Nettoeinkommens */
+  h2('So verteilt sich das Netto-Einkommen');
+  const N=Math.max(r.net,r.spend+r.saved,1);
+  const segs=[['Fixkosten',r.fix,COL.fix],['Lebenshaltung',r.leben,COL.leben],['Spart bereits',r.saved,COL.spar],['Sparempfehlung',r.extra,COL.plus],['Frei danach',Math.max(0,r.after),COL.frei]];
+  if(r.free<0) segs.push(['Fehlbetrag',-r.free,COL.minus]);
+  let x0=M; segs.forEach(([l,v,col])=>{ if(v<=0) return; const w=v/N*CW; doc.rect(x0,y,w,24,col); x0+=w; });
+  y+=40;
+  const lw=CW/2;
+  segs.forEach(([l,v,col],i)=>{ const lx=M+(i%2)*lw, ly=y+Math.floor(i/2)*16; doc.rect(lx,ly-8,9,9,col); doc.text(lx+14,ly,l,{size:9}); doc.text(lx+lw-14,ly,eur0(v)+(r.net>0?'  ('+pct(v/r.net)+')':''),{size:9,bold:true,align:'right'}); });
+  y+=Math.ceil(segs.length/2)*16+12;
+
+  /* Sparempfehlung */
+  h2('Sparempfehlung');
+  ensure(50);
+  doc.text(M,y+6,reco[1],{size:20,bold:true,color:r.free<0?COL.minus:NAVY}); doc.text(doc.W-M,y+6,reco[0],{size:9,color:MUT,align:'right'}); y+=24;
+  para(reco[2],9.5,INK);
+  para('Notgroschen: '+eur0(+c.reserve||0)+' vorhanden, empfohlen sind 3–6 Monatsausgaben ('+eur0(r.reserveGoal[0])+' bis '+eur0(r.reserveGoal[1])+').',9.5,MUT);
+  y+=6;
+  const kz=[['Fixkostenquote',r.net?r.fix/r.net:0,'bis 50 %',0.5,0.6,false],['Wohnkosten inkl. Energie',r.net?r.byG.wohnen/r.net:0,'bis 35 %',0.35,0.4,false],['Kreditquote (ohne Hauskredit)',r.net?r.byG.kredite/r.net:0,'bis 5 %',0.05,0.15,false],['Sparquote heute',r.rateNow,'mind. '+(c.rate||10)+' %',(c.rate||10)/100,(c.rate||10)/200,true]];
+  ensure(20+kz.length*18);
+  doc.rect(M,y-11,CW,17,SOFT);[['Kennzahl',M+4,'l'],['Richtwert',M+300,'r'],['Ist',M+390,'r'],['Bewertung',doc.W-M-4,'r']].forEach(([t,x,a])=>doc.text(x,y,t,{size:8.5,bold:true,color:MUT,align:a==='r'?'right':undefined}));y+=17;
+  kz.forEach(([l,v,ref,g,b,inv])=>{ const st=inv?(v>=g?'gut':v>=b?'ausbaufähig':'zu niedrig'):(v<=g?'gut':v<=b?'erhöht':'kritisch'); const col=st==='gut'?COL.spar:(st==='kritisch'||st==='zu niedrig')?COL.minus:'#B86E00';
+    doc.text(M+4,y,l,{size:9.5}); doc.text(M+300,y,ref,{size:9.5,align:'right',color:MUT}); doc.text(M+390,y,pct(v),{size:9.5,bold:true,align:'right'}); doc.text(doc.W-M-4,y,st,{size:9.5,bold:true,color:col,align:'right'}); y+=5; doc.line(M,y,doc.W-M,y,LINE,0.4); y+=13; });
+  y+=8;
+
+  /* Grafik 2: Kosten nach Bereichen */
+  const gr=GROUPS.filter(g=>r.byG[g.id]>0);
+  if(gr.length){
+    h2('Ausgaben nach Bereichen (pro Monat)');
+    ensure(gr.length*20+10);
+    const mx=Math.max(...gr.map(g=>r.byG[g.id])); const LX=M+170, RW=CW-170-70;
+    gr.forEach(g=>{ const v=r.byG[g.id]; doc.text(M,y,g.name,{size:9}); doc.rect(LX,y-9,Math.max(1,v/mx*RW),11,g.saving?COL.spar:g.id==='leben'?COL.leben:COL.fix); doc.text(doc.W-M,y,eur0(v),{size:9,bold:true,align:'right'}); y+=20; });
+    y+=4;
+  }
+
+  /* Tabellen */
+  const cols=[['Position',M,'l'],['Zahlweise',M+300,'r'],['Betrag',M+395,'r'],['pro Monat',doc.W-M,'r']];
+  const thead=()=>{doc.rect(M,y-11,CW,17,SOFT);cols.forEach(([t,x,a])=>doc.text(a==='l'?x+4:x-4,y,t,{size:8.5,bold:true,color:MUT,align:a==='l'?undefined:'right'}));y+=17;};
+  const trow=(label,iv,amt,m,opt)=>{ opt=opt||{}; const lines=pdfWrap(label||'–',9,opt.bold,280); const h=lines.length*11+5; if(y+h>doc.H-60){newPage(false);thead();}
+    if(opt.fill) doc.rect(M,y-11,CW,h+1,opt.fill);
+    lines.forEach((l,i)=>doc.text(M+4,y+i*11,l,{size:9,bold:opt.bold,color:opt.color||INK}));
+    if(iv!=null) doc.text(M+296,y,iv,{size:9,align:'right',color:MUT});
+    if(amt!=null) doc.text(M+391,y,amt,{size:9,align:'right'});
+    if(m!=null) doc.text(doc.W-M-4,y,m,{size:9,bold:true,align:'right',color:opt.color||INK});
+    y+=h-5; doc.line(M,y,doc.W-M,y,LINE,0.4); y+=12; };
+  h2('Einnahmen (netto)');
+  ensure(40); thead();
+  c.income.filter(x=>+x.amount).forEach(x=>trow(x.label,IV[x.iv].l,eur(+x.amount),eur(mo(x))));
+  trow('Summe Einnahmen',null,null,eur(r.net),{bold:true,fill:'#E2F1E7'});
+  y+=8;
+  h2('Ausgaben und Sparen im Detail');
+  ensure(40); thead();
+  GROUPS.forEach(g=>{ const items=c.costs.filter(x=>x.group===g.id && +x.amount); if(!items.length) return;
+    trow(g.name,null,null,eur(r.byG[g.id]),{bold:true,fill:SOFT,color:NAVY});
+    items.forEach(x=>trow(x.label,IV[x.iv].l,eur(+x.amount),eur(mo(x)))); });
+  trow('Summe Ausgaben inkl. Sparen',null,null,eur(r.spend+r.saved),{bold:true,fill:'#FBEFE3'});
+  trow('Frei pro Monat',null,null,eur(r.free),{bold:true,fill:r.free<0?'#F8DEDB':'#E2F1E7',color:r.free<0?COL.minus:INK});
+  y+=8;
+
+  /* Gesprächspunkte */
+  const P=points(c,r);
+  if(P.length){ h2('Gesprächspunkte'); P.forEach(p=>{ ensure(30); doc.rect(M,y-9,4,4+11*pdfWrap(p.p,9,false,CW-14).length+3,p.sev==='crit'?COL.minus:p.sev==='warn'?'#B86E00':'#3D5F8C'); doc.text(M+12,y,p.t,{size:10,bold:true}); y+=13; pdfWrap(p.p,9,false,CW-14).forEach(l=>{ensure(12);doc.text(M+12,y,l,{size:9,color:MUT});y+=11;}); y+=7; }); }
+  if(c.note){ y+=4; para('Notiz: '+c.note,9,MUT); }
+  footer();
+  return doc.build();
+}
+function pdfFileName(c){ return 'Haushaltscheck_'+c.name.replace(/[^\wäöüÄÖÜß-]+/g,'_').replace(/^_+|_+$/g,'')+'_'+new Date().toISOString().slice(0,10)+'.pdf'; }
+function pdfMsg(t){ const el=document.getElementById('pdfMsg'); if(el){ el.textContent=t; el.hidden=false; } }
+function pdfSave(c){
+  try{ const blob=buildPdf(c), url=URL.createObjectURL(blob), a=document.createElement('a');
+    a.href=url; a.download=pdfFileName(c); document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),60000); pdfMsg('PDF gespeichert: '+a.download+' (Ordner „Downloads“)'); }
+  catch(e){ pdfMsg('Speichern hat nicht geklappt. Nutze „Teilen“ oder im Browser-Menü „Drucken → Als PDF speichern“.'); }
+}
+async function pdfShare(c){
+  try{ const f=new File([buildPdf(c)],pdfFileName(c),{type:'application/pdf'}); await navigator.share({files:[f],title:'Haushaltscheck – '+c.name}); }
+  catch(e){ if(e && e.name!=='AbortError') pdfSave(c); }
+}
+
 render();
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("lernapp-sw.js").catch(()=>{}));}
 </script>
-<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
 </body>
 </html>
+
