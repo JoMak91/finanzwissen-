@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Haushaltscheck</title>
+<meta name="description" content="Fixkosten, Überschuss und Sparquote für Kunden">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#1C2F4D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: Beratungsbogen in drei Schritten (Einnahmen → Kosten → Ergebnis) mit fester Ergebnisleiste unten */
+:root{
+  --bg:#EEF1F5; --surface:#FFFFFF; --sunk:#E2E7EF; --line:#CBD3DF;
+  --fg:#152033; --muted:#5B6678; --accent:#2B4C7E; --accent-ink:#FFFFFF; --head:#1C2F4D; --head-ink:#E8EEF7;
+  --brass:#B07A1F; --good:#2E7D4F; --warn:#B86E00; --crit:#B3261E; --info:#3D5F8C;
+  --good-bg:#E2F1E7; --warn-bg:#FBEBD2; --crit-bg:#F8DEDB; --info-bg:#E1E9F4;
+  --c-fix:#5B6C8F; --c-leben:#C98B1E; --c-spar:#2E7D4F; --c-plus:#7FC29B; --c-frei:#C9D3E0; --c-minus:#B3261E;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,Menlo,monospace; --r:12px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F141C; --surface:#171E2A; --sunk:#202A39; --line:#2E3A4C;
+  --fg:#E5EAF2; --muted:#98A3B5; --accent:#7EA6E0; --accent-ink:#0A1220; --head:#0B111A; --head-ink:#DDE5F1;
+  --brass:#D9A548; --good:#5CC48A; --warn:#E6A23C; --crit:#F07167; --info:#86A9DB;
+  --good-bg:#173226; --warn-bg:#3A2C12; --crit-bg:#3D1C1A; --info-bg:#1B2840;
+  --c-fix:#8396BD; --c-leben:#D9A548; --c-spar:#5CC48A; --c-plus:#2F7A52; --c-frei:#3A475B; --c-minus:#F07167; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0F141C; --surface:#171E2A; --sunk:#202A39; --line:#2E3A4C;
+  --fg:#E5EAF2; --muted:#98A3B5; --accent:#7EA6E0; --accent-ink:#0A1220; --head:#0B111A; --head-ink:#DDE5F1;
+  --brass:#D9A548; --good:#5CC48A; --warn:#E6A23C; --crit:#F07167; --info:#86A9DB;
+  --good-bg:#173226; --warn-bg:#3A2C12; --crit-bg:#3D1C1A; --info-bg:#1B2840;
+  --c-fix:#8396BD; --c-leben:#D9A548; --c-spar:#5CC48A; --c-plus:#2F7A52; --c-frei:#3A475B; --c-minus:#F07167; color-scheme:dark;}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.45;padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--head)}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+header.top{background:var(--head);color:var(--head-ink);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 18px}
+.top-in{max-width:880px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+h1{font-family:var(--f-display);font-weight:800;font-size:1.5rem;margin:0;letter-spacing:-.02em;line-height:1.1}
+.sub{font-size:.82rem;opacity:.75;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+main{max-width:880px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 24px;display:flex;flex-direction:column;gap:16px}
+.btn{font:inherit;font-weight:600;border:1px solid transparent;border-radius:999px;padding:9px 16px;cursor:pointer;background:var(--accent);color:var(--accent-ink);display:inline-flex;align-items:center;gap:6px;min-height:40px}
+.btn.ghost{background:transparent;color:inherit;border-color:currentColor}
+.btn.soft{background:var(--sunk);color:var(--fg)}
+.btn.danger{background:var(--crit);color:#fff}
+.btn.small{padding:6px 12px;min-height:32px;font-size:.85rem}
+.btn:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,.step:focus-visible,.chip:focus-visible,.cust:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.link{background:none;border:0;color:var(--accent);font:inherit;font-weight:600;cursor:pointer;padding:0}
+section.card{background:var(--surface);border-radius:var(--r);padding:16px;min-width:0}
+h2{font-family:var(--f-display);font-weight:600;font-size:1.12rem;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h3{font-size:.95rem;margin:0;font-weight:600}
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.muted{color:var(--muted)} .small{font-size:.84rem}
+.pos{color:var(--good)} .neg{color:var(--crit)}
+input,select,textarea{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 11px;min-height:42px;width:100%}
+textarea{min-height:110px;font-family:var(--f-num);font-size:.8rem}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.8rem;color:var(--muted);font-weight:600;min-width:0}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:460px){.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.banner{background:var(--info-bg);border-radius:var(--r);padding:12px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.9rem}
+.banner .grow{flex:1 1 220px;min-width:0}
+/* Schritte */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--sunk);padding:4px;border-radius:12px}
+.step{font:inherit;border:0;background:transparent;border-radius:9px;padding:8px 4px;cursor:pointer;color:var(--muted);font-weight:600;font-size:.86rem;display:flex;align-items:center;justify-content:center;gap:6px}
+.step b{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--line);color:var(--fg);font-size:.72rem}
+.step[aria-current="step"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px #0002}
+.step[aria-current="step"] b{background:var(--accent);color:var(--accent-ink)}
+/* Positionen */
+.grp{display:flex;flex-direction:column;gap:2px}
+.grp-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:4px 0 8px;border-bottom:1px solid var(--line)}
+.item{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,.9fr) minmax(0,1fr) 32px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.item input,.item select{min-height:38px;padding:7px 9px}
+.item .amt{text-align:right}
+@media (max-width:520px){.item{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 32px}.item .lbl{grid-column:1/-1}}
+.x{background:none;border:0;color:var(--muted);font-size:1.3rem;cursor:pointer;width:32px;height:32px;border-radius:8px}
+.x:hover{background:var(--sunk);color:var(--crit)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.chip{font:inherit;font-size:.8rem;border:1px dashed var(--line);background:transparent;color:var(--fg);border-radius:999px;padding:5px 11px;cursor:pointer}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.gsum{font-family:var(--f-num);font-variant-numeric:tabular-nums;font-size:.9rem}
+details.more summary{cursor:pointer;color:var(--muted);font-size:.84rem;margin-top:8px}
+/* Ergebnis */
+.hero{display:flex;flex-direction:column;gap:6px}
+.hero .big{font-family:var(--f-display);font-weight:800;font-size:2.3rem;line-height:1;letter-spacing:-.02em}
+.stackbar{display:flex;height:30px;border-radius:8px;overflow:hidden;background:var(--sunk);margin:12px 0 8px}
+.stackbar span{height:100%;min-width:2px}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px 14px;font-size:.84rem}
+.legend div{display:flex;justify-content:space-between;gap:8px;min-width:0}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;flex:none}
+.reco{border-radius:var(--r);padding:16px;background:var(--good-bg);display:flex;flex-direction:column;gap:6px}
+.reco.warn{background:var(--warn-bg)} .reco.crit{background:var(--crit-bg)}
+.reco .lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;color:var(--muted)}
+.reco .val{font-family:var(--f-display);font-weight:800;font-size:1.8rem;line-height:1.1}
+.ratio{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.ratio:last-child{border-bottom:0}
+.meter{grid-column:1/-1;height:8px;border-radius:4px;background:var(--sunk);position:relative;overflow:hidden}
+.meter i{position:absolute;inset:0 auto 0 0;border-radius:4px}
+.meter .mark{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--fg);opacity:.6}
+.pill{display:inline-block;font-size:.72rem;font-weight:600;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.pill.good{background:var(--good-bg);color:var(--good)} .pill.warn{background:var(--warn-bg);color:var(--warn)} .pill.crit{background:var(--crit-bg);color:var(--crit)} .pill.info{background:var(--info-bg);color:var(--info)}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal;min-width:140px}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.points{display:flex;flex-direction:column;gap:8px}
+.point{display:grid;grid-template-columns:6px minmax(0,1fr);gap:10px;background:var(--bg);border-radius:10px;padding:10px 10px 10px 0;overflow:hidden}
+.point .stripe{border-radius:0 4px 4px 0}
+.point.crit .stripe{background:var(--crit)} .point.warn .stripe{background:var(--warn)} .point.info .stripe{background:var(--info)}
+.point p{margin:2px 0 0;font-size:.85rem;color:var(--muted)}
+input[type=range]{padding:0;min-height:28px;border:0;background:transparent;accent-color:var(--accent)}
+/* Kundenliste */
+.custs{display:flex;flex-direction:column}
+.cust{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 4px;border:0;border-bottom:1px solid var(--line);background:none;font:inherit;color:inherit;text-align:left;cursor:pointer;width:100%}
+.cust:last-child{border-bottom:0}
+.av{width:40px;height:40px;border-radius:50%;background:var(--sunk);display:grid;place-items:center;font-weight:700;color:var(--accent)}
+.cust .n{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cust .s{display:block;font-size:.8rem;color:var(--muted)}
+/* Ergebnisleiste */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--head);color:var(--head-ink);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+.dock-in{max-width:880px;margin:0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px;align-items:center}
+.dock .l{font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;opacity:.7}
+.dock .v{font-family:var(--f-num);font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dock .v.neg{color:#FF9C93} .dock .v.pos{color:#8EE0AE}
+@media (max-width:420px){.dock-in{grid-template-columns:repeat(3,minmax(0,1fr))}.dock .btn{display:none}}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:.88rem;z-index:60;max-width:calc(100% - 32px);text-align:center}
+.scrim{position:fixed;inset:0;background:#0008;z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surface);width:100%;max-width:640px;max-height:92%;overflow:auto;border-radius:18px 18px 0 0;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px}
+.actions{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.summary{white-space:pre-wrap;font-family:var(--f-num);font-size:.78rem;background:var(--bg);border-radius:10px;padding:12px;max-height:50vh;overflow:auto}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <div class="brand">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="3" y="5" width="28" height="24" rx="4" fill="none" stroke="currentColor" stroke-width="2" opacity=".55"/><path d="M8 22 L14 15 L19 19 L26 10" fill="none" stroke="#D9A548" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div style="min-width:0"><h1>Haushaltscheck</h1><div class="sub" id="hSub">Fixkosten, Überschuss und Sparrate</div></div>
+  </div>
+  <button class="btn ghost small" type="button" id="hBtn">Alle Kunden</button>
+</div></header>
+<main id="app"></main>
+<div class="dock" id="dock" hidden><div class="dock-in">
+  <div><div class="l">Netto</div><div class="v" id="dIn">–</div></div>
+  <div><div class="l">Ausgaben</div><div class="v" id="dOut">–</div></div>
+  <div><div class="l">Frei</div><div class="v" id="dFree">–</div></div>
+  <button class="btn small" type="button" id="dGo">Ergebnis</button>
+</div></div>
+<input type="file" id="backupIn" accept=".json,application/json" hidden>
+
+<script>
+const IV = {m:{l:'monatlich',f:1}, q:{l:'vierteljährl.',f:1/3}, h:{l:'halbjährl.',f:1/6}, j:{l:'jährlich',f:1/12}};
+const KINDERGELD = 259; // € pro Kind und Monat (2026)
+const GROUPS = [
+  {id:'wohnen', name:'Wohnen & Energie', need:true, presets:['Miete / Kreditrate Haus','Nebenkosten / Hausgeld','Strom','Gas / Heizung','Wasser / Abwasser','Grundsteuer','Müllabfuhr',['Rundfunkbeitrag',18.36]]},
+  {id:'versicherung', name:'Versicherungen', need:true, presets:['Privathaftpflicht','Hausrat','Wohngebäude','KFZ-Versicherung','Berufsunfähigkeit','Risikolebensversicherung','Rechtsschutz','Unfallversicherung','Krankenzusatz','Pflegezusatz','Zahnzusatz']},
+  {id:'mobil', name:'Mobilität', need:true, presets:['Autokredit / Leasing','Tanken / Laden','KFZ-Steuer','Wartung & TÜV (Rücklage)',['Deutschlandticket',63]]},
+  {id:'komm', name:'Handy, Internet & Abos', need:false, presets:['Handyvertrag','Internet / Festnetz','Streaming (Netflix, Disney+ …)','Musik (Spotify …)','Fitnessstudio','Zeitung / Apps','Cloud-Speicher']},
+  {id:'kinder', name:'Kinder', need:true, presets:['Kita / Betreuung','Verein / Musikschule','Taschengeld','Schulbedarf (Rücklage)']},
+  {id:'kredite', name:'Kredite & Raten', need:true, presets:['Ratenkredit','Dispo / Kreditkarte','0-%-Finanzierung','Privatdarlehen']},
+  {id:'leben', name:'Lebenshaltung (variabel)', need:null, presets:['Lebensmittel & Drogerie','Kleidung','Freizeit & Ausgehen','Urlaub (Rücklage)','Geschenke','Haustier','Sonstiges']},
+  {id:'sparen', name:'Bestehendes Sparen & Vorsorge', need:false, saving:true, presets:['ETF-Sparplan','Tagesgeld-Sparrate','Bausparvertrag','Riester / Rürup','Private Rentenversicherung','Betriebliche Altersvorsorge (Eigenanteil netto)','Kinder-Sparplan']},
+];
+const G = Object.fromEntries(GROUPS.map(g=>[g.id,g]));
+const INC_PRESETS = ['Nettogehalt Person 1','Nettogehalt Person 2','Kindergeld','Elterngeld','Minijob / Nebenjob','Weihnachts-/Urlaubsgeld (netto)','Mieteinnahmen','Unterhalt','Sonstige Einnahmen'];
+const WANTS_IN_LEBEN = ['kleidung','freizeit','urlaub','geschenke','sonstiges','haustier'];
+
+const KEY='haushaltscheck_v1';
+const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
+let S = load(), cur=null, step=1, toastT=null, listQ='';
+function load(){
+  try{ const r=localStorage.getItem(KEY); if(r){ const d=JSON.parse(r); if(Array.isArray(d.customers)) return d; } }catch(e){}
+  return {customers:[sampleCustomer()]};
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast('Speichern im Browser nicht möglich.'); } }
+function sampleCustomer(){
+  const it=(group,label,amount,iv='m',provider='')=>({id:uid(),group,label,amount,iv,provider,note:''});
+  return {id:uid(), sample:true, name:'Familie Beispiel', adults:2, kids:2, reserve:4000, rate:10, created:new Date().toISOString().slice(0,10), note:'',
+    income:[{id:uid(),label:'Nettogehalt Person 1',amount:2950,iv:'m'},{id:uid(),label:'Nettogehalt Person 2',amount:650,iv:'m'},{id:uid(),label:'Kindergeld',amount:2*KINDERGELD,iv:'m'},{id:uid(),label:'Weihnachts-/Urlaubsgeld (netto)',amount:1800,iv:'j'}],
+    costs:[ it('wohnen','Miete / Kreditrate Haus',1150), it('wohnen','Nebenkosten / Hausgeld',180), it('wohnen','Strom',95), it('wohnen','Gas / Heizung',130), it('wohnen','Rundfunkbeitrag',55.08,'q'), it('wohnen','Grundsteuer',320,'j'),
+      it('versicherung','Privathaftpflicht',78,'j'), it('versicherung','Hausrat',11.2), it('versicherung','KFZ-Versicherung',780,'j'), it('versicherung','Rechtsschutz',29.9),
+      it('mobil','Tanken / Laden',220), it('mobil','KFZ-Steuer',190,'j'), it('mobil','Wartung & TÜV (Rücklage)',40), it('mobil','Autokredit / Leasing',289),
+      it('komm','Handyvertrag',49.98), it('komm','Internet / Festnetz',44.95), it('komm','Streaming (Netflix, Disney+ …)',35.97), it('komm','Fitnessstudio',29.9),
+      it('kinder','Kita / Betreuung',160),
+      it('kredite','Ratenkredit',145),
+      it('leben','Lebensmittel & Drogerie',800), it('leben','Kleidung',150), it('leben','Freizeit & Ausgehen',200), it('leben','Geschenke',40),
+      it('sparen','ETF-Sparplan',100) ]};
+}
+
+/* ---------- Rechnen ---------- */
+const mo = x => (+x.amount||0) * (IV[x.iv]?.f ?? 1);
+function calc(c){
+  const net = c.income.reduce((s,x)=>s+mo(x),0);
+  const byG = {}; GROUPS.forEach(g=>byG[g.id]=0); c.costs.forEach(x=>{ byG[x.group]=(byG[x.group]||0)+mo(x); });
+  const fix = GROUPS.filter(g=>!g.saving && g.id!=='leben').reduce((s,g)=>s+byG[g.id],0);
+  const leben = byG.leben, saved = byG.sparen;
+  const spend = fix + leben;
+  const free = net - spend - saved;
+  const target = net * (c.rate||10)/100;
+  const gap = Math.max(0, target - saved);
+  const extra = Math.max(0, Math.min(gap, free));
+  let wants = byG.komm; let lebenNeed=0;
+  c.costs.filter(x=>x.group==='leben').forEach(x=>{ const l=x.label.toLowerCase(); if(WANTS_IN_LEBEN.some(w=>l.includes(w))) wants+=mo(x); else lebenNeed+=mo(x); });
+  const needs = GROUPS.filter(g=>g.need===true).reduce((s,g)=>s+byG[g.id],0) + lebenNeed;
+  return {net, byG, fix, leben, saved, spend, free, target, gap, extra, after: free-extra, needs, wants, rateNow: net>0? saved/net:0, rateAfter: net>0?(saved+extra)/net:0, reserveGoal:[spend*3, spend*6]};
+}
+function points(c, r){
+  const P=[]; const has=(g,rx)=>c.costs.some(x=>x.group===g && rx.test(x.label.toLowerCase()) && +x.amount>0);
+  if(r.net<=0) return [{sev:'info',t:'Noch keine Einnahmen erfasst',p:'Trage zuerst die Netto-Einnahmen ein.'}];
+  if(r.free<0) P.push({sev:'crit',t:'Ausgaben übersteigen die Einnahmen',p:`Monatlich fehlen ${eur0(-r.free)}. Zuerst Kosten senken, bevor neue Sparverträge sinnvoll sind.`});
+  if(r.fix/r.net>0.6) P.push({sev:'warn',t:`Fixkostenquote ${pct(r.fix/r.net)}`,p:'Über 60 % der Einnahmen sind fest gebunden. Wenig Spielraum bei unerwarteten Ausgaben.'});
+  if(r.byG.wohnen/r.net>0.4) P.push({sev:'warn',t:`Wohnkosten ${pct(r.byG.wohnen/r.net)} vom Netto`,p:'Als gesund gelten bis etwa 35–40 % inklusive Energie.'});
+  if(r.byG.kredite>0) P.push({sev: r.byG.kredite/r.net>0.15?'crit':'warn', t:`Konsumkredite: ${eur0(r.byG.kredite)} pro Monat`, p:'Zinsen und Laufzeiten prüfen. Eine Umschuldung oder Sondertilgung schafft oft schnell Luft.'});
+  if(has('kredite',/dispo|kreditkarte/)) P.push({sev:'crit',t:'Dispo oder Kreditkarte im Minus',p:'Die teuerste Form von Schulden. Ablösen hat Vorrang vor dem Sparen.'});
+  const res = +c.reserve||0;
+  if(res < r.reserveGoal[0]) P.push({sev:'warn',t:'Notgroschen zu klein',p:`Vorhanden ${eur0(res)}, empfohlen sind 3 Monatsausgaben, also ${eur0(r.reserveGoal[0])}. Die Sparrate sollte zuerst den Notgroschen auffüllen.`});
+  if(!has('versicherung',/haftpflicht/)) P.push({sev:'warn',t:'Keine Privathaftpflicht erfasst',p:'Wichtigste Versicherung für jeden Haushalt – kostet meist unter 10 € im Monat.'});
+  if(!has('versicherung',/berufsunf|\bbu\b/) && c.income.some(x=>/gehalt|lohn/i.test(x.label))) P.push({sev:'info',t:'Keine Berufsunfähigkeitsabsicherung erfasst',p:'Die Arbeitskraft ist bei Familien meist der größte Vermögenswert. Bestehenden Schutz erfragen.'});
+  if(c.kids>0 && !has('versicherung',/risikoleb|lebensvers/)) P.push({sev:'info',t:'Keine Risikolebensversicherung erfasst',p:'Mit Kindern oder Hauskredit sichert sie die Familie ab, falls ein Einkommen wegfällt.'});
+  if(r.byG.komm/r.net>0.06) P.push({sev:'info',t:'Abos und Verträge vergleichsweise hoch',p:`${eur0(r.byG.komm)} pro Monat für Handy, Internet und Abos. Tarife und ungenutzte Abos prüfen.`});
+  const insMonthly = c.costs.filter(x=>x.group==='versicherung' && x.iv==='m').length;
+  if(insMonthly>=3) P.push({sev:'info',t:'Versicherungen monatlich bezahlt',p:`${insMonthly} Verträge laufen monatlich. Jährliche Zahlweise spart oft 3–8 % Ratenzuschlag.`});
+  if(r.rateNow>=(c.rate||10)/100 && r.free>=0) P.push({sev:'info',t:'Sparziel bereits erreicht',p:`Es werden schon ${pct(r.rateNow)} gespart. Der freie Betrag kann für Ziele wie Altersvorsorge oder Kinder genutzt werden.`});
+  const o={crit:0,warn:1,info:2}; return P.sort((a,b)=>o[a.sev]-o[b.sev]);
+}
+
+/* ---------- Format ---------- */
+const f2=new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}), f0=new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR',maximumFractionDigits:0});
+const eur=v=>f2.format(v), eur0=v=>f0.format(v), pct=v=>(v*100).toFixed(1).replace('.',',')+' %';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=v=>{ const n=parseFloat(String(v).replace(/\./g,'').replace(',','.')); return isNaN(n)?0:n; };
+const show=v=>v? String(v).replace('.',','):'';
+function toast(m){ let el=document.querySelector('.toast'); if(!el){el=document.createElement('div');el.className='toast';el.setAttribute('role','status');document.body.appendChild(el);} el.textContent=m; el.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>el.hidden=true,3000); }
+const C=()=>S.customers.find(c=>c.id===cur);
+
+/* ---------- Ansichten ---------- */
+const app=document.getElementById('app');
+function render(){
+  const c=C();
+  document.getElementById('hBtn').hidden = !c;
+  document.getElementById('dock').hidden = !c;
+  document.getElementById('hSub').textContent = c ? `${c.name} · ${c.adults} Erw.${c.kids?`, ${c.kids} Kind${c.kids>1?'er':''}`:''}` : 'Fixkosten, Überschuss und Sparrate';
+  if(!c){ app.innerHTML=vList(); return; }
+  app.innerHTML = `${c.sample?`<div class="banner"><div class="grow"><b>Beispielkunde.</b> Alle Werte sind erfunden und zeigen, wie ein ausgefüllter Check aussieht.</div></div>`:''}
+  <div class="steps" role="tablist" aria-label="Schritte"><button class="step" type="button" data-step="1" aria-current="${step===1?'step':'false'}"><b>1</b>Einnahmen</button><button class="step" type="button" data-step="2" aria-current="${step===2?'step':'false'}"><b>2</b>Kosten</button><button class="step" type="button" data-step="3" aria-current="${step===3?'step':'false'}"><b>3</b>Ergebnis</button></div>
+  ${step===1?vIncome(c):step===2?vCosts(c):vResult(c)}`;
+  dock();
+}
+function dock(){
+  const c=C(); if(!c) return; const r=calc(c);
+  document.getElementById('dIn').textContent=eur0(r.net);
+  document.getElementById('dOut').textContent=eur0(r.spend+r.saved);
+  const f=document.getElementById('dFree'); f.textContent=eur0(r.free); f.className='v '+(r.free<0?'neg':'pos');
+  document.getElementById('dGo').hidden = step===3;
+}
+function vList(){
+  const list=S.customers.filter(c=>!listQ || c.name.toLowerCase().includes(listQ.toLowerCase())).sort((a,b)=>(b.updated||b.created||'').localeCompare(a.updated||a.created||''));
+  return `<section class="card"><div class="sec-h"><h2>Kunden</h2><button class="btn small" type="button" data-act="new">+ Neuer Kunde</button></div>
+    ${S.customers.length>4?`<input type="search" id="lq" placeholder="Kunde suchen" value="${esc(listQ)}" aria-label="Kunde suchen" style="margin-bottom:8px">`:''}
+    <div class="custs">${list.map(c=>{ const r=calc(c); return `<button class="cust" type="button" data-open="${c.id}"><span class="av">${esc(c.name.replace(/^(Familie|Herr|Frau)\s+/i,'').slice(0,2).toUpperCase())}</span><span style="min-width:0"><span class="n">${esc(c.name)}${c.sample?' <span class="pill info">Beispiel</span>':''}</span><span class="s">${c.adults} Erw.${c.kids?`, ${c.kids} Kind${c.kids>1?'er':''}`:''} · angelegt ${fmtD(c.created)}</span></span><span class="num ${r.free<0?'neg':'pos'}" style="text-align:right">${eur0(r.free)}<span class="s" style="font-family:var(--f-body)">frei / Monat</span></span></button>`; }).join('') || '<p class="muted">Noch keine Kunden.</p>'}</div></section>
+  <section class="card" style="display:flex;flex-direction:column;gap:10px"><h2>Daten & Datenschutz</h2>
+    <p class="small muted" style="margin:0">Alle Kundendaten bleiben nur auf diesem Gerät im Browser. Es wird nichts übertragen. Erfasse nur, was du für die Beratung brauchst, und lösche Kunden, wenn sie nicht mehr betreut werden.</p>
+    <div class="actions" style="justify-content:flex-start"><button class="btn soft small" type="button" data-act="backup">Sicherung als Datei</button><button class="btn soft small" type="button" data-act="backupCopy">Sicherung kopieren</button><button class="btn soft small" type="button" data-act="restore">Sicherung laden</button></div></section>`;
+}
+const fmtD=d=>d?d.slice(8,10)+'.'+d.slice(5,7)+'.'+d.slice(0,4):'';
+function ivSel(x, kind){ return `<select data-${kind}-iv="${x.id}" aria-label="Zahlweise">${Object.entries(IV).map(([k,v])=>`<option value="${k}" ${x.iv===k?'selected':''}>${v.l}</option>`).join('')}</select>`; }
+function vIncome(c){
+  const r=calc(c);
+  return `<section class="card" style="display:flex;flex-direction:column;gap:10px"><h2>Haushalt</h2>
+    <label class="f">Name<input id="cName" value="${esc(c.name)}" placeholder="z. B. Familie Müller"></label>
+    <div class="grid3"><label class="f">Erwachsene<input id="cAdults" type="number" min="1" max="6" value="${c.adults}"></label><label class="f">Kinder<input id="cKids" type="number" min="0" max="8" value="${c.kids}"></label><label class="f">Rücklagen (€)<input id="cReserve" inputmode="decimal" value="${show(c.reserve)}" placeholder="Tagesgeld, Notgroschen"></label></div>
+    <label class="f">Notiz<input id="cNote" value="${esc(c.note||'')}" placeholder="z. B. Termin, Wünsche, Ziele"></label></section>
+  <section class="card"><div class="grp-h"><h2>Netto-Einnahmen</h2><span class="gsum">${eur(r.net)} / Monat</span></div>
+    <div class="grp">${c.income.map(x=>`<div class="item"><input class="lbl" data-inc-label="${x.id}" value="${esc(x.label)}" aria-label="Bezeichnung"><input class="amt num" data-inc-amt="${x.id}" inputmode="decimal" value="${show(x.amount)}" placeholder="0,00" aria-label="Betrag in €">${ivSel(x,'inc')}<button class="x" type="button" data-del-inc="${x.id}" aria-label="Entfernen">×</button></div>`).join('')}</div>
+    <div class="chips">${INC_PRESETS.map(p=>`<button class="chip" type="button" data-add-inc="${esc(p)}">+ ${esc(p)}</button>`).join('')}</div>
+    <p class="small muted" style="margin:12px 0 0">Immer Netto-Beträge eintragen, also das, was tatsächlich aufs Konto kommt. Jährliche Zahlungen wie Weihnachtsgeld werden automatisch auf den Monat umgerechnet.</p></section>
+  <div class="actions"><span></span><button class="btn" type="button" data-step="2">Weiter zu den Kosten</button></div>`;
+}
+function vCosts(c){
+  const r=calc(c);
+  return GROUPS.map(g=>{ const items=c.costs.filter(x=>x.group===g.id); const used=new Set(items.map(x=>x.label));
+    return `<section class="card"><div class="grp-h"><h2>${g.name}</h2><span class="gsum">${eur(r.byG[g.id])} / Monat</span></div>
+      <div class="grp">${items.map(x=>`<div class="item"><input class="lbl" data-c-label="${x.id}" value="${esc(x.label)}" aria-label="Bezeichnung"><input class="amt num" data-c-amt="${x.id}" inputmode="decimal" value="${show(x.amount)}" placeholder="0,00" aria-label="Betrag in €">${ivSel(x,'c')}<button class="x" type="button" data-del-c="${x.id}" aria-label="Entfernen">×</button></div>`).join('')}</div>
+      <div class="chips">${g.presets.map(p=>{ const [l,v]=Array.isArray(p)?p:[p,0]; return used.has(l)?'':`<button class="chip" type="button" data-add-c="${g.id}" data-label="${esc(l)}" data-val="${v}">+ ${esc(l)}</button>`; }).join('')}<button class="chip" type="button" data-add-c="${g.id}" data-label="" data-val="0">+ Eigene Position</button></div>
+      ${g.id==='leben'?`<p class="small muted" style="margin:10px 0 0">Unbekannt? <button class="link small" type="button" data-act="pauschale">Pauschalen für ${c.adults} Erw.${c.kids?` + ${c.kids} Kind${c.kids>1?'er':''}`:''} einsetzen</button> – Erfahrungswerte, bitte mit dem Kunden abgleichen.</p>`:''}
+      ${g.saving?`<p class="small muted" style="margin:10px 0 0">Was der Haushalt heute schon spart. Zählt zur Sparquote, nicht zu den Kosten.</p>`:''}
+    </section>`; }).join('') + `<div class="actions"><button class="btn soft" type="button" data-step="1">Zurück</button><button class="btn" type="button" data-step="3">Ergebnis ansehen</button></div>`;
+}
+function vResult(c){
+  const r=calc(c); const P=points(c,r); const rate=c.rate||10;
+  const N=Math.max(r.net, r.spend+r.saved, 1);
+  const seg=(v,col)=>v>0?`<span style="width:${v/N*100}%;background:${col}" title="${eur0(v)}"></span>`:'';
+  let reco, rcls='';
+  if(r.net<=0){ reco=`<div class="reco warn"><div class="lbl">Empfehlung</div><div>Noch keine Einnahmen erfasst.</div></div>`; }
+  else if(r.free<0){ rcls='crit'; reco=`<div class="reco crit"><div class="lbl">Empfehlung</div><div class="val num">${eur0(-r.free)} fehlen</div><div>Pro Monat wird mehr ausgegeben als eingenommen. Erst Kosten um mindestens diesen Betrag senken – dann ${eur0(r.gap)} für die ${rate}-%-Sparquote einplanen.</div></div>`; }
+  else if(r.gap<=0){ reco=`<div class="reco"><div class="lbl">Sparziel ${rate} %</div><div class="val num">erreicht</div><div>Bereits ${eur0(r.saved)} pro Monat (${pct(r.rateNow)}) werden gespart. Zusätzlich frei: <b class="num">${eur0(r.free)}</b> – ideal für weitere Ziele.</div></div>`; }
+  else if(r.free>=r.gap){ reco=`<div class="reco"><div class="lbl">Empfohlene zusätzliche Sparrate</div><div class="val num">${eur0(r.gap)} / Monat</div><div>Damit werden ${rate} % vom Netto gespart (${eur0(r.target)} insgesamt${r.saved>0?`, davon ${eur0(r.saved)} schon vorhanden`:''}). Danach bleiben noch <b class="num">${eur0(r.after)}</b> frei.</div></div>`; }
+  else { rcls='warn'; reco=`<div class="reco warn"><div class="lbl">Mögliche Sparrate</div><div class="val num">${eur0(r.free)} / Monat</div><div>Für ${rate} % (${eur0(r.target)}) fehlen noch ${eur0(r.gap-r.free)}. Die Sparquote läge damit bei ${pct(r.rateAfter)}. Kosten prüfen, um auf ${rate} % zu kommen.</div></div>`; }
+  const q=(lbl,v,good,bad,inv)=>{ const st = inv ? (v>=good?'good':v>=bad?'warn':'crit') : (v<=good?'good':v<=bad?'warn':'crit'); const txt={good:'gut',warn:'erhöht',crit:'kritisch'}; const txtInv={good:'gut',warn:'ausbaufähig',crit:'zu niedrig'};
+    return `<div class="ratio"><span>${lbl} <span class="pill ${st}">${(inv?txtInv:txt)[st]}</span></span><span class="num">${pct(v)}</span><span class="meter"><i style="width:${Math.min(100,Math.max(0,v*100))}%;background:var(--${st})"></i><span class="mark" style="left:${Math.min(99,(inv?good:good)*100)}%"></span></span><span class="small muted" style="grid-column:1/-1">${inv?`Ziel: mindestens ${pct(good)}`:`Richtwert: bis ${pct(good)}`}</span></div>`; };
+  const b5 = r.net>0 ? [r.needs/r.net, r.wants/r.net, (r.saved+r.extra)/r.net] : [0,0,0];
+  return `<section class="card hero"><span class="small muted">Frei verfügbar pro Monat</span><div class="big num ${r.free<0?'neg':''}">${eur0(r.free)}</div><span class="small muted">nach allen Kosten und bestehendem Sparen · ${eur0(r.free*12)} im Jahr</span>
+    <div class="stackbar" role="img" aria-label="Aufteilung des Nettoeinkommens">${seg(r.fix,'var(--c-fix)')}${seg(r.leben,'var(--c-leben)')}${seg(r.saved,'var(--c-spar)')}${seg(r.extra,'var(--c-plus)')}${seg(Math.max(0,r.after),'var(--c-frei)')}${r.free<0?seg(-r.free,'var(--c-minus)'):''}</div>
+    <div class="legend"><div><span><i class="sw" style="background:var(--c-fix)"></i>Fixkosten</span><span class="num">${eur0(r.fix)}</span></div><div><span><i class="sw" style="background:var(--c-leben)"></i>Lebenshaltung</span><span class="num">${eur0(r.leben)}</span></div><div><span><i class="sw" style="background:var(--c-spar)"></i>Spart bereits</span><span class="num">${eur0(r.saved)}</span></div><div><span><i class="sw" style="background:var(--c-plus)"></i>Sparempfehlung</span><span class="num">${eur0(r.extra)}</span></div><div><span><i class="sw" style="background:var(--c-frei)"></i>Frei danach</span><span class="num">${eur0(Math.max(0,r.after))}</span></div>${r.free<0?`<div><span><i class="sw" style="background:var(--c-minus)"></i>Fehlbetrag</span><span class="num">${eur0(-r.free)}</span></div>`:''}</div></section>
+  <section class="card" style="display:flex;flex-direction:column;gap:12px"><div class="sec-h" style="margin:0"><h2>Sparempfehlung</h2><span class="small muted">Ziel: <b class="num" id="rateLbl">${rate} %</b> vom Netto</span></div>
+    <input type="range" id="rate" min="5" max="25" step="1" value="${rate}" aria-label="Sparquote in Prozent">
+    ${reco}
+    <div class="tablewrap"><table><thead><tr><th>Baustein</th><th>Ziel</th><th>Ist</th></tr></thead><tbody>
+      <tr><td>Notgroschen (3–6 Monatsausgaben)</td><td class="num">${eur0(r.reserveGoal[0])}–${eur0(r.reserveGoal[1])}</td><td class="num ${(+c.reserve||0)>=r.reserveGoal[0]?'pos':'neg'}">${eur0(+c.reserve||0)}</td></tr>
+      <tr><td>Sparrate ${rate} % vom Netto</td><td class="num">${eur0(r.target)}</td><td class="num">${eur0(r.saved)}</td></tr>
+    </tbody></table></div></section>
+  <section class="card"><div class="sec-h"><h2>Kennzahlen</h2></div>
+    ${q('Fixkostenquote', r.net?r.fix/r.net:0, .5, .6)}
+    ${q('Wohnkosten inkl. Energie', r.net?r.byG.wohnen/r.net:0, .35, .4)}
+    ${q('Kreditquote (ohne Hauskredit)', r.net?r.byG.kredite/r.net:0, .05, .15)}
+    ${q('Sparquote heute', r.rateNow, rate/100, rate/200, true)}</section>
+  <section class="card"><div class="sec-h"><h2>50 / 30 / 20-Regel</h2><span class="small muted">mit Sparempfehlung</span></div>
+    <div class="tablewrap"><table><thead><tr><th>Bereich</th><th>Faustregel</th><th>Ist</th><th>€ / Monat</th></tr></thead><tbody>
+      <tr><td>Bedarf (Wohnen, Versicherung, Mobilität, Kinder, Kredite, Lebensmittel)</td><td class="num">50 %</td><td class="num ${b5[0]>0.55?'neg':''}">${pct(b5[0])}</td><td class="num">${eur0(r.needs)}</td></tr>
+      <tr><td>Wünsche (Abos, Freizeit, Kleidung, Urlaub)</td><td class="num">30 %</td><td class="num ${b5[1]>0.35?'neg':''}">${pct(b5[1])}</td><td class="num">${eur0(r.wants)}</td></tr>
+      <tr><td>Sparen & Vorsorge</td><td class="num">20 %</td><td class="num ${b5[2]>=0.1?'pos':'neg'}">${pct(b5[2])}</td><td class="num">${eur0(r.saved+r.extra)}</td></tr>
+    </tbody></table></div><p class="small muted" style="margin:10px 0 0">Die 10 % sind die Untergrenze für Vermögensaufbau, 20 % das Ideal der 50/30/20-Regel.</p></section>
+  <section class="card"><div class="sec-h"><h2>Gesprächspunkte</h2><span class="small muted">${P.length}</span></div><div class="points">${P.map(p=>`<div class="point ${p.sev}"><div class="stripe"></div><div><h3>${esc(p.t)}</h3><p>${esc(p.p)}</p></div></div>`).join('') || '<p class="muted">Keine Auffälligkeiten.</p>'}</div></section>
+  <section class="card"><div class="sec-h"><h2>Kosten nach Bereichen</h2></div><div class="tablewrap"><table><thead><tr><th>Bereich</th><th>€ / Monat</th><th>Anteil</th></tr></thead><tbody>${GROUPS.filter(g=>r.byG[g.id]>0).map(g=>`<tr><td>${g.name}</td><td class="num">${eur(r.byG[g.id])}</td><td class="num">${r.net?pct(r.byG[g.id]/r.net):'–'}</td></tr>`).join('')}</tbody></table></div></section>
+  <div class="actions"><button class="btn soft" type="button" data-step="2">Zurück</button><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn soft" type="button" data-act="dup">Als Kopie anlegen</button><button class="btn" type="button" data-act="summary">Zusammenfassung kopieren</button></span></div>
+  <div class="actions"><button class="btn danger small" type="button" data-act="delCust">Kunde löschen</button></div>`;
+}
+function summaryText(c){
+  const r=calc(c); const rate=c.rate||10; const L=[];
+  L.push(`Haushaltscheck – ${c.name} (${new Date().toLocaleDateString('de-DE')})`);
+  L.push(`Haushalt: ${c.adults} Erwachsene${c.kids?`, ${c.kids} Kinder`:''}`,'');
+  L.push(`Netto-Einnahmen:        ${eur(r.net)}`);
+  GROUPS.forEach(g=>{ if(r.byG[g.id]>0) L.push(`${(g.name+':').padEnd(24)}${eur(r.byG[g.id])}`); });
+  L.push('',`Frei pro Monat:         ${eur(r.free)}`);
+  L.push(`Sparquote heute:        ${pct(r.rateNow)}`);
+  if(r.free<0) L.push(`→ Fehlbetrag ${eur(-r.free)} pro Monat. Erst Kosten senken.`);
+  else if(r.gap<=0) L.push(`→ Sparziel ${rate} % erreicht.`);
+  else L.push(`→ Empfohlene zusätzliche Sparrate: ${eur(Math.min(r.gap,r.free))} pro Monat (Ziel ${rate} % = ${eur(r.target)})`);
+  L.push(`Notgroschen: ${eur0(+c.reserve||0)} vorhanden, Ziel ${eur0(r.reserveGoal[0])}–${eur0(r.reserveGoal[1])}`);
+  const P=points(c,r); if(P.length){ L.push('','Gesprächspunkte:'); P.forEach(p=>L.push('• '+p.t)); }
+  return L.join('\n');
+}
+
+/* ---------- Sheets ---------- */
+function openSheet(html,onMount){ closeSheet(); const sc=document.createElement('div'); sc.className='scrim'; sc.innerHTML=`<div class="sheet" role="dialog" aria-modal="true">${html}</div>`; sc.addEventListener('click',e=>{if(e.target===sc)closeSheet();}); document.body.appendChild(sc); onMount&&onMount(sc.firstChild); }
+function closeSheet(){ document.querySelectorAll('.scrim').forEach(s=>s.remove()); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); });
+function copyOrShow(txt, title){ const fallback=()=>openSheet(`<h2>${title}</h2><p class="small muted" style="margin:0">Text markieren und kopieren.</p><textarea readonly id="cp">${esc(txt)}</textarea><div class="actions"><span></span><button class="btn" type="button" id="cpOk">Fertig</button></div>`,el=>{el.querySelector('#cpOk').onclick=closeSheet; const t=el.querySelector('#cp'); t.focus(); t.select();});
+  if(navigator.clipboard?.writeText) navigator.clipboard.writeText(txt).then(()=>toast(title+' kopiert')).catch(fallback); else fallback(); }
+
+/* ---------- Ereignisse ---------- */
+function touch(){ const c=C(); if(c){ c.updated=new Date().toISOString(); } save(); }
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button'); if(!t) return; const c=C();
+  if(t.dataset.open){ cur=t.dataset.open; step=1; render(); scrollTo(0,0); return; }
+  if(t.dataset.step){ step=+t.dataset.step; render(); scrollTo(0,0); return; }
+  if(t.dataset.addInc!=null){ const l=t.dataset.addInc; c.income.push({id:uid(),label:l,amount: l==='Kindergeld'?(c.kids||1)*KINDERGELD:0, iv: /weihnacht/i.test(l)?'j':'m'}); touch(); render(); focusLast('[data-inc-amt]'); return; }
+  if(t.dataset.addC){ c.costs.push({id:uid(),group:t.dataset.addC,label:t.dataset.label,amount:+t.dataset.val||0,iv: /steuer|grundsteuer/i.test(t.dataset.label)?'j':'m',provider:'',note:''}); touch(); render(); focusIn(t.dataset.addC, !t.dataset.label); return; }
+  if(t.dataset.delInc){ c.income=c.income.filter(x=>x.id!==t.dataset.delInc); touch(); render(); return; }
+  if(t.dataset.delC){ c.costs=c.costs.filter(x=>x.id!==t.dataset.delC); touch(); render(); return; }
+  const act=t.dataset.act;
+  if(act==='new'){ const n={id:uid(),name:'Neuer Kunde',adults:2,kids:0,reserve:0,rate:10,created:new Date().toISOString().slice(0,10),note:'',income:[{id:uid(),label:'Nettogehalt Person 1',amount:0,iv:'m'}],costs:[]}; S.customers.push(n); cur=n.id; step=1; save(); render(); setTimeout(()=>{const i=document.getElementById('cName'); i&&(i.focus(),i.select());},0); }
+  else if(act==='pauschale'){ const a=c.adults, k=c.kids; const P={'Lebensmittel & Drogerie':250*a+150*k,'Kleidung':50*a+40*k,'Freizeit & Ausgehen':80*a+40*k,'Urlaub (Rücklage)':100*a+50*k,'Geschenke':20*a+15*k}; let n=0;
+    Object.entries(P).forEach(([l,v])=>{ const ex=c.costs.find(x=>x.group==='leben'&&x.label===l); if(ex){ if(!+ex.amount){ex.amount=v;n++;} } else { c.costs.push({id:uid(),group:'leben',label:l,amount:v,iv:'m',provider:'',note:'Pauschale'}); n++; } });
+    touch(); render(); toast(n?`${n} Pauschalen eingesetzt – bitte mit dem Kunden prüfen`:'Alle Positionen haben schon Werte'); }
+  else if(act==='summary') copyOrShow(summaryText(c),'Zusammenfassung');
+  else if(act==='dup'){ const d=JSON.parse(JSON.stringify(c)); d.id=uid(); d.name=c.name+' (Variante)'; d.sample=false; d.created=new Date().toISOString().slice(0,10); d.income.forEach(x=>x.id=uid()); d.costs.forEach(x=>x.id=uid()); S.customers.push(d); cur=d.id; step=2; save(); render(); toast('Kopie angelegt – ideal zum Durchspielen von Spar-Szenarien'); }
+  else if(act==='delCust'){ if(t.dataset.armed){ S.customers=S.customers.filter(x=>x.id!==c.id); cur=null; save(); render(); toast('Kunde gelöscht'); } else { t.dataset.armed=1; t.textContent=`„${c.name}“ wirklich löschen?`; } }
+  else if(act==='backup'){ try{ const b=new Blob([JSON.stringify({app:'haushaltscheck',version:1,data:S})],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='haushaltscheck-sicherung-'+new Date().toISOString().slice(0,10)+'.json'; document.body.appendChild(a); a.click(); a.remove(); toast('Sicherung wird gespeichert. Klappt das nicht, nutze „Sicherung kopieren“.'); }catch(err){ toast('Download hier nicht möglich – nutze „Sicherung kopieren“.'); } }
+  else if(act==='backupCopy') copyOrShow(JSON.stringify({app:'haushaltscheck',version:1,data:S}),'Sicherung');
+  else if(act==='restore') openSheet(`<h2>Sicherung laden</h2><p class="small muted" style="margin:0">Ersetzt alle aktuellen Kunden.</p><button class="btn" type="button" id="rf">Datei auswählen</button><textarea id="rt" placeholder="Oder Sicherungstext einfügen"></textarea><div class="actions"><button class="btn soft" type="button" id="rc">Abbrechen</button><button class="btn" type="button" id="rg">Text laden</button></div>`,el=>{ el.querySelector('#rf').onclick=()=>document.getElementById('backupIn').click(); el.querySelector('#rc').onclick=closeSheet; el.querySelector('#rg').onclick=()=>restore(el.querySelector('#rt').value); });
+});
+function restore(txt){ try{ const o=JSON.parse(txt); const d=o.data||o; if(!Array.isArray(d.customers)) throw 0; S=d; cur=null; save(); closeSheet(); render(); toast(`${S.customers.length} Kunden geladen`); }catch(e){ toast('Das ist keine gültige Sicherung dieser App.'); } }
+function focusLast(sel){ setTimeout(()=>{ const els=document.querySelectorAll(sel); const el=els[els.length-1]; el&&el.focus(); },0); }
+function focusIn(gid, label){ setTimeout(()=>{ const c=C(); const last=[...c.costs].reverse().find(x=>x.group===gid); if(!last) return; const el=document.querySelector(`[data-c-${label?'label':'amt'}="${last.id}"]`); el&&el.focus(); },0); }
+document.addEventListener('input',e=>{
+  const t=e.target, c=C();
+  if(t.id==='lq'){ listQ=t.value; const p=t.selectionStart; render(); const q=document.getElementById('lq'); q.focus(); q.setSelectionRange(p,p); return; }
+  if(!c) return;
+  const d=t.dataset; let x;
+  if(d.incAmt && (x=c.income.find(i=>i.id===d.incAmt))) x.amount=num(t.value);
+  else if(d.incLabel && (x=c.income.find(i=>i.id===d.incLabel))) x.label=t.value;
+  else if(d.cAmt && (x=c.costs.find(i=>i.id===d.cAmt))) x.amount=num(t.value);
+  else if(d.cLabel && (x=c.costs.find(i=>i.id===d.cLabel))) x.label=t.value;
+  else if(t.id==='cName') c.name=t.value||'Ohne Namen';
+  else if(t.id==='cNote') c.note=t.value;
+  else if(t.id==='cReserve') c.reserve=num(t.value);
+  else if(t.id==='cAdults') c.adults=Math.max(1,parseInt(t.value)||1);
+  else if(t.id==='cKids') c.kids=Math.max(0,parseInt(t.value)||0);
+  else if(t.id==='rate'){ c.rate=+t.value; document.getElementById('rateLbl').textContent=c.rate+' %'; }
+  else return;
+  touch(); dock(); updateSums();
+  if(t.id==='cName'||t.id==='cAdults'||t.id==='cKids') document.getElementById('hSub').textContent=`${c.name} · ${c.adults} Erw.${c.kids?`, ${c.kids} Kind${c.kids>1?'er':''}`:''}`;
+});
+document.addEventListener('change',e=>{
+  const t=e.target, c=C(); if(!c) return; let x;
+  if(t.dataset.incIv && (x=c.income.find(i=>i.id===t.dataset.incIv))){ x.iv=t.value; touch(); render(); }
+  else if(t.dataset.cIv && (x=c.costs.find(i=>i.id===t.dataset.cIv))){ x.iv=t.value; touch(); render(); }
+  else if(t.id==='rate'){ render(); }
+});
+function updateSums(){ const c=C(); if(!c) return; const r=calc(c);
+  if(step===1){ const s=document.querySelector('.grp-h .gsum'); s&&(s.textContent=eur(r.net)+' / Monat'); }
+  if(step===2){ document.querySelectorAll('section.card').forEach((sec,i)=>{ const g=GROUPS[i]; const s=sec.querySelector('.gsum'); if(g&&s) s.textContent=eur(r.byG[g.id])+' / Monat'; }); }
+}
+document.getElementById('hBtn').onclick=()=>{ cur=null; render(); scrollTo(0,0); };
+document.getElementById('dGo').onclick=()=>{ step=3; render(); scrollTo(0,0); };
+document.getElementById('backupIn').onchange=e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>restore(r.result); r.readAsText(f); e.target.value=''; };
+render();
+</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
+</body>
+</html>
